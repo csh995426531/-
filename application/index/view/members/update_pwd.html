@@ -1,0 +1,40 @@
+{$message}
+<div class="row">
+    <div class="span12">
+        <div class="">
+            <div class="page-header">
+                <h2>密码修改</h2>
+            </div>
+            <form class="form-horizontal" method="post">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="user_id">选择账号</label>
+                        <div class="controls">
+                            <select id="user_id" class="input-xlarge" name="user_id">
+                                {foreach $users as $user}
+                                    <option value="{$user.id}">{$user.username}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="pwd_1">新密码</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="pwd_1" name="pwd_1" value="">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="pwd_2">确认新密码</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="pwd_2" name="pwd_2" value="">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="submit"></label>
+                        <button class="btn btn-success" type="submit" id="submit">确定</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

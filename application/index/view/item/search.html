@@ -1,0 +1,207 @@
+
+<div class="row">
+
+    <div class="">
+        <div class="span12">
+
+                <form class="form-inline" method="get">
+                <select class="span2" name="category_id">
+                    <option value=""> - 分类 - </option>
+                    {foreach $categories as $category}
+                    <option value="{$category.data}" {$Think.get.category_id==$category.data? 'selected' :''}>{$category.data}</opion>
+                    {/foreach}
+                </select>
+                <select class="span2" name="type_id">
+                    <option value=""> - 型号 - </option>
+                    {foreach $types as $type}
+                    <option value="{$type.data}" {$Think.get.type_id==$type.data ? 'selected' :''}>{$type.data}</opion>
+                    {/foreach}
+                </select>
+                <select class="span2" name="name_id">
+                    <option value=""> - 名称 - </option>
+                    {foreach $names as $name}
+                    <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
+                    {/foreach}
+                </select>
+                <select class="span2" name="feature_id">
+                    <option value=""> - 配置 - </option>
+                    {foreach $features as $feature}
+                    <option value="{$feature.data}" {$Think.get.feature_id==$feature.data ? 'selected' :''}>{$feature.data}</option>
+                    {/foreach}
+                </select>
+                <select class="span2" name="network_id">
+                    <option value=""> - 网络模式 - </option>
+                    {foreach $networks as $network}
+                    <option value="{$network.data}" {$Think.get.network_id==$network.data ? 'selected' :''}>{$network.data}</option>
+                    {/foreach}
+                </select>
+                <select class="span2" name="appearance_id">
+                    <option value=""> - 外观 - </option>
+                    {foreach $appearances as $appearance}
+                    <option value="{$appearance.data}" {$Think.get.appearance_id==$appearance.data ? 'selected' :''}>{$appearance.data}</option>
+                    {/foreach}
+                </select>
+                <select class="span2" name="edition_id">
+                    <option value=""> - 固件版本 - </option>
+                    {foreach $editions as $edition}
+                    <option value="{$edition.data}" {$Think.get.edition_id==$edition.data ? 'selected' :''}>{$edition.data}</option>
+                    {/foreach}
+                </select>
+                <select class="span2" name="channel_id">
+                    <option value=""> - 进货渠道 - </option>
+                    {foreach $channels as $channel}
+                    <option value="{$channel.data}" {$Think.get.channel_id==$channel.data ? 'selected' :''}>{$channel.data}</option>
+                    {/foreach}
+                </select>
+                <select class="span2" name="date">
+                    <option value=""> - 进货日期 - </option>
+                    {foreach $dates as $date}
+                    <option value="{$date}" {$Think.get.date==$date ? 'selected' :''}>{$date}</option>
+                    {/foreach}
+                </select>
+                <select class="span2" name="status">
+                    <option value=""> - 状态 - </option>
+                    {foreach name="statuses" item="status" key="k" }
+                    <option value="{$k}" {$Think.get.status==$status ? 'selected' :''}>{$status}</option>
+                    {/foreach}
+                </select>
+                <input type="text" class="input-large" name="keyword" placeholder="序列号" value="{$Think.get.keyword}">
+                <button type="submit" class="btn btn-primary">搜索</button>
+            </form>
+        </div>
+
+        <div class="row">
+
+            <div class="span12 listing-buttons">
+
+                <!--<button class="btn btn-info">Action</button>-->
+
+                <!--<button class="btn btn-success">Action</button>-->
+
+                <!--<button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>-->
+
+            </div>
+
+            <div class="span12">
+
+                <!--<div class="page-header">-->
+                <!--<div class="btn-group pull-right">-->
+                <!--<button class="btn dropdown-toggle" data-toggle="dropdown">-->
+                <!--<i class="icon-download-alt"></i> Export-->
+                <!--<span class="caret"></span>-->
+                <!--</button>-->
+                <!--<ul class="dropdown-menu">-->
+                <!--<li><a href="">CSV</a></li>-->
+                <!--<li><a href="">Excel</a></li>-->
+                <!--<li><a href="">PDF</a></li>-->
+                <!--</ul>-->
+                <!--</div>-->
+                <!--<h2>Listings</h2>-->
+                <!--</div>-->
+                <h4 class="span12">总条数：{$lists->total()}</h4>
+                <table class="orders-table table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>进货日期</th>
+                        <th>型号</th>
+                        <th>分类</th>
+                        <th>名称</th>
+                        <th>配置</th>
+                        <th>外观</th>
+                        <th>序列号</th>
+                        <th>固件版本</th>
+                        <th>备注</th>
+                        <th>进货价格</th>
+                        <th>进货渠道</th>
+                        <th>状态</th>
+                        <!--<th class="actions">操作</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label label-info">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label label-warning">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label label-important">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label label-inverse">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label label-success">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+
+                    {volist name='lists' id='temp'}
+                    <tr>
+                        <td><span>{$temp.id}</span></td>
+                        <th><span>{$temp.date}</span></th>
+                        <th><span>{$temp.itemType.data}</span></th>
+                        <th><span>{$temp.itemCategory.data}</span></th>
+                        <th><span>{$temp.itemName.data}</span></th>
+                        <th><span>{$temp.itemFeature.data}</span></th>
+                        <th><span>{$temp.itemAppearance.data}</span></th>
+                        <th><span>{$temp.number}</span></th>
+                        <th><span>{$temp.itemEdition.data}</span></th>
+                        <th><span>{$temp.memo}</span></th>
+                        <th><span>{$temp.price}</span></th>
+                        <th><span>{$temp.itemChannel.data}</span></th>
+                        <th><span>{$temp.statusName}</span></th>
+                        <!--<td class="actions">-->
+                            <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
+                            <!--<a class="btn btn-small btn-success allow-item" data-id="{$temp.id}" data-value="1" data-href="{:url('allowAgree')}">通过</a>-->
+                            <!--<a class="btn btn-small btn-danger reject-item" data-id="{$temp.id}" data-value="0" data-href="{:url('rejectAgree')}">拒绝</a>-->
+                        <!--</td>-->
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                {$lists->render()}
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/jquery.min.js"></script>
+    <script>
+        $(function(){
+            $(".allow-item, .reject-item").click(function(){
+                var url = $(this).data('href');
+                var id = $(this).data('id');
+                $.post(url, {id:id}, function (res) {
+                    alert(res.data);
+                    window.location.replace("<?php echo url('incomeAgree');?>");
+                })
+            })
+        })
+    </script>

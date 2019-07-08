@@ -1,0 +1,146 @@
+
+<div class="row">
+
+<div class="span12">
+
+<div class="">
+
+<form class="form-inline" method="get">
+    <select class="span2" name="type_id">
+        <option value=""> - 型号 - </option>
+        {foreach $types as $type}
+        <option value="{$type.data}" {$Think.get.type_id==$type.data ? 'selected' :''}>{$type.data}</opion>
+        {/foreach}
+    </select>
+    <span id="data-all" style="display:none">{$data|json_encode}</span>
+    <select class="span2" id="name_id" name="name_id"  data-href="{:url('changeName')}">
+        <option value=""> - 名称 - </option>
+        {foreach $names as $name}
+        <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
+        {/foreach}
+    </select>
+    <select class="span2"  id="feature_id"name="feature_id" >
+        <option value=""> - 配置 - </option>
+        {foreach $features as $feature}
+            <option value="{$feature.data}" {$Think.get.feature_id==$feature.data ? 'selected' :''}>{$feature.data}</option>
+        {/foreach}
+    </select>
+    <select class="span2" id="network_id" name="network_id">
+        <option value=""> - 网络模式 - </option>
+        {foreach $networks as $network}
+            <option value="{$network.data}" {$Think.get.network_id==$network.data ? 'selected' :''}>{$network.data}</option>
+        {/foreach}
+    </select>
+    <select class="span2" id="appearance_id" name="appearance_id">
+        <option value=""> - 外观 - </option>
+        {foreach $appearances as $appearance}
+            <option value="{$appearance.data}" {$Think.get.appearance_id==$appearance.data ? 'selected' :''}>{$appearance.data}</option>
+        {/foreach}
+    </select>
+    <input type="text" class="input-large" name="keyword" placeholder="序列号" value="{$Think.get.keyword}">
+<button type="submit" class="btn btn-primary">搜索</button>
+</form>
+
+<div class="row">
+
+    <div class="">
+        <div class="span12 listing-buttons">
+        </div>
+        <div class="span12">
+            <h4 class="span12">总条数：{$lists->total()}</h4>
+            <table class="orders-table table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>入库时间</th>
+                    <th>型号</th>
+                    <th>分类</th>
+                    <th>名称</th>
+                    <th>配置</th>
+                    <th>外观</th>
+                    <th>序列号</th>
+                    <th>固件版本</th>
+                    <th>备注</th>
+                    <th>进货价格</th>
+                    <th>进货渠道</th>
+                    <th>状态</th>
+                    <!--<th class="actions">操作</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                {volist name='lists' id='temp'}
+                <tr>
+                    <td><span>{$temp.id}</span></td>
+                    <th><span>{$temp.date}</span></th>
+                    <th><span>{$temp.itemType.data}</span></th>
+                    <th><span>{$temp.itemCategory.data}</span></th>
+                    <th><span>{$temp.itemName.data}</span></th>
+                    <th><span>{$temp.itemFeature.data}</span></th>
+                    <th><span>{$temp.itemAppearance.data}</span></th>
+                    <th><span>{$temp.number}</span></th>
+                    <th><span>{$temp.itemEdition.data}</span></th>
+                    <th><span>{$temp.memo}</span></th>
+                    <th><span>{$temp.price}</span></th>
+                    <th><span>{$temp.itemChannel.data}</span></th>
+                    <th><span>{$temp.statusName}</span></th>
+                    <td class="actions">
+                        <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
+                        <!--<a class="btn btn-small btn-success allow-item" data-id="{$temp.id}" data-value="1" data-href="{:url('allowAgree')}">通过</a>-->
+                        <!--<a class="btn btn-small btn-danger reject-item" data-id="{$temp.id}" data-value="0" data-href="{:url('rejectAgree')}">拒绝</a>-->
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+        <div>
+            {$lists->render()}
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/jquery.min.js"></script>
+<script>
+    $(function(){
+        $(".allow-item, .reject-item").click(function(){
+            var url = $(this).data('href');
+            var id = $(this).data('id');
+            $.post(url, {id:id}, function (res) {
+                alert(res.data);
+                window.location.replace("<?php echo url('incomeAgree');?>");
+            })
+        })
+        $("#name_id").change(function(){
+            var val = $(this).val();
+            var data = jQuery.parseJSON($("#data-all").html());
+            if (val != '') {
+
+                var url = $(this).data('href');
+
+                var name = $(this).val();
+                $.get(url, {name:name}, function(res){
+                    data = res.data;
+                })
+            } 
+
+            var features_str = '<option value=""> - 配置 - </option>';
+            $.each(data.features,function(k,v){
+                features_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            var networks_str = '<option value=""> - 网络模式 - </option>';
+            $.each(data.networks,function(k,v){
+                networks_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            var appearances_str = '<option value=""> - 外观 - </option>';
+            $.each(data.appearances,function(k,v){
+                appearances_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            $('#feature_id').html(features_str);
+            $('#network_id').html(networks_str);
+            $('#appearance_id').html(appearances_str);
+        }); 
+    })
+</script>

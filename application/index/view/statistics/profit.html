@@ -1,0 +1,93 @@
+
+<div class="row">
+
+    <div class="span5">
+
+        <div class="">
+
+            <div class="page-header">
+                <h2>筛选条件</h2>
+            </div>
+
+            <form class="form-inline" method="get">
+                <input type="hidden" name="mark" value="1"/>
+                <div class="control-group">
+                    <label class="control-label" for="start_date">开始日期</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="start_date"  name="start_date" value="" autocomplete="off">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="end_date">结束日期</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="end_date"  name="end_date" value="" autocomplete="off">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <select class="span2" name="channel_id">
+                        <option value="0"> - 出货途径 - </option>
+                        {foreach $channels as $channel}
+                        <option value="{$channel.id}" {$Think.get.channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">搜索</button>
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="span5">
+        <div class="slate">
+
+            <div class="page-header">
+                <h2>筛选结果</h2>
+            </div>
+
+            <p>总数量：{$count}</p>
+            <p>总销售额：{$count}</p>
+            <p>总毛利润：{$profit}</p>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery-1.8.3.js"></script>
+<script>
+    $(function () {
+
+        var startDate = "<?php echo $start_date;?>";
+        var endDate = "<?php echo $end_date;?>";
+
+        $.datepicker.regional['zh-CN'] = {
+            closeText: '关闭',
+            prevText: '<上月',
+            nextText: '下月>',
+            currentText: '今天',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                '七', '八', '九', '十', '十一', '十二'],
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            weekHeader: '周',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: true,
+            yearSuffix: '年'
+        };
+
+        $.datepicker.setDefaults( $.datepicker.regional[ "zh-CN" ] );
+
+        $("#start_date, #end_date").datepicker({
+            dateFormat: "yy-mm-dd",
+            todayHighlight: false,
+            // minDate: 0,
+            // maxDate: "+2D"
+        });
+
+        $('#start_date').datepicker("setDate", startDate);
+        $('#end_date').datepicker("setDate", endDate);
+    })
+</script>

@@ -1,0 +1,191 @@
+
+<!--<div class="row">-->
+
+<!--<div class="span10">-->
+
+<!--<div class="">-->
+
+<!--<form class="form-inline">-->
+<!--<input type="text" class="input-large" placeholder="Keyword...">-->
+<!--<select class="span2">-->
+<!--<option value=""> - From Date - </option>-->
+<!--</select>-->
+<!--<select class="span2">-->
+<!--<option value=""> - To Date - </option>-->
+<!--</select>-->
+<!--<select class="span2">-->
+<!--<option value=""> - Filter - </option>-->
+<!--</select>-->
+<!--<button type="submit" class="btn btn-primary">Filter Listings</button>-->
+<!--</form>-->
+
+<!--</div>-->
+
+<!--</div>-->
+
+<div class="row">
+
+    <div class="">
+        <div class="span12 listing-buttons">
+
+            <!--<button class="btn btn-info">Action</button>-->
+
+            <!--<button class="btn btn-success">Action</button>-->
+
+            <!--<button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>-->
+
+        </div>
+
+        <div class="span12">
+
+            <!--<div class="page-header">-->
+            <!--<div class="btn-group pull-right">-->
+            <!--<button class="btn dropdown-toggle" data-toggle="dropdown">-->
+            <!--<i class="icon-download-alt"></i> Export-->
+            <!--<span class="caret"></span>-->
+            <!--</button>-->
+            <!--<ul class="dropdown-menu">-->
+            <!--<li><a href="">CSV</a></li>-->
+            <!--<li><a href="">Excel</a></li>-->
+            <!--<li><a href="">PDF</a></li>-->
+            <!--</ul>-->
+            <!--</div>-->
+            <!--<h2>Listings</h2>-->
+            <!--</div>-->
+            <h4 class="span12">总条数：{$lists->total()}</h4>
+            <table class="orders-table table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>型号</th>
+                    <th>分类</th>
+                    <th>名称</th>
+                    <th>配置</th>
+                    <th>外观</th>
+                    <th>序列号</th>
+                    <th>固件版本</th>
+                    <th>备注</th>
+                    <th>销售价格</th>
+                    <th>出货渠道</th>
+                    <th>出库人</th>
+                    <th>出库时间</th>
+                    <th>订单号</th>
+                    <th class="actions">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--<tr>-->
+                <!--<td><a href="form.html">Listing title</a> <span class="label label-info">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                <!--<td class="actions">-->
+                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><a href="form.html">Listing title</a> <span class="label label-warning">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                <!--<td class="actions">-->
+                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><a href="form.html">Listing title</a> <span class="label label-important">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                <!--<td class="actions">-->
+                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><a href="form.html">Listing title</a> <span class="label label-inverse">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                <!--<td class="actions">-->
+                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><a href="form.html">Listing title</a> <span class="label label-success">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                <!--<td class="actions">-->
+                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                <!--<td><a href="form.html">Listing title</a> <span class="label">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                <!--<td class="actions">-->
+                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                <!--</td>-->
+                <!--</tr>-->
+
+                {volist name='lists' id='temp'}
+                <tr>
+                    <td><span>{$temp.id}</span></td>
+                    <th><span>{$temp.item.itemType.data}</span></th>
+                    <th><span>{$temp.item.itemCategory.data}</span></th>
+                    <th><span>{$temp.item.itemName.data}</span></th>
+                    <th><span>{$temp.item.itemFeature.data}</span></th>
+                    <th><span>{$temp.item.itemAppearance.data}</span></th>
+                    <th><span>{$temp.item.number}</span></th>
+                    <th><span>{$temp.item.itemEdition.data}</span></th>
+                    <th><span>{$temp.memo}</span></th>
+                    <th><span>{$temp.price}</span></th>
+                    <th><span>{$temp.itemChannel.data}</span></th>
+                    <td><span>{$temp.createUser.username}</span></td>
+                    <td><span>{$temp.create_time}</span></td>
+                    <td><span>{$temp.order_no}</span></td>
+                    <td class="actions">
+                        <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
+                        <a class="btn btn-small btn-success allow-item" data-id="{$temp.id}" data-value="1" data-href="{:url('allowOutgoAgree')}">通过</a>
+                        <a class="btn btn-small btn-danger reject-item" data-id="{$temp.id}" data-value="0" data-href="{:url('rejectOutgoAgree')}">拒绝</a>
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+        <div>
+            {$lists->render()}
+        </div>
+    </div>
+
+    <!--<div class="span5">-->
+
+    <!--<div class="pagination pull-left">-->
+    <!--<ul>-->
+    <!--<li><a href="#">Prev</a></li>-->
+    <!--<li class="active">-->
+    <!--<a href="#">1</a>-->
+    <!--</li>-->
+    <!--<li><a href="#">2</a></li>-->
+    <!--<li><a href="#">3</a></li>-->
+    <!--<li><a href="#">4</a></li>-->
+    <!--<li><a href="#">Next</a></li>-->
+    <!--</ul>-->
+    <!--</div>-->
+
+    <!--</div>-->
+
+    <!--<div class="span5 listing-buttons pull-right">-->
+
+    <!--<button class="btn btn-info">Action</button>-->
+
+    <!--<button class="btn btn-success">Action</button>-->
+
+    <!--<button class="btn btn-primary">Add New Item</button>-->
+
+    <!--</div>-->
+
+</div>
+<script src="/static/js/jquery.min.js"></script>
+<script>
+    $(function(){
+        $(".allow-item, .reject-item").click(function(){
+            var url = $(this).data('href');
+            var id = $(this).data('id');
+            $.post(url, {id:id}, function (res) {
+                alert(res.data);
+                window.location.replace("<?php echo url('outgoAgree');?>");
+            })
+        })
+    })
+</script>
