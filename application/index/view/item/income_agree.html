@@ -28,10 +28,7 @@
             <button type="submit" class="btn btn-primary">搜索</button>
         </form>
     </div>
-
         <div class="span12">
-
-            <h4 class="span12">总条数：{$lists->total()}</h4>
             <table class="orders-table table">
                 <thead>
                 <tr>
@@ -56,7 +53,7 @@
 
                 {volist name='lists' id='temp'}
                 <tr>
-                    <td><input type="checkbox" class="checkbox-checked" /></td>
+                    <td><input type="checkbox" class="checkbox-checked" data-id="{$temp.id}"  /></td>
                     <td><span>{$temp.id}</span></td>
                     <td><span>{$temp.typeName}</span></td>
                     <th><span>{$temp.item.itemType.data}</span></th>
@@ -78,9 +75,18 @@
                     </td>
                 </tr>
                 {/volist}
+                <tr>
+                    <td><label style="cursor: pointer"><input type="checkbox" id="checkbox-all"  />全选</label> </td>
+                    <td colspan="14">共{$count}记录 ， 共{$total}金额</td>
+                </tr>
+                <tr>
+                    <td colspan="15">
+                            <a class="btn btn-small btn-success " id="allow-all" data-href="{:url('allowAgree')}">批量通过</a>
+                            <a class="btn btn-small btn-danger" id="reject-all" data-href="{:url('rejectAgree')}">批量拒绝</a>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-            <div></div>
         </div>
         <div>
             {$lists->render()}
@@ -90,6 +96,7 @@
 <script src="/static/js/jquery.min.js"></script>
 <script>
     $(function(){
+
         $(".allow-item, .reject-item").click(function(){
             var url = $(this).data('href');
             var id = $(this).data('id');
@@ -97,6 +104,64 @@
                 alert(res.data);
                 window.location.replace("<?php echo url('incomeAgree');?>");
             })
+        })
+
+        $("#checkbox-all").click(function(){
+
+            var all_checked = 1;
+
+            $(".checkbox-checked").each(function(k, v){
+              
+                if ($(v).prop('checked') == false){
+                    all_checked = 0;
+                }
+            })
+            
+            if (all_checked == 1) {
+                $(".checkbox-checked").each(function(k, v){
+                    $(v).prop('checked', false)
+                })
+                $("#checkbox-all").prop('checked', false)
+            } else {
+                $(".checkbox-checked").each(function(k, v){
+                    $(v).prop('checked', true)
+                })
+                $("#checkbox-all").prop('checked', true)
+            }
+        });
+
+        $("#allow-all").click(function(){
+
+            var url = $(this).data('href');
+            var arr = new Array();
+            $(".checkbox-checked").each(function(k, v){
+                if ($(v).prop('checked') == true){
+                    arr. push($(v).data('id'));
+                }
+            })
+
+            if (arr.length > 0) {
+                $.post(url, {id:arr}, function(res) {
+                        alert(res.data)
+                })
+            }
+        })
+
+        $("#reject-all").click(function(){
+
+            var url = $(this).data('href');
+            var arr = new Array();
+            $(".checkbox-checked").each(function(k, v){
+                if ($(v).prop('checked') == true){
+                    arr. push($(v).data('id'));
+                }
+            })
+
+            if (arr.length > 0) {
+                $.post(url, {id:arr}, function(res) {
+                    alert(res.data)
+                })
+            }
         })
 
         $.datepicker.regional['zh-CN'] = {

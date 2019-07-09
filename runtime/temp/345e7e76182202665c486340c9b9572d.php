@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:69:"/data/www/y5g/public/../application/index/view/item/income_agree.html";i:1562607960;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562608103;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:69:"/data/www/y5g/public/../application/index/view/item/income_agree.html";i:1562690522;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562608158;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -147,10 +147,7 @@
             <button type="submit" class="btn btn-primary">搜索</button>
         </form>
     </div>
-
         <div class="span12">
-
-            <h4 class="span12">总条数：<?php echo $lists->total(); ?></h4>
             <table class="orders-table table">
                 <thead>
                 <tr>
@@ -175,7 +172,7 @@
 
                 <?php if(is_array($lists) || $lists instanceof \think\Collection || $lists instanceof \think\Paginator): $i = 0; $__LIST__ = $lists;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$temp): $mod = ($i % 2 );++$i;?>
                 <tr>
-                    <td><input type="checkbox" class="checkbox-checked" /></td>
+                    <td><input type="checkbox" class="checkbox-checked" data-id="<?php echo $temp['id']; ?>"  /></td>
                     <td><span><?php echo $temp['id']; ?></span></td>
                     <td><span><?php echo $temp['typeName']; ?></span></td>
                     <th><span><?php echo $temp['item']['itemType']['data']; ?></span></th>
@@ -197,9 +194,18 @@
                     </td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
+                <tr>
+                    <td><label style="cursor: pointer"><input type="checkbox" id="checkbox-all"  />全选</label> </td>
+                    <td colspan="14">共<?php echo $count; ?>记录 ， 共<?php echo $total; ?>金额</td>
+                </tr>
+                <tr>
+                    <td colspan="15">
+                            <a class="btn btn-small btn-success " id="allow-all" data-href="<?php echo url('allowAgree'); ?>">批量通过</a>
+                            <a class="btn btn-small btn-danger" id="reject-all" data-href="<?php echo url('rejectAgree'); ?>">批量拒绝</a>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-            <div></div>
         </div>
         <div>
             <?php echo $lists->render(); ?>
@@ -209,6 +215,7 @@
 <script src="/static/js/jquery.min.js"></script>
 <script>
     $(function(){
+
         $(".allow-item, .reject-item").click(function(){
             var url = $(this).data('href');
             var id = $(this).data('id');
@@ -216,6 +223,64 @@
                 alert(res.data);
                 window.location.replace("<?php echo url('incomeAgree');?>");
             })
+        })
+
+        $("#checkbox-all").click(function(){
+
+            var all_checked = 1;
+
+            $(".checkbox-checked").each(function(k, v){
+              
+                if ($(v).prop('checked') == false){
+                    all_checked = 0;
+                }
+            })
+            
+            if (all_checked == 1) {
+                $(".checkbox-checked").each(function(k, v){
+                    $(v).prop('checked', false)
+                })
+                $("#checkbox-all").prop('checked', false)
+            } else {
+                $(".checkbox-checked").each(function(k, v){
+                    $(v).prop('checked', true)
+                })
+                $("#checkbox-all").prop('checked', true)
+            }
+        });
+
+        $("#allow-all").click(function(){
+
+            var url = $(this).data('href');
+            var arr = new Array();
+            $(".checkbox-checked").each(function(k, v){
+                if ($(v).prop('checked') == true){
+                    arr. push($(v).data('id'));
+                }
+            })
+
+            if (arr.length > 0) {
+                $.post(url, {id:arr}, function(res) {
+                        alert(res.data)
+                })
+            }
+        })
+
+        $("#reject-all").click(function(){
+
+            var url = $(this).data('href');
+            var arr = new Array();
+            $(".checkbox-checked").each(function(k, v){
+                if ($(v).prop('checked') == true){
+                    arr. push($(v).data('id'));
+                }
+            })
+
+            if (arr.length > 0) {
+                $.post(url, {id:arr}, function(res) {
+                    alert(res.data)
+                })
+            }
         })
 
         $.datepicker.regional['zh-CN'] = {

@@ -430,7 +430,7 @@ class Item extends BaseController
         $channels = ItemChannel::where("id", 'in', array_column($channelIds, 'channel_id'))->select();
 
         $sql = ItemIncomeHistory::alias('t')->join('item i', 'i.id=t.item_id')->where("t.status", ItemIncomeHistory::STATUS_WAIT);
-        
+
         $user_id = $this->request->get('user_id');
 
         if (!empty($user_id) && $user_id > 0) {
@@ -458,6 +458,12 @@ class Item extends BaseController
             $sql = $sql->where('i.channel_id', $channel_id);
         }
 
+        $sql2 = clone($sql);
+        $count = $sql2->count();        
+
+        $sql3 = clone($sql);
+        $total = $sql3->sum('i.price');
+
         $lists = $sql->paginate(10);
 
         foreach ($lists as $list) {
@@ -476,22 +482,53 @@ class Item extends BaseController
             'channels' => $channels,
             'lists' => $lists,
             'breadcrumb' => $breadcrumb,
+            'count' => $count ,
+            'total' => $total
         ]);
     }
 
     //通过入库审核
     public function allowAgree(){
 
-        $result = SetResult(200, '保存成功');
+        $id = $_POST['id'];
+       
+        if ( empty($id)) {
+           return SetResult(500, 'id不能为空');
+        }
 
-        $id = $this->request->param('id');
+        if (is_array(($id))) {
+
+            $success =0;
+            $fail = 0;
+
+            foreach ($id as $temp) {
+                $result = $this->doAllowAgree($temp);
+
+                if ($result['code'] == 200) {
+                    $success++;
+                } else {
+                    $fail++;
+                }
+            }
+
+            if ($success >0) {
+                $msg = '成功：'. $success.'，失败：'. $fail;
+                $result = SetResult(200, $msg);
+            } else {
+                $result = SetResult(500, '操作失败');
+            }
+        } else {
+            $result = $this->doAllowAgree($id);
+        }
+
+        return $result;
+    }
+
+    public function doAllowAgree($id){
+        $result = SetResult(200, '保存成功');
 
         Db::startTrans();
         try {
-
-            if ( empty($id)) {
-                throw new \Exception("id不能为空");
-            }
 
             $history = ItemIncomeHistory::where("id", $id)->find();
 
@@ -562,10 +599,44 @@ class Item extends BaseController
 
     //拒绝入库审核
     public function rejectAgree(){
+        
+
+        $id = $_POST['id'];
+
+        if ( empty($id)) {
+            return SetResult(500, 'id不能为空');
+         }
+
+         if (is_array($id)) {
+            $success =0;
+            $fail = 0;
+
+            foreach ($id as $temp) {
+                $result = $this->doRejectAgree($temp);
+
+                if ($result['code'] == 200) {
+                    $success++;
+                } else {
+                    $fail++;
+                }
+            }
+
+            if ($success >0) {
+                $msg = '成功：'. $success.'，失败：'. $fail;
+                $result = SetResult(200, $msg);
+            } else {
+                $result = SetResult(500, '操作失败');
+            }
+         } else {
+             $result = $this->doRejectAgree($id);
+         }
+
+         return $result;
+    }
+
+    public function doRejectAgree($id) {
+
         $result = SetResult(200, '操作成功');
-
-        $id = $this->request->param('id');
-
         Db::startTrans();
         try {
 
