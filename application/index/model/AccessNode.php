@@ -39,6 +39,9 @@ class AccessNode extends Model
             'index/item/outgo' => [
                 'index/item/outgo', 'index/item/addoutgo',
             ],
+            'index/item/specialoutgo' => [
+                'index/item/specialoutgo', 'index/item/addoutgo',
+            ],
             'index/item/incomeagree' => [
                 'index/item/incomeagree','index/item/allowagree','index/item/rejectagree',
             ],
@@ -54,31 +57,31 @@ class AccessNode extends Model
             ],
 
             'index/setting/category' => [
-                'index/setting/category','index/setting/addcategory','index/setting/delcategory',
+                'index/setting/category','index/setting/addcategory','index/setting/delcategory', 'index/setting/opencategory'
             ],
             'index/setting/name' => [
-                'index/setting/name','index/setting/addname','index/setting/delname',
+                'index/setting/name','index/setting/addname','index/setting/delname', 'index/setting/openname'
             ],
             'index/setting/feature' => [
-                'index/setting/feature','index/setting/addfeature','index/setting/delfeature',
+                'index/setting/feature','index/setting/addfeature','index/setting/delfeature', 'index/setting/openfeature'
             ],
             'index/setting/appearance' => [
-                'index/setting/appearance','index/setting/addappearance','index/setting/delappearance',
+                'index/setting/appearance','index/setting/addappearance','index/setting/delappearance', 'index/setting/openappearance'
             ],
             'index/setting/edition' => [
-                'index/setting/edition','index/setting/addedition','index/setting/deledition',
+                'index/setting/edition','index/setting/addedition','index/setting/deledition', 'index/setting/openedition'
             ],
             'index/setting/type' => [
-                'index/setting/type','index/setting/addtype','index/setting/deltype',
+                'index/setting/type','index/setting/addtype','index/setting/deltype', 'index/setting/opentype'
             ],
             'index/setting/incomechannel' => [
-                'index/setting/incomechannel','index/setting/addchannel','index/setting/delchannel'
+                'index/setting/incomechannel','index/setting/addchannel','index/setting/delchannel', 'index/setting/openchannel'
             ],
             'index/setting/outgochannel' => [
-                'index/setting/outgochannel','index/setting/addchannel','index/setting/delchannel'
+                'index/setting/outgochannel','index/setting/addchannel','index/setting/delchannel', 'index/setting/openchannel'
             ],
             'index/setting/network' => [
-                'index/setting/network','index/setting/addnetwork','index/setting/delnetwork'
+                'index/setting/network','index/setting/addnetwork','index/setting/delnetwork', 'index/setting/opennetwork'
             ],
             'index/log/index' => [
                 'index/log/index'

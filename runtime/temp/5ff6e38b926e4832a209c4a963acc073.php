@@ -1,6 +1,6 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:68:"/data/www/y5g/public/../application/index/view/item/outgo_agree.html";i:1562380492;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562492072;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:68:"/data/www/y5g/public/../application/index/view/item/outgo_agree.html";i:1562799763;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562608158;}*/ ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%">
 <head>
 
     <meta charset="utf-8">
@@ -22,13 +22,13 @@
     <![endif]-->
 
 </head>
-<body>
+<body style="height:100%">
 
-<div class="container">
-    <div class="row">
-        <div class="span2">
-            <div class="main-left-col">
-                <h1><i class="icon-shopping-cart icon-large"></i> Adminize</h1>
+<div class="container-fluid " style="padding: 0px;height:100%">
+    <div class="row" style="height:100%">
+        <div class="span2" style="width: 9.3%;background: #484646;height:100%">
+            <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
+                <h1><i class="icon-large"></i> 库存管理系统</h1>
                 <ul class="side-nav">
                     <li class="active">
                         <a href="index.html"><i class="icon-home"></i> Dashboard</a>
@@ -91,7 +91,7 @@
 
         </div> <!-- end span2 -->
 
-        <div class="span10">
+        <div class="span10" style="width: 82%;    margin-left: 2%;height:100%">
 
             <div class="secondary-masthead span12">
 
@@ -122,7 +122,7 @@
 
 <!--<div class="span10">-->
 
-<!--<div class="slate">-->
+<!--<div class="">-->
 
 <!--<form class="form-inline">-->
 <!--<input type="text" class="input-large" placeholder="Keyword...">-->
@@ -144,7 +144,7 @@
 
 <div class="row">
 
-    <div class="slate">
+    <div class="">
         <div class="span12 listing-buttons">
 
             <!--<button class="btn btn-info">Action</button>-->
@@ -176,15 +176,13 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>型号</th>
-                    <th>分类</th>
                     <th>名称</th>
                     <th>配置</th>
                     <th>外观</th>
                     <th>序列号</th>
-                    <th>固件版本</th>
                     <th>备注</th>
                     <th>销售价格</th>
+                    <th>毛利润</th>
                     <th>出货渠道</th>
                     <th>出库人</th>
                     <th>出库时间</th>
@@ -239,15 +237,13 @@
                 <?php if(is_array($lists) || $lists instanceof \think\Collection || $lists instanceof \think\Paginator): $i = 0; $__LIST__ = $lists;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$temp): $mod = ($i % 2 );++$i;?>
                 <tr>
                     <td><span><?php echo $temp['id']; ?></span></td>
-                    <th><span><?php echo $temp['item']['itemType']['data']; ?></span></th>
-                    <th><span><?php echo $temp['item']['itemCategory']['data']; ?></span></th>
                     <th><span><?php echo $temp['item']['itemName']['data']; ?></span></th>
                     <th><span><?php echo $temp['item']['itemFeature']['data']; ?></span></th>
                     <th><span><?php echo $temp['item']['itemAppearance']['data']; ?></span></th>
                     <th><span><?php echo $temp['item']['number']; ?></span></th>
-                    <th><span><?php echo $temp['item']['itemEdition']['data']; ?></span></th>
                     <th><span><?php echo $temp['memo']; ?></span></th>
-                    <th><span><?php echo $temp['price']; ?></span></th>
+                    <th><span><?php echo $temp['price'] * 1; ?></span></th>
+                    <th><span><?php echo $temp['price'] * 1 - $temp['item']['price'] * 1 - 100; ?></span></th>
                     <th><span><?php echo $temp['itemChannel']['data']; ?></span></th>
                     <td><span><?php echo $temp['createUser']['username']; ?></span></td>
                     <td><span><?php echo $temp['create_time']; ?></span></td>

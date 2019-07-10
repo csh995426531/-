@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1562607970;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562608158;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/item/special_outgo.html";i:1562802070;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562801030;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -47,7 +47,13 @@
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('item/outgo'); ?>"><i class="icon-reply"></i> 销售出库 </a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
+                        <ul id="item-outgo-dropdown" class="collapse">
+                            <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
+                            <li><a href="<?php echo url('item/specialoutgo'); ?>">特殊出库</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
                         <ul id="examine-dropdown" class="collapse">
@@ -123,70 +129,34 @@
     <div class="">
         <div class="span12">
 
-                <form class="form-inline" method="get">
-                <select class="span2" name="category_id">
-                    <option value=""> - 分类 - </option>
-                    <?php foreach($categories as $category): ?>
-                    <option value="<?php echo $category['data']; ?>" <?php echo \think\Request::instance()->get('category_id')==$category['data']?'selected' :''; ?>><?php echo $category['data']; ?></opion>
-                    <?php endforeach; ?>
-                </select>
+            <form class="form-inline" method="get">
                 <select class="span2" name="type_id">
-                    <option value=""> - 型号 - </option>
+                    <option value="0"> - 型号 - </option>
                     <?php foreach($types as $type): ?>
-                    <option value="<?php echo $type['data']; ?>" <?php echo \think\Request::instance()->get('type_id')==$type['data']?'selected' :''; ?>><?php echo $type['data']; ?></opion>
+                    <option value="<?php echo $type['id']; ?>" <?php echo \think\Request::instance()->get('type_id')==$type['id']?'selected' :''; ?>><?php echo $type['data']; ?></opion>
                     <?php endforeach; ?>
                 </select>
                 <select class="span2" name="name_id">
-                    <option value=""> - 名称 - </option>
+                    <option value="0"> - 名称 - </option>
                     <?php foreach($names as $name): ?>
-                    <option value="<?php echo $name['data']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['data']?'selected' :''; ?>><?php echo $name['data']; ?></option>
+                    <option value="<?php echo $name['id']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['id']?'selected' :''; ?>><?php echo $name['data']; ?></option>
                     <?php endforeach; ?>
                 </select>
                 <select class="span2" name="feature_id">
-                    <option value=""> - 配置 - </option>
+                    <option value="0"> - 配置 - </option>
                     <?php foreach($features as $feature): ?>
-                    <option value="<?php echo $feature['data']; ?>" <?php echo \think\Request::instance()->get('feature_id')==$feature['data']?'selected' :''; ?>><?php echo $feature['data']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <select class="span2" name="network_id">
-                    <option value=""> - 网络模式 - </option>
-                    <?php foreach($networks as $network): ?>
-                    <option value="<?php echo $network['data']; ?>" <?php echo \think\Request::instance()->get('network_id')==$network['data']?'selected' :''; ?>><?php echo $network['data']; ?></option>
+                    <option value="<?php echo $feature['id']; ?>" <?php echo \think\Request::instance()->get('feature_id')==$feature['id']?'selected' :''; ?>><?php echo $feature['data']; ?></option>
                     <?php endforeach; ?>
                 </select>
                 <select class="span2" name="appearance_id">
-                    <option value=""> - 外观 - </option>
+                    <option value="0"> - 外观 - </option>
                     <?php foreach($appearances as $appearance): ?>
-                    <option value="<?php echo $appearance['data']; ?>" <?php echo \think\Request::instance()->get('appearance_id')==$appearance['data']?'selected' :''; ?>><?php echo $appearance['data']; ?></option>
+                    <option value="<?php echo $appearance['id']; ?>" <?php echo \think\Request::instance()->get('appearance_id')==$appearance['id']?'selected' :''; ?>><?php echo $appearance['data']; ?></option>
                     <?php endforeach; ?>
                 </select>
-                <select class="span2" name="edition_id">
-                    <option value=""> - 固件版本 - </option>
-                    <?php foreach($editions as $edition): ?>
-                    <option value="<?php echo $edition['data']; ?>" <?php echo \think\Request::instance()->get('edition_id')==$edition['data']?'selected' :''; ?>><?php echo $edition['data']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <select class="span2" name="channel_id">
-                    <option value=""> - 进货渠道 - </option>
-                    <?php foreach($channels as $channel): ?>
-                    <option value="<?php echo $channel['data']; ?>" <?php echo \think\Request::instance()->get('channel_id')==$channel['data']?'selected' :''; ?>><?php echo $channel['data']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <select class="span2" name="date">
-                    <option value=""> - 进货日期 - </option>
-                    <?php foreach($dates as $date): ?>
-                    <option value="<?php echo $date; ?>" <?php echo \think\Request::instance()->get('date')==$date?'selected' :''; ?>><?php echo $date; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <select class="span2" name="status">
-                    <option value=""> - 状态 - </option>
-                    <?php if(is_array($statuses) || $statuses instanceof \think\Collection || $statuses instanceof \think\Paginator): if( count($statuses)==0 ) : echo "" ;else: foreach($statuses as $k=>$status): ?>
-                    <option value="<?php echo $k; ?>" <?php echo \think\Request::instance()->get('status')==$status?'selected' :''; ?>><?php echo $status; ?></option>
-                    <?php endforeach; endif; else: echo "" ;endif; ?>
-                </select>
-                <input type="text" class="input-large" name="keyword" placeholder="序列号" value="<?php echo \think\Request::instance()->get('keyword'); ?>">
                 <button type="submit" class="btn btn-primary">搜索</button>
             </form>
+
         </div>
 
         <div class="row">
@@ -222,7 +192,7 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>进货日期</th>
+                        <th>入库时间</th>
                         <th>型号</th>
                         <th>分类</th>
                         <th>名称</th>
@@ -234,7 +204,7 @@
                         <th>进货价格</th>
                         <th>进货渠道</th>
                         <th>状态</th>
-                        <!--<th class="actions">操作</th>-->
+                        <th class="actions">操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -296,11 +266,14 @@
                         <th><span><?php echo $temp['price']; ?></span></th>
                         <th><span><?php echo $temp['itemChannel']['data']; ?></span></th>
                         <th><span><?php echo $temp['statusName']; ?></span></th>
-                        <!--<td class="actions">-->
+                        <td class="actions">
                             <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
-                            <!--<a class="btn btn-small btn-success allow-item" data-id="<?php echo $temp['id']; ?>" data-value="1" data-href="<?php echo url('allowAgree'); ?>">通过</a>-->
+                            <?php if($temp['status'] == 2): ?>
+                            <a class="btn btn-small btn-warning add-outgo" data-toggle="modal" href="#addOutgo" data-id="<?php echo $temp['id']; ?>">维修</a>
+                            <a class="btn btn-small btn-danger add-outgo" data-toggle="modal" href="#addOutgo" data-id="<?php echo $temp['id']; ?>">丢失</a>
                             <!--<a class="btn btn-small btn-danger reject-item" data-id="<?php echo $temp['id']; ?>" data-value="0" data-href="<?php echo url('rejectAgree'); ?>">拒绝</a>-->
-                        <!--</td>-->
+                            <?php endif; ?>
+                        </td>
                     </tr>
                     <?php endforeach; endif; else: echo "" ;endif; ?>
                     </tbody>
@@ -310,20 +283,100 @@
                 <?php echo $lists->render(); ?>
             </div>
         </div>
+
+        <!-- <div class="modal hide fade" id="addOutgo">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h3>出库</h3>
+            </div>
+            <form class="form-horizontal" method="post" id="form" data-action="<?php echo url('addOutgo'); ?>">
+                <fieldset>
+                    <div class="modal-body">
+                        <input type="hidden" name="item_id" id="item_id" />
+                        <div class="control-group">
+                            <label class="control-label" for="channel_id">出货途径</label>
+                            <div class="controls">
+                                <select id="channel_id" class="input-xlarge" name="channel_id">
+                                        <option value="0"> - 请选择 - </option>
+                                    <?php foreach($channels as $channel): ?>
+                                    <option value="<?php echo $channel['id']; ?>"><?php echo $channel['data']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="order_no">订单号</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="order_no" name="order_no" value="" placeholder="必填项">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="price">销售价格</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="price" name="price" value=""  placeholder="必填项">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="consignee_nickname">收货人昵称</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="consignee_nickname" name="consignee_nickname" value="">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="consignee">收货人</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="consignee" name="consignee" value="">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="consignee_address">收货人地址</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="consignee_address" name="consignee_address" value="">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="consignee_phone">收货人手机号</label>
+                            <div class="controls">
+                                <input type="text" class="input-xlarge" id="consignee_phone" name="consignee_phone" value="">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="memo">订单备注</label>
+                            <div class="controls">
+                                <textarea class="input-xlarge" name="memo" id="memo" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn" data-dismiss="modal">关闭</a>
+                        <button class="btn btn-success" type="button" id="submit">确定</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div> -->
+
     </div>
-    <script src="/static/js/jquery.min.js"></script>
-    <script>
-        $(function(){
-            $(".allow-item, .reject-item").click(function(){
-                var url = $(this).data('href');
-                var id = $(this).data('id');
-                $.post(url, {id:id}, function (res) {
-                    alert(res.data);
-                    window.location.replace("<?php echo url('incomeAgree');?>");
-                })
+</div>
+<script src="/static/js/jquery.min.js"></script>
+<script>
+    $(function(){
+        // $(".add-outgo").click(function () {
+        //     var id = $(this).data('id');
+        //     $("#item_id").val(id);
+        // });
+
+        $("#submit").click(function(){
+            var url = $("#form").data('action');
+            var data = $('#form').serialize();
+            $.post(url, data, function (res) {
+                alert(res.data);
+                if (res.code == 200) {
+                    window.location.replace("<?php echo url('outgo');?>");
+                }
             })
-        })
-    </script>
+        });
+    })
+</script>
             </div>
 
         </div> <!-- end span10 -->

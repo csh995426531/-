@@ -170,7 +170,7 @@
         $(".del-item").click(function(){
             var url = $(this).data('href');
             var id = $(this).data('id');
-            $.post(url, {id:id}, function (res) {
+            $.post(url, {id:id}, function (res) {console.log(res);
                 alert(res.data);
                 window.location.replace("<?php echo url('outgoChannel');?>");
             })

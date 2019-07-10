@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/index/index.html";i:1562380492;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562608158;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/index/index.html";i:1562380492;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562801030;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -47,7 +47,13 @@
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('item/outgo'); ?>"><i class="icon-reply"></i> 销售出库 </a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
+                        <ul id="item-outgo-dropdown" class="collapse">
+                            <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
+                            <li><a href="<?php echo url('item/specialoutgo'); ?>">特殊出库</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
                         <ul id="examine-dropdown" class="collapse">

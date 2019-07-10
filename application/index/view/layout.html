@@ -46,7 +46,13 @@
                             <li><a href="{:url('item/returnIncome')}">退货入库</a></li>
                         </ul>
                     </li>
-                    <li><a href="{:url('item/outgo')}"><i class="icon-reply"></i> 销售出库 </a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
+                        <ul id="item-outgo-dropdown" class="collapse">
+                            <li><a href="{:url('item/outgo')}">销售出库</a></li>
+                            <li><a href="{:url('item/specialoutgo')}">特殊出库</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
                         <ul id="examine-dropdown" class="collapse">

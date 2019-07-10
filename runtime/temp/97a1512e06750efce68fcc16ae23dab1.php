@@ -1,6 +1,6 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"/data/www/y5g/public/../application/index/view/setting/edition.html";i:1562380493;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562384194;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"/data/www/y5g/public/../application/index/view/setting/edition.html";i:1562607975;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562608158;}*/ ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%">
 <head>
 
     <meta charset="utf-8">
@@ -22,13 +22,13 @@
     <![endif]-->
 
 </head>
-<body>
+<body style="height:100%">
 
-<div class="container">
-    <div class="row">
-        <div class="span2">
-            <div class="main-left-col">
-                <h1><i class="icon-shopping-cart icon-large"></i> Adminize</h1>
+<div class="container-fluid " style="padding: 0px;height:100%">
+    <div class="row" style="height:100%">
+        <div class="span2" style="width: 9.3%;background: #484646;height:100%">
+            <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
+                <h1><i class="icon-large"></i> 库存管理系统</h1>
                 <ul class="side-nav">
                     <li class="active">
                         <a href="index.html"><i class="icon-home"></i> Dashboard</a>
@@ -47,7 +47,7 @@
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('item/outgo'); ?>"><i class="icon-reply"></i> 产品出库 </a></li>
+                    <li><a href="<?php echo url('item/outgo'); ?>"><i class="icon-reply"></i> 销售出库 </a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
                         <ul id="examine-dropdown" class="collapse">
@@ -91,7 +91,7 @@
 
         </div> <!-- end span2 -->
 
-        <div class="span10">
+        <div class="span10" style="width: 82%;    margin-left: 2%;height:100%">
 
             <div class="secondary-masthead span12">
 
@@ -122,7 +122,7 @@
 
 <!--<div class="span10">-->
 
-<!--<div class="slate">-->
+<!--<div class="">-->
 
 <!--<form class="form-inline">-->
 <!--<input type="text" class="input-large" placeholder="Keyword...">-->
@@ -146,7 +146,7 @@
 <?php echo $message; ?>
 <div class="row">
 
-    <div class="slate">
+    <div class="">
 
         <div class="span12 listing-buttons">
 

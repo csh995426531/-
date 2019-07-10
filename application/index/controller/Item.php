@@ -314,7 +314,8 @@ class Item extends BaseController
                 ->whereOr('i.number','like',"%".$keyword."%");
         }
 
-        $lists = $lists->paginate(10);
+        $lists = $lists->field('t.*')
+            ->paginate(10);     
 
         $breadcrumb = '退货入库';
 
@@ -464,7 +465,8 @@ class Item extends BaseController
         $sql3 = clone($sql);
         $total = $sql3->sum('i.price');
 
-        $lists = $sql->paginate(10);
+        $lists = $sql->field('t.*')
+        ->paginate(10);
 
         foreach ($lists as $list) {
 
@@ -787,6 +789,68 @@ class Item extends BaseController
         ]);
     }
 
+    //特殊出库
+    public function specialOutgo(){
+        $lists = \app\index\model\Item::where("status", "in", [
+            \app\index\model\Item::STATUS_NORMAL,
+            \app\index\model\Item::STATUS_OUTGO_WAIT
+        ]);
+
+        $typeId = $this->request->get("type_id");
+
+        if (!empty($typeId) && $typeId > 0) {
+            $lists = $lists->where("type_id", $typeId);
+        }
+
+        $nameId = $this->request->get("name_id");
+
+        if (!empty($nameId) && $nameId > 0) {
+            $lists = $lists->where("name_id", $nameId);
+        }
+
+        $featureId = $this->request->get("feature_id");
+
+        if (!empty($featureId) && $featureId > 0) {
+            $lists = $lists->where("feature_id", $featureId);
+        }
+
+        $appearanceId = $this->request->get("appearance_id");
+
+        if (!empty($appearanceId) && $appearanceId > 0) {
+            $lists = $lists->where("appearance_id", $appearanceId);
+        }
+
+        $lists = $lists->paginate(10);
+
+        foreach ($lists as $list) {
+            $list->statusName = $list->getStatusName();
+        }
+
+        $types = ItemType::where("status", ItemType::STATUS_ACTIVE)->select();
+
+        $names = ItemName::where("status", ItemName::STATUS_ACTIVE)->select();
+
+        $features = ItemFeature::where("status", ItemFeature::STATUS_ACTIVE)->select();
+
+        $appearances = ItemAppearance::where("status", ItemAppearance::STATUS_ACTIVE)->select();
+
+        $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)
+            ->where("status", ItemChannel::STATUS_ACTIVE)
+            ->select();
+
+        $breadcrumb = '特殊出库';
+
+        return $this->fetch('special_outgo', [
+            'breadcrumb' => $breadcrumb,
+            'channels' => $channels,
+            'lists' => $lists,
+            'types' => $types,
+            'names' => $names,
+            'features' => $features,
+            'appearances' => $appearances,
+        ]);
+    }
+
     //添加出库记录
     public function addOutgo(){
 
@@ -799,11 +863,11 @@ class Item extends BaseController
             $channelId = $this->request->post('channel_id', 0);
             $order_no = $this->request->post('order_no');
             $price = $this->request->post('price');
-            $consignee_nickname = $this->request->post('consignee_nickname');
-            $consignee = $this->request->post('consignee');
-            $consignee_address = $this->request->post('consignee_address');
-            $consignee_phone = $this->request->post('consignee_phone');
-            $memo = $this->request->post('memo');
+            $consignee_nickname = $this->request->post('consignee_nickname','');
+            $consignee = $this->request->post('consignee','');
+            $consignee_address = $this->request->post('consignee_address','');
+            $consignee_phone = $this->request->post('consignee_phone','');
+            $memo = $this->request->post('memo','');
 
             Db::startTrans();
             try {

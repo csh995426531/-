@@ -57,15 +57,13 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>型号</th>
-                    <th>分类</th>
                     <th>名称</th>
                     <th>配置</th>
                     <th>外观</th>
                     <th>序列号</th>
-                    <th>固件版本</th>
                     <th>备注</th>
                     <th>销售价格</th>
+                    <th>毛利润</th>
                     <th>出货渠道</th>
                     <th>出库人</th>
                     <th>出库时间</th>
@@ -120,15 +118,13 @@
                 {volist name='lists' id='temp'}
                 <tr>
                     <td><span>{$temp.id}</span></td>
-                    <th><span>{$temp.item.itemType.data}</span></th>
-                    <th><span>{$temp.item.itemCategory.data}</span></th>
                     <th><span>{$temp.item.itemName.data}</span></th>
                     <th><span>{$temp.item.itemFeature.data}</span></th>
                     <th><span>{$temp.item.itemAppearance.data}</span></th>
                     <th><span>{$temp.item.number}</span></th>
-                    <th><span>{$temp.item.itemEdition.data}</span></th>
                     <th><span>{$temp.memo}</span></th>
-                    <th><span>{$temp.price}</span></th>
+                    <th><span>{$temp.price * 1}</span></th>
+                    <th><span>{$temp.price * 1 - $temp.item.price * 1 - 100}</span></th>
                     <th><span>{$temp.itemChannel.data}</span></th>
                     <td><span>{$temp.createUser.username}</span></td>
                     <td><span>{$temp.create_time}</span></td>
