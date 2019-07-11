@@ -851,6 +851,54 @@ class Item extends BaseController
         ]);
     }
 
+    public function addSpecialOutgo(){
+        $result = SetResult(200, '操作成功');
+
+        $itemId = $this->request->param('item_id');
+        $status = $this->request->param('type');
+
+        if ($this->request->isPost()) {
+
+            try {
+                if (empty($itemId)) {
+                    throw new Exception("itemid错误");
+                }
+                if (!in_array($status,  [4,5])) {
+                    throw new Exception("操作类型错误");
+                }
+
+                $item = \app\index\model\Item::where("id", $itemId)->find();
+
+                if (empty($item) || $item->status != \app\index\model\Item::STATUS_NORMAL) {
+                    throw new \Exception("库存物品无效");
+                }
+
+                $updated = $item->save([
+                    'status' => $status,
+                    'update_time' => time(),
+                ], [
+                    'id' => $item->id,
+                    'status' => \app\index\model\Item::STATUS_NORMAL
+                ]);
+
+                if ($updated != 1) {
+                    throw new \Exception("库存更新失败");
+                }
+                
+                AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
+                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+            } catch (\Exception $e) {
+                $result = SetResult(500, $e->getMessage());
+                AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
+                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+            }
+        } else {
+            $result = SetResult(500, '请求方式错误');
+        }
+
+        return $result;
+    }
+
     //添加出库记录
     public function addOutgo(){
 

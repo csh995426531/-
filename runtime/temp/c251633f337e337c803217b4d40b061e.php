@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"/data/www/y5g/public/../application/index/view/item/inventory.html";i:1562607766;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562801030;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:69:"/data/www/y5g/public/../application/index/view/statistics/income.html";i:1562607859;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562886323;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -51,7 +51,7 @@
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
                         <ul id="item-outgo-dropdown" class="collapse">
                             <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
-                            <li><a href="<?php echo url('item/specialoutgo'); ?>">特殊出库</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">特殊出库</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -61,13 +61,14 @@
                             <li><a href="<?php echo url('item/outgoAgree'); ?>">出库审核</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <!-- <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
                         <ul id="statistics-dropdown" class="collapse">
                             <li><a href="<?php echo url('/index/statistics/income'); ?>">进货统计</a></li>
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
-                    </li>
+                    </li> -->
+                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
@@ -126,147 +127,101 @@
                 
 <div class="row">
 
-<div class="span12">
+    <div class="span5">
 
-<div class="">
+        <div class="">
 
-<form class="form-inline" method="get">
-    <select class="span2" name="type_id">
-        <option value=""> - 型号 - </option>
-        <?php foreach($types as $type): ?>
-        <option value="<?php echo $type['data']; ?>" <?php echo \think\Request::instance()->get('type_id')==$type['data']?'selected' :''; ?>><?php echo $type['data']; ?></opion>
-        <?php endforeach; ?>
-    </select>
-    <span id="data-all" style="display:none"><?php echo json_encode($data); ?></span>
-    <select class="span2" id="name_id" name="name_id"  data-href="<?php echo url('changeName'); ?>">
-        <option value=""> - 名称 - </option>
-        <?php foreach($names as $name): ?>
-        <option value="<?php echo $name['data']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['data']?'selected' :''; ?>><?php echo $name['data']; ?></option>
-        <?php endforeach; ?>
-    </select>
-    <select class="span2"  id="feature_id"name="feature_id" >
-        <option value=""> - 配置 - </option>
-        <?php foreach($features as $feature): ?>
-            <option value="<?php echo $feature['data']; ?>" <?php echo \think\Request::instance()->get('feature_id')==$feature['data']?'selected' :''; ?>><?php echo $feature['data']; ?></option>
-        <?php endforeach; ?>
-    </select>
-    <select class="span2" id="network_id" name="network_id">
-        <option value=""> - 网络模式 - </option>
-        <?php foreach($networks as $network): ?>
-            <option value="<?php echo $network['data']; ?>" <?php echo \think\Request::instance()->get('network_id')==$network['data']?'selected' :''; ?>><?php echo $network['data']; ?></option>
-        <?php endforeach; ?>
-    </select>
-    <select class="span2" id="appearance_id" name="appearance_id">
-        <option value=""> - 外观 - </option>
-        <?php foreach($appearances as $appearance): ?>
-            <option value="<?php echo $appearance['data']; ?>" <?php echo \think\Request::instance()->get('appearance_id')==$appearance['data']?'selected' :''; ?>><?php echo $appearance['data']; ?></option>
-        <?php endforeach; ?>
-    </select>
-    <input type="text" class="input-large" name="keyword" placeholder="序列号" value="<?php echo \think\Request::instance()->get('keyword'); ?>">
-<button type="submit" class="btn btn-primary">搜索</button>
-</form>
+            <div class="page-header">
+                <h2>筛选条件</h2>
+            </div>
 
-<div class="row">
+            <form class="form-inline" method="get">
+                <input type="hidden" name="mark" value="1"/>
+                <div class="control-group">
+                    <label class="control-label" for="start_date">开始日期</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="start_date"  name="start_date" value="" autocomplete="off">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="end_date">结束日期</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="end_date"  name="end_date" value="" autocomplete="off">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <select class="span2" name="channel_id">
+                        <option value="0"> - 进货渠道 - </option>
+                        <?php foreach($channels as $channel): ?>
+                        <option value="<?php echo $channel['id']; ?>" <?php echo \think\Request::instance()->get('channel_id')==$channel['id']?'selected' :''; ?>><?php echo $channel['data']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <select class="span2" name="create_user_id">
+                        <option value="0"> - 进货人 - </option>
+                        <?php foreach($createUsers as $createUser): ?>
+                        <option value="<?php echo $createUser['id']; ?>" <?php echo \think\Request::instance()->get('create_user_id')==$createUser['id']?'selected' :''; ?>><?php echo $createUser['username']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">搜索</button>
+            </form>
 
-    <div class="">
-        <div class="span12 listing-buttons">
         </div>
-        <div class="span12">
-            <h4 class="span12">总条数：<?php echo $lists->total(); ?></h4>
-            <table class="orders-table table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>入库时间</th>
-                    <th>型号</th>
-                    <th>分类</th>
-                    <th>名称</th>
-                    <th>配置</th>
-                    <th>外观</th>
-                    <th>序列号</th>
-                    <th>固件版本</th>
-                    <th>备注</th>
-                    <th>进货价格</th>
-                    <th>进货渠道</th>
-                    <th>状态</th>
-                    <!--<th class="actions">操作</th>-->
-                </tr>
-                </thead>
-                <tbody>
-                <?php if(is_array($lists) || $lists instanceof \think\Collection || $lists instanceof \think\Paginator): $i = 0; $__LIST__ = $lists;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$temp): $mod = ($i % 2 );++$i;?>
-                <tr>
-                    <td><span><?php echo $temp['id']; ?></span></td>
-                    <th><span><?php echo $temp['date']; ?></span></th>
-                    <th><span><?php echo $temp['itemType']['data']; ?></span></th>
-                    <th><span><?php echo $temp['itemCategory']['data']; ?></span></th>
-                    <th><span><?php echo $temp['itemName']['data']; ?></span></th>
-                    <th><span><?php echo $temp['itemFeature']['data']; ?></span></th>
-                    <th><span><?php echo $temp['itemAppearance']['data']; ?></span></th>
-                    <th><span><?php echo $temp['number']; ?></span></th>
-                    <th><span><?php echo $temp['itemEdition']['data']; ?></span></th>
-                    <th><span><?php echo $temp['memo']; ?></span></th>
-                    <th><span><?php echo $temp['price']; ?></span></th>
-                    <th><span><?php echo $temp['itemChannel']['data']; ?></span></th>
-                    <th><span><?php echo $temp['statusName']; ?></span></th>
-                    <td class="actions">
-                        <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
-                        <!--<a class="btn btn-small btn-success allow-item" data-id="<?php echo $temp['id']; ?>" data-value="1" data-href="<?php echo url('allowAgree'); ?>">通过</a>-->
-                        <!--<a class="btn btn-small btn-danger reject-item" data-id="<?php echo $temp['id']; ?>" data-value="0" data-href="<?php echo url('rejectAgree'); ?>">拒绝</a>-->
-                    </td>
-                </tr>
-                <?php endforeach; endif; else: echo "" ;endif; ?>
-                </tbody>
-            </table>
-        </div>
-        <div>
-            <?php echo $lists->render(); ?>
+
+    </div>
+
+    <div class="span5">
+        <div class="slate">
+
+            <div class="page-header">
+                <h2>筛选结果</h2>
+            </div>
+
+            <p>总数量：<?php echo $count; ?></p>
+            <p>总金额：<?php echo $price; ?></p>
         </div>
     </div>
 </div>
-
-<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/jquery-1.8.3.js"></script>
 <script>
-    $(function(){
-        $(".allow-item, .reject-item").click(function(){
-            var url = $(this).data('href');
-            var id = $(this).data('id');
-            $.post(url, {id:id}, function (res) {
-                alert(res.data);
-                window.location.replace("<?php echo url('incomeAgree');?>");
-            })
-        })
-        $("#name_id").change(function(){
-            var val = $(this).val();
-            var data = jQuery.parseJSON($("#data-all").html());
-            if (val != '') {
+    $(function () {
 
-                var url = $(this).data('href');
+        var startDate = "<?php echo $start_date;?>";
+        var endDate = "<?php echo $end_date;?>";
 
-                var name = $(this).val();
-                $.get(url, {name:name}, function(res){
-                    data = res.data;
-                })
-            } 
+        $.datepicker.regional['zh-CN'] = {
+            closeText: '关闭',
+            prevText: '<上月',
+            nextText: '下月>',
+            currentText: '今天',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                '七', '八', '九', '十', '十一', '十二'],
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            weekHeader: '周',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: true,
+            yearSuffix: '年'
+        };
 
-            var features_str = '<option value=""> - 配置 - </option>';
-            $.each(data.features,function(k,v){
-                features_str += '<option value="'+v.data+'"> '+v.data+' </option>';
-            })
+        $.datepicker.setDefaults( $.datepicker.regional[ "zh-CN" ] );
 
-            var networks_str = '<option value=""> - 网络模式 - </option>';
-            $.each(data.networks,function(k,v){
-                networks_str += '<option value="'+v.data+'"> '+v.data+' </option>';
-            })
+        $("#start_date, #end_date").datepicker({
+            dateFormat: "yy-mm-dd",
+            todayHighlight: false,
+            // minDate: 0,
+            // maxDate: "+2D"
+        });
 
-            var appearances_str = '<option value=""> - 外观 - </option>';
-            $.each(data.appearances,function(k,v){
-                appearances_str += '<option value="'+v.data+'"> '+v.data+' </option>';
-            })
-
-            $('#feature_id').html(features_str);
-            $('#network_id').html(networks_str);
-            $('#appearance_id').html(appearances_str);
-        }); 
+        $('#start_date').datepicker("setDate", startDate);
+        $('#end_date').datepicker("setDate", endDate);
     })
 </script>
             </div>

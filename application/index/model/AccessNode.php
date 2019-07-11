@@ -40,7 +40,7 @@ class AccessNode extends Model
                 'index/item/outgo', 'index/item/addoutgo',
             ],
             'index/item/specialoutgo' => [
-                'index/item/specialoutgo', 'index/item/addoutgo',
+                'index/item/specialoutgo', 'index/item/addspecialoutgo',
             ],
             'index/item/incomeagree' => [
                 'index/item/incomeagree','index/item/allowagree','index/item/rejectagree',
@@ -49,9 +49,9 @@ class AccessNode extends Model
                 'index/item/outgoagree','index/item/allowoutgoagree','index/item/rejectoutgoagree',
             ],
 
-            'index/statistics/income' => [
-                'index/statistics/income',
-            ],
+            // 'index/statistics/income' => [
+            //     'index/statistics/income',
+            // ],
             'index/statistics/profit' => [
                 'index/statistics/profit',
             ],

@@ -62,7 +62,7 @@
                 <select class="span2" name="status">
                     <option value=""> - 状态 - </option>
                     {foreach name="statuses" item="status" key="k" }
-                    <option value="{$k}" {$Think.get.status==$status ? 'selected' :''}>{$status}</option>
+                    <option value="{$k}" {$Think.get.status==$k? 'selected' :''}>{$status}</option>
                     {/foreach}
                 </select>
                 <input type="text" class="input-large" name="keyword" placeholder="序列号" value="{$Think.get.keyword}">

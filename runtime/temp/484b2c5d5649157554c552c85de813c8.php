@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/item/special_outgo.html";i:1562802070;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562801030;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/item/special_outgo.html";i:1562885709;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562801030;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -269,8 +269,8 @@
                         <td class="actions">
                             <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
                             <?php if($temp['status'] == 2): ?>
-                            <a class="btn btn-small btn-warning add-outgo" data-toggle="modal" href="#addOutgo" data-id="<?php echo $temp['id']; ?>">维修</a>
-                            <a class="btn btn-small btn-danger add-outgo" data-toggle="modal" href="#addOutgo" data-id="<?php echo $temp['id']; ?>">丢失</a>
+                            <a class="btn btn-small btn-warning add-outgo" data-toggle="modal" data-href="<?php echo url('addSpecialOutgo'); ?>" data-id="<?php echo $temp['id']; ?>" data-type="4">维修</a>
+                            <a class="btn btn-small btn-danger add-outgo" data-toggle="modal"  data-href="<?php echo url('addSpecialOutgo'); ?>" data-id="<?php echo $temp['id']; ?>" data-type="5">丢失</a>
                             <!--<a class="btn btn-small btn-danger reject-item" data-id="<?php echo $temp['id']; ?>" data-value="0" data-href="<?php echo url('rejectAgree'); ?>">拒绝</a>-->
                             <?php endif; ?>
                         </td>
@@ -371,10 +371,20 @@
             $.post(url, data, function (res) {
                 alert(res.data);
                 if (res.code == 200) {
-                    window.location.replace("<?php echo url('outgo');?>");
+                    window.location.replace("<?php echo url('specialOutgo');?>");
                 }
             })
         });
+
+        $(".add-outgo").click(function(){
+            var id = $(this).data('id')
+            var url = $(this).data('href')
+            var type = $(this).data('type')
+            $.post(url, {item_id:id,type:type}, function(res){
+                alert(res.data);
+                // window.location.replace("<?php echo url('specialOutgo');?>");
+            })
+        })
     })
 </script>
             </div>

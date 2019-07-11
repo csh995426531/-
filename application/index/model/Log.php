@@ -20,7 +20,8 @@ class Log extends Model
     const ACTION_ITEM_RETURN_INCOME = '退货入库';
     const ACTION_ITEM_INCOME_AGREE_SUCCESS = '通过入库审核';
     const ACTION_ITEM_INCOME_AGREE_REJECT = '拒绝入库审核';
-    const ACTION_ITEM_OUTGO = '出库';
+    const ACTION_ITEM_OUTGO = '销售出库';
+    const ACTION_ITEM_SPECIAL_OUTGO = '特殊出库';
     const ACTION_ITEM_OUTGO_AGREE_SUCCESS = '通过出库审核';
     const ACTION_ITEM_OUTGO_AGREE_REJECT = '拒绝出库审核';
     const ACTION_ITEM_INVENTORY= '在库查询';
@@ -43,8 +44,8 @@ class Log extends Model
     const ACTION_SETTING_TYPE_DEL = '删除型号';
     const ACTION_SETTING_CHANNEL_ADD = '增加进货渠道/出货途径';
     const ACTION_SETTING_CHANNEL_DEL = '删除进货渠道/出货途径';
-    const ACTION_STATISTICS_INCOME = '进货统计';
-    const ACTION_STATISTICS_PROFIT = '利润统计';
+    // const ACTION_STATISTICS_INCOME = '进货统计';
+    const ACTION_STATISTICS_PROFIT = '统计';
 
     public function user(){
         return $this->hasOne("user", 'id', 'user_id');
