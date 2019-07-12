@@ -1,4 +1,10 @@
-Call to undefined method <?php
+<?php
+/**
+ * Created by PhpStorm.
+ * User: csh
+ * Date: 2019/6/1
+ * Time: 17:23
+ */
 namespace app\index\controller;
 
 use app\base\controller\BaseController;

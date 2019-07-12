@@ -24,28 +24,37 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <select class="span2" name="income_channel_id">
-                        <option value="0"> - 进货渠道 - </option>
-                        {foreach $income_channels as $channel}
-                        <option value="{$channel.id}" {$Think.get.channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
-                        {/foreach}
-                    </select>
+                     <label class="control-label" for="income_channel_id">进货渠道</label>
+                     <div class="controls">
+                        <select class="span2" name="income_channel_id">
+                            <option value="0"> -  - </option>
+                            {foreach $income_channels as $channel}
+                            <option value="{$channel.id}" {$Think.get.income_channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
+                            {/foreach}
+                        </select>
+                    </div>    
                 </div>
                 <div class="control-group">
-                    <select class="span2" name="create_user_id">
-                        <option value="0"> - 进货人 - </option>
-                        {foreach $create_users as $createUser}
-                        <option value="{$createUser.id}" {$Think.get.create_user_id==$createUser.id ? 'selected' :''}>{$createUser.username}</option>
-                        {/foreach}
-                    </select>
+                    <label class="control-label" for="create_user_id">进货人</label>
+                    <div class="controls">
+                        <select class="span2" name="create_user_id">
+                            <option value="0"> -  - </option>
+                            {foreach $create_users as $createUser}
+                            <option value="{$createUser.id}" {$Think.get.create_user_id==$createUser.id ? 'selected' :''}>{$createUser.username}</option>
+                            {/foreach}
+                        </select>
+                    </div>    
                 </div>
                 <div class="control-group">
-                    <select class="span2" name="outgo_channel_id">
-                        <option value="0"> - 出货途径 - </option>
-                        {foreach $outgo_channels as $channel}
-                        <option value="{$channel.id}" {$Think.get.channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
-                        {/foreach}
-                    </select>
+                    <label class="control-label" for="outgo_channel_id">出货途径</label>
+                    <div class="controls">
+                        <select class="span2" name="outgo_channel_id">
+                            <option value="0"> -  - </option>
+                            {foreach $outgo_channels as $channel}
+                            <option value="{$channel.id}" {$Think.get.outgo_channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
+                            {/foreach}
+                        </select>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">搜索</button>
             </form>
@@ -61,9 +70,10 @@
                 <h2>筛选结果</h2>
             </div>
 
-            <p>总数量：{$income_count}</p>
+            <p>进货总数量：{$income_count}</p>
             <p>进货总价格：{$income_price}</p>
             <p>平均进货价格：{$ave_income_price}</p>
+            <p>销售总数量：{$outgo_count}</p>
             <p>平均销售价格：{$ave_outgo_price}</p>
             <p>总利润：{$profit}</p>
             <p>平均利润：{$ave_profit}</p>

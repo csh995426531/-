@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:69:"/data/www/y5g/public/../application/index/view/statistics/profit.html";i:1562972376;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562886323;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:61:"/data/www/y5g/public/../application/index/view/log/index.html";i:1562607970;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562886323;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -127,83 +127,169 @@
                 
 <div class="row">
 
-    <div class="span5">
+    <div class="">
 
-        <div class="">
-
-            <div class="page-header">
-                <h2>筛选条件</h2>
-            </div>
+        <div class="span12">
 
             <form class="form-inline" method="get">
-                <input type="hidden" name="mark" value="1"/>
-                <div class="control-group">
-                    <label class="control-label" for="start_date">开始日期</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" id="start_date"  name="start_date" value="" autocomplete="off">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="end_date">结束日期</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" id="end_date"  name="end_date" value="" autocomplete="off">
-                    </div>
-                </div>
-                <div class="control-group">
-                     <label class="control-label" for="income_channel_id">进货渠道</label>
-                     <div class="controls">
-                        <select class="span2" name="income_channel_id">
-                            <option value="0"> -  - </option>
-                            <?php foreach($income_channels as $channel): ?>
-                            <option value="<?php echo $channel['id']; ?>" <?php echo \think\Request::instance()->get('income_channel_id')==$channel['id']?'selected' :''; ?>><?php echo $channel['data']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>    
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="create_user_id">进货人</label>
-                    <div class="controls">
-                        <select class="span2" name="create_user_id">
-                            <option value="0"> -  - </option>
-                            <?php foreach($create_users as $createUser): ?>
-                            <option value="<?php echo $createUser['id']; ?>" <?php echo \think\Request::instance()->get('create_user_id')==$createUser['id']?'selected' :''; ?>><?php echo $createUser['username']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>    
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="outgo_channel_id">出货途径</label>
-                    <div class="controls">
-                        <select class="span2" name="outgo_channel_id">
-                            <option value="0"> -  - </option>
-                            <?php foreach($outgo_channels as $channel): ?>
-                            <option value="<?php echo $channel['id']; ?>" <?php echo \think\Request::instance()->get('outgo_channel_id')==$channel['id']?'selected' :''; ?>><?php echo $channel['data']; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
+                <label for="start_date">开始日期
+                    <input type="text" class="span2 input-xlarge" id="start_date"  name="start_date" value="" autocomplete="off">
+                </label>
+
+                <label for="end_date">结束日期
+                    <input type="text" class="span2 input-xlarge" id="end_date"  name="end_date" value="" autocomplete="off">
+                </label>
+                <select class="span2" name="user_id">
+                    <option value="0"> - 操作人 - </option>
+                    <?php foreach($users as $user): ?>
+                    <option value="<?php echo $user['id']; ?>" <?php echo \think\Request::instance()->get('user_id')==$user['id']?'selected' :''; ?>><?php echo $user['username']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <select class="span2" name="action">
+                    <option value="0"> - 操作菜单 - </option>
+                    <?php foreach($actions as $action): ?>
+                    <option value="<?php echo $action; ?>" <?php echo \think\Request::instance()->get('action')==$action?'selected' :''; ?>><?php echo $action; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <select class="span2" name="response">
+                    <option value="0"> - 操作结果 - </option>
+                    <?php foreach($responses as $key => $response): ?>
+                    <option value="<?php echo $key; ?>" <?php echo \think\Request::instance()->get('response')==$key?'selected' :''; ?>><?php echo $response; ?></option>
+                    <?php endforeach; ?>
+                </select>
                 <button type="submit" class="btn btn-primary">搜索</button>
             </form>
-
         </div>
 
-    </div>
+        <div class="row">
 
-    <div class="span5">
-        <div class="slate">
+            <div class="span12 listing-buttons">
 
-            <div class="page-header">
-                <h2>筛选结果</h2>
+                <!--<button class="btn btn-info">Action</button>-->
+
+                <!--<button class="btn btn-success">Action</button>-->
+
+                <!--<button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>-->
+
             </div>
 
-            <p>进货总数量：<?php echo $income_count; ?></p>
-            <p>进货总价格：<?php echo $income_price; ?></p>
-            <p>平均进货价格：<?php echo $ave_income_price; ?></p>
-            <p>销售总数量：<?php echo $outgo_count; ?></p>
-            <p>平均销售价格：<?php echo $ave_outgo_price; ?></p>
-            <p>总利润：<?php echo $profit; ?></p>
-            <p>平均利润：<?php echo $ave_profit; ?></p>
+            <div class="span12">
+
+                <!--<div class="page-header">-->
+                <!--<div class="btn-group pull-right">-->
+                <!--<button class="btn dropdown-toggle" data-toggle="dropdown">-->
+                <!--<i class="icon-download-alt"></i> Export-->
+                <!--<span class="caret"></span>-->
+                <!--</button>-->
+                <!--<ul class="dropdown-menu">-->
+                <!--<li><a href="">CSV</a></li>-->
+                <!--<li><a href="">Excel</a></li>-->
+                <!--<li><a href="">PDF</a></li>-->
+                <!--</ul>-->
+                <!--</div>-->
+                <!--<h2>Listings</h2>-->
+                <!--</div>-->
+                <h4 class="span12">总条数：<?php echo $lists->total(); ?></h4>
+                <table class="orders-table table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>操作时间</th>
+                        <th>操作人</th>
+                        <th>操作菜单</th>
+                        <th>操作内容</th>
+                        <th>操作结果</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label label-info">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label label-warning">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label label-important">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label label-inverse">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label label-success">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                    <!--<td><a href="form.html">Listing title</a> <span class="label">Item Status</span><br /><span class="meta">Added Today</span></td>-->
+                    <!--<td class="actions">-->
+                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
+                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
+                    <!--</td>-->
+                    <!--</tr>-->
+
+                    <?php if(is_array($lists) || $lists instanceof \think\Collection || $lists instanceof \think\Paginator): $i = 0; $__LIST__ = $lists;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$temp): $mod = ($i % 2 );++$i;?>
+                    <tr>
+                        <td><span><?php echo $temp['id']; ?></span></td>
+                        <th><span><?php echo $temp['create_time']; ?></span></th>
+                        <th><span><?php echo $temp['user']['username']; ?></span></th>
+                        <th><span><?php echo $temp['action']; ?></span></th>
+                        <th><span><?php echo $temp['request']; ?></span></th>
+                        <th><span><?php echo $temp['response']; ?></span></th>
+                    </tr>
+                    <?php endforeach; endif; else: echo "" ;endif; ?>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <?php echo $lists->render(); ?>
+            </div>
         </div>
+
+        <!--<div class="span5">-->
+
+        <!--<div class="pagination pull-left">-->
+        <!--<ul>-->
+        <!--<li><a href="#">Prev</a></li>-->
+        <!--<li class="active">-->
+        <!--<a href="#">1</a>-->
+        <!--</li>-->
+        <!--<li><a href="#">2</a></li>-->
+        <!--<li><a href="#">3</a></li>-->
+        <!--<li><a href="#">4</a></li>-->
+        <!--<li><a href="#">Next</a></li>-->
+        <!--</ul>-->
+        <!--</div>-->
+
+        <!--</div>-->
+
+        <!--<div class="span5 listing-buttons pull-right">-->
+
+        <!--<button class="btn btn-info">Action</button>-->
+
+        <!--<button class="btn btn-success">Action</button>-->
+
+        <!--<button class="btn btn-primary">Add New Item</button>-->
+
+        <!--</div>-->
+
     </div>
 </div>
 <script src="/static/js/jquery-1.8.3.js"></script>

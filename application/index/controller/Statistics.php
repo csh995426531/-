@@ -153,48 +153,42 @@ class Statistics extends BaseController
                 $sql = $sql->where("t.channel_id", $incomeChannelId);
             }
 
-            if (!empty($createUserId)) {
-
-                $histories = Db::table("y5g_item_income_history")->where("create_user_id", $createUserId)->select();
-                if (!empty($histories)) {
-                    $sql = $sql->where("t.id", 'in', array_column($histories, 'item_id'));
-                }
+            if (!empty($$createUserId) && $createUserId > 0) {
+                $sql = $sql->where("h.create_user_id", '=', $createUserId);
             }
-
+            
             $sql2 = clone $sql;
 
-            $incomePrice = $sql->sum('t.price');
-            $incomeCount = $sql2->count(); 
+            $incomePrice = $sql->sum('t.price'); 
+            $incomeCount = $sql2->count();
             $aveIncomePrice =  $incomeCount == 0 ? 0 :  round($incomePrice / $incomeCount, 2) ;
 
-            $sql = ItemOutgoHistory::where("status", 'in', [
-                ItemOutgoHistory::STATUS_SUCCESS,
-                ItemOutgoHistory::STATUS_RETURN_WAIT
-            ]);
+            $sql = Db::name('ItemOutgoHistory')
+                ->alias('oh')
+                ->join('Item i', 'i.id=oh.item_id')
+                ->where("oh.status", 'in', [
+                    ItemOutgoHistory::STATUS_SUCCESS,
+                    ItemOutgoHistory::STATUS_RETURN_WAIT
+                ]);
 
             if (!empty($startDate)) {
-                $sql = $sql->where("date", '>=', $startDate);
+                $sql = $sql->where("oh.date", '>=', $startDate);
             }
 
             if (!empty($endDate)) {
-                $sql = $sql->where("date", '<=', $endDate);
+                $sql = $sql->where("oh.date", '<=', $endDate);
             }
 
             if (!empty($outgoChannelId) && $outgoChannelId > 0) {
-                $sql = $sql->where("channel_id", $outgoChannelId);
+                $sql = $sql->where("oh.channel_id", $outgoChannelId);
             }
-
-            $sql2 = clone $sql;
-            $sql3 = clone $sql;
             
-           
-            var_dump($sql->field('item_id')->select());die;
-            $historyIds = collection($sql2->select())->toArray();
-            $incomePrice = \app\index\model\Item::where('id', 'in', array_column($historyIds, 'item_id'))
-            ->sum("price");
-
-            $outgoPrice = $sql->sum('price');
-            $profit = $outgoPrice - $incomePrice;
+            $sql3 = clone $sql;
+        
+            $priceTemp = $sql->field("sum(i.price) as income_price,sum(oh.price) as outgo_price")->find();
+            $incomePrice2 = floatval($priceTemp['income_price']);
+            $outgoPrice = floatval($priceTemp['outgo_price']);
+            $profit = $outgoPrice > 0 ? $outgoPrice - $incomePrice2 - 100 : 0; 
 
             $outgoCount = $sql3->count();
             
@@ -238,21 +232,11 @@ class Statistics extends BaseController
             $outgoChannels = [];
         }
 
-        $breadcrumb = '利润统计';
+        $breadcrumb = '统计';
 
         AddLog(\app\index\model\Log::ACTION_STATISTICS_PROFIT, json_encode($this->request->param())
             , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
 
-
-            $incomePrice = 0;
-            $incomeCount = 0;
-            $aveIncomePrice =  0;
-
-            $outgoPrice = 0;
-            $profit = 0;
-            $outgoCount = 0;
-            $aveOutgoPrice = 0;
-            $aveProfit = 0;
         return $this->fetch('profit', [
             'breadcrumb' => $breadcrumb,
             'income_channels' => $incomeChannels,
