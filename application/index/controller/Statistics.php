@@ -8,6 +8,7 @@ use app\index\model\ItemOutgoHistory;
 use app\index\model\User;
 use think\Db;
 use think\Session;
+use app\index\model\ItemName;
 
 class Statistics extends BaseController
 {
@@ -132,6 +133,8 @@ class Statistics extends BaseController
 
         $createUserId = $this->request->get("create_user_id");
 
+        $nameId = $this->request->get('name_id');
+
         $mark = $this->request->get('mark');
 
         if ($mark == 1) {
@@ -155,6 +158,10 @@ class Statistics extends BaseController
 
             if (!empty($$createUserId) && $createUserId > 0) {
                 $sql = $sql->where("h.create_user_id", '=', $createUserId);
+            }
+
+            if (!empty($nameId) && $nameId > 0) {
+                $sql = $sql->where("t.name_id", '=', $nameId);
             }
             
             $sql2 = clone $sql;
@@ -181,6 +188,10 @@ class Statistics extends BaseController
 
             if (!empty($outgoChannelId) && $outgoChannelId > 0) {
                 $sql = $sql->where("oh.channel_id", $outgoChannelId);
+            }
+
+            if (!empty($nameId) && $nameId > 0) {
+                $sql = $sql->where("i.name_id", '=', $nameId);
             }
             
             $sql3 = clone $sql;
@@ -232,6 +243,8 @@ class Statistics extends BaseController
             $outgoChannels = [];
         }
 
+        $names = Db::table('y5g_item_name')->where('status', ItemName::STATUS_ACTIVE)->select();
+
         $breadcrumb = '统计';
 
         AddLog(\app\index\model\Log::ACTION_STATISTICS_PROFIT, json_encode($this->request->param())
@@ -251,7 +264,8 @@ class Statistics extends BaseController
             'ave_outgo_price' => $aveOutgoPrice,
             'ave_profit' => $aveProfit,
             'start_date' => $startDate,
-            'end_date' => $endDate
+            'end_date' => $endDate,
+            'names' => $names
         ]);
     }
 }

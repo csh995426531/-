@@ -19,10 +19,10 @@ require __DIR__ . '/../thinkphp/start.php';
 
 header("Content-type:text/html;charset=utf-8");
 //配置信息
-$cfg_dbhost = '172.21.0.1';
+$cfg_dbhost = '127.0.0.1';
 $cfg_dbname = 'maiguo';
-$cfg_dbuser = 'root';
-$cfg_dbpwd = '123456';
+$cfg_dbuser = 'maiguo';
+$cfg_dbpwd = 'B6je4LcsY5MApHnr';
 $cfg_db_language = 'utf8';
 $to_file_name = "databases_backup.sql";
 //END 配置
@@ -33,41 +33,41 @@ $conn = new mysqli($cfg_dbhost, $cfg_dbuser, $cfg_dbpwd, $cfg_dbname);
 if ($conn->connect_error) {
     die("连接失败: " . $conn->connect_error);
 } 
-echo 'success';die;
+echo '连接成功';
 
 // // 使用 sql 创建数据表
-$sql = "CREATE TABLE `y5g_item_network` (
-    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '类别id',
-    `name_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '名称id',
-    `data` varchar(255) NOT NULL DEFAULT '' COMMENT '名称',
-    `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态 1正常 2失效',
-    `create_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-    `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-    PRIMARY KEY (`id`,`name_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+$sql = "ALTER TABLE `maiguo`.`y5g_item` ADD COLUMN `network_id` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '网络模式id' AFTER `update_time`";
 
-// if ($conn->query($sql)) {
-//     echo "数据表 y5g_item_network 创建成功";
-// } else {
-//     echo "创建数据表错误: " .$conn->error;
-// }
+if ($conn->query($sql)) {
+    echo "数据表 y5g_item 更新成功";
+} else {
+    echo "数据表 y5g_item 更新失败: " .$conn->error;
+}
+die;
+$sql = "INSERT INTO `maiguo`.`y5g_access_node` (`id`, `module`, `controller`, `action`, `name`, `parent_id`, `create_time`, `update_time`) VALUES ('31', 'index', 'item', 'specialoutgo', '特殊出库', '11', '0', '0')";
 
-$sql = "INSERT INTO `maiguo`.`y5g_access_node` (`id`, `module`, `controller`, `action`, `name`, `parent_id`, `create_time`, `update_time`) VALUES ('30', 'index', 'setting', 'network', '网络模式录入', '19', '0', '0')";
+if ($conn->query($sql)) {
+    echo "数据表 y5g_access_node 更新成功";
+} else {
+    echo "数据表 y5g_access_node 更新错误: ".$conn->error;
+}
 
-// if ($conn->query($sql)) {
-//     echo "数据表 y5g_access_node 更新成功";
-// } else {
-//     echo "数据表 y5g_access_node 更新错误: ".$conn->error;
-// }
+$sql = "DELETE FROM `maiguo`.`y5g_access_node` WHERE (`id` = '17')";
 
-$sql = "ALTER TABLE y5g_item_type CHANGE feature_id network_id  int(10) unsigned NOT NULL DEFAULT '0' COMMENT '网络模式id'";
+if ($conn->query($sql)) {
+    echo "数据表 y5g_access_node 更新成功";
+} else {
+    echo "数据表 y5g_access_node 更新错误: " .$conn->error;
+}
 
-// if ($conn->query($sql)) {
-//     echo "数据表 y5g_item_type 更新成功";
-// } else {
-//     echo "数据表 y5g_item_type 更新错误: " .$conn->error;
-// }
+$sql = "UPDATE `maiguo`.`y5g_access_node` SET `name` = '统计' WHERE (`id` = '18')";
+
+if ($conn->query($sql)) {
+    echo "数据表 y5g_access_node 更新成功";
+} else {
+    echo "数据表 y5g_access_node 更新错误: " .$conn->error;
+}
+die;
 // mysqli_close($conn);
 // //数据库中有哪些表
 // $tables = mysql_query("SHOW TABLES FROM $cfg_dbname");

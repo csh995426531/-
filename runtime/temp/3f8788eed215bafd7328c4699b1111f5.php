@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:69:"/data/www/y5g/public/../application/index/view/statistics/profit.html";i:1562972376;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562886323;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:69:"/data/www/y5g/public/../application/index/view/statistics/profit.html";i:1562975201;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562886323;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -149,6 +149,17 @@
                         <input type="text" class="input-xlarge" id="end_date"  name="end_date" value="" autocomplete="off">
                     </div>
                 </div>
+                <div class="control-group">
+                    <label class="control-label" for="name_id">产品名称</label>
+                    <div class="controls">
+                       <select class="span2" name="name_id">
+                           <option value="0"> -  - </option>
+                           <?php foreach($names as $name): ?>
+                           <option value="<?php echo $name['id']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['id']?'selected' :''; ?>><?php echo $name['data']; ?></option>
+                           <?php endforeach; ?>
+                       </select>
+                   </div>    
+               </div>
                 <div class="control-group">
                      <label class="control-label" for="income_channel_id">进货渠道</label>
                      <div class="controls">
