@@ -17,31 +17,32 @@
                     <option value="{$type.data}" {$Think.get.type_id==$type.data ? 'selected' :''}>{$type.data}</opion>
                     {/foreach}
                 </select>
-                <select class="span2" name="name_id">
+                <span id="data-all" style="display:none">{$data|json_encode}</span>
+                <select class="span2" name="name_id" id='name_id'   data-href="{:url('changeName')}">
                     <option value=""> - 名称 - </option>
                     {foreach $names as $name}
                     <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
                     {/foreach}
                 </select>
-                <select class="span2" name="feature_id">
+                <select class="span2" name="feature_id" id='feature_id'>
                     <option value=""> - 配置 - </option>
                     {foreach $features as $feature}
                     <option value="{$feature.data}" {$Think.get.feature_id==$feature.data ? 'selected' :''}>{$feature.data}</option>
                     {/foreach}
                 </select>
-                <select class="span2" name="network_id">
+                <select class="span2" name="network_id" id='network_id'>
                     <option value=""> - 网络模式 - </option>
                     {foreach $networks as $network}
                     <option value="{$network.data}" {$Think.get.network_id==$network.data ? 'selected' :''}>{$network.data}</option>
                     {/foreach}
                 </select>
-                <select class="span2" name="appearance_id">
+                <select class="span2" name="appearance_id" id='appearance_id'>
                     <option value=""> - 外观 - </option>
                     {foreach $appearances as $appearance}
                     <option value="{$appearance.data}" {$Think.get.appearance_id==$appearance.data ? 'selected' :''}>{$appearance.data}</option>
                     {/foreach}
                 </select>
-                <select class="span2" name="edition_id">
+                <select class="span2" name="edition_id" id='edition_id'>
                     <option value=""> - 固件版本 - </option>
                     {foreach $editions as $edition}
                     <option value="{$edition.data}" {$Think.get.edition_id==$edition.data ? 'selected' :''}>{$edition.data}</option>
@@ -203,5 +204,44 @@
                     window.location.replace("<?php echo url('incomeAgree');?>");
                 })
             })
+
+            $("#name_id").change(function(){
+                var val = $(this).val();
+                var data;
+                if (val != '') {
+
+                    var url = $(this).data('href');
+
+                    var name = $(this).val();
+                    $.get(url, {name:name}, function(res){
+                        data = res.data;
+                        reset(data);
+                    })
+                } else {
+                    data = jQuery.parseJSON($("#data-all").html());
+                    reset(data);
+                }
+            }); 
         })
+
+        function reset(data){
+            var features_str = '<option value=""> - 配置 - </option>';
+            $.each(data.features,function(k,v){
+                features_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            var networks_str = '<option value=""> - 网络模式 - </option>';
+            $.each(data.networks,function(k,v){
+                networks_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            var appearances_str = '<option value=""> - 外观 - </option>';
+            $.each(data.appearances,function(k,v){
+                appearances_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            $('#feature_id').html(features_str);
+            $('#network_id').html(networks_str);
+            $('#appearance_id').html(appearances_str);
+        }
     </script>

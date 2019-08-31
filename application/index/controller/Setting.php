@@ -577,18 +577,20 @@ class Setting extends BaseController
             $message = urldecode($message);
         }
 
-        $nameData = ItemName::where('status', ItemName::STATUS_ACTIVE)->select();
+        // $nameData = ItemName::where('status', ItemName::STATUS_ACTIVE)->select();
 
-        $names = [];
+        // $names = [];
 
-        foreach ($nameData as $nameTemp) {
+        // foreach ($nameData as $nameTemp) {
 
-            if (!isset($names[$nameTemp->category_id])) {
-                $names[$nameTemp->category_id]['category'] = $nameTemp->category;
-            }
+        //     if (!isset($names[$nameTemp->category_id])) {
+        //         $names[$nameTemp->category_id]['category'] = $nameTemp->category;
+        //     }
 
-            $names[$nameTemp->category_id]['lists'][] = $nameTemp;
-        }
+        //     $names[$nameTemp->category_id]['lists'][] = $nameTemp;
+        // }
+        $categories = ItemCategory::where('status', ItemCategory::STATUS_ACTIVE)->select();
+
 
         $lists = ItemEdition::paginate(10);
 
@@ -597,7 +599,7 @@ class Setting extends BaseController
         return $this->fetch("edition", [
             'message' => $message,
             'lists' => $lists,
-            'names' => $names,
+            'categories' => $categories,
             'breadcrumb' => $breadcrumb,
         ]);
     }
@@ -607,38 +609,38 @@ class Setting extends BaseController
 
         $result = SetResult(200, '保存成功');
 
-        $nameId = $this->request->param('name_id');
+        $categoryId = $this->request->param('category_id');
 
         $data = $this->request->param('data');
 
         try {
 
-            if ( empty($nameId)) {
-                throw new \Exception("名称不能为空");
+            if ( empty($categoryId)) {
+                throw new \Exception("类别不能为空");
             }
 
             if ( empty($data)) {
                 throw new \Exception("值不能为空");
             }
 
-            $name = ItemName::where("id", $nameId)->find();
+            $category = ItemCategory::where("id", $categoryId)->find();
 
-            if (empty($name) || $name->status != ItemName::STATUS_ACTIVE) {
-                throw new \Exception("名称无效");
+            if (empty($category) || $category->status != ItemCategory::STATUS_ACTIVE) {
+                throw new \Exception("类别无效");
             }
 
             $edition = ItemEdition::where("data", $data)
-                ->where("name_id", $nameId)
+                ->where("category_id", $categoryId)
                 ->find();
 
             if (!empty($edition)) {
-                throw new \Exception("该固件版本已存在");
+                throw new \Exception("该类别下固件版本已存在");
             }
 
             $model = new ItemEdition;
             $model->data([
-                'category_id' => $name->category_id,
-                'name_id' => $nameId,
+                'category_id' => $categoryId,
+                'name_id' => 0,
                 'data' => $data,
                 'status' => ItemEdition::STATUS_ACTIVE,
                 'create_time' => time(),
@@ -740,7 +742,7 @@ class Setting extends BaseController
 
         $lists = ItemType::paginate(10);
 
-        $breadcrumb = '型号录入';
+        $breadcrumb = '网络模式型号录入';
 
         return $this->fetch("type", [
             'message' => $message,
@@ -757,7 +759,7 @@ class Setting extends BaseController
 
         $nameId = $this->request->param('name_id');
 
-        $networkId = $this->request->param('network_id');
+        $network_data = $this->request->param('network');
 
         $data = $this->request->param('data');
 
@@ -767,12 +769,12 @@ class Setting extends BaseController
                 throw new \Exception("名称不能为空");
             }
 
-            if ( empty($networkId)) {
+            if ( empty($network_data)) {
                 throw new \Exception("网络模式不能为空");
             }
 
             if ( empty($data)) {
-                throw new \Exception("值不能为空");
+                throw new \Exception("型号不能为空");
             }
 
             $name = ItemName::where("id", $nameId)->find();
@@ -780,16 +782,32 @@ class Setting extends BaseController
             if (empty($name) || $name->status != ItemName::STATUS_ACTIVE) {
                 throw new \Exception("名称无效");
             }
+           
+            $network = ItemNetwork::where([
+                "data" => $network_data,
+                'name_id' => $nameId
+            ])->find();
 
-            $network = ItemNetwork::where("id", $networkId)->find();
-
-            if (empty($network) || $network->status != ItemNetwork::STATUS_ACTIVE) {
-                throw new \Exception("网络模式无效");
+            if (empty($network) ) {
+                $network = new ItemNetwork;
+                
+                $network->data([
+                    'category_id' => $name->category_id,
+                    'name_id' => $nameId,
+                    'data' => $network_data,
+                    'status' => ItemNetwork::STATUS_ACTIVE,
+                    'create_time' => time(),
+                    'update_time' => time()
+                ]);
+    
+                if (!$network->save()) {
+                    throw new \Exception("保存错误");
+                }
             }
-
+          
             $edition = ItemType::where("data", $data)
                 ->where("name_id", $nameId)
-                ->where("network_id", $networkId)
+                ->where("network_id", $network->id)
                 ->find();
 
             if (!empty($edition)) {
@@ -800,7 +818,7 @@ class Setting extends BaseController
             $model->data([
                 'category_id' => $name->category_id,
                 'name_id' => $nameId,
-                'network_id' => $networkId,
+                'network_id' => $network->id,
                 'data' => $data,
                 'status' => ItemType::STATUS_ACTIVE,
                 'create_time' => time(),
@@ -813,7 +831,7 @@ class Setting extends BaseController
 
             AddLog(\app\index\model\Log::ACTION_SETTING_TYPE_ADD, json_encode($this->request->param())
                 , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
-        }catch (\Exception $e) {
+        }catch (\Exception $e) {return 2;
             $result = SetResult(500, $e->getMessage());
             AddLog(\app\index\model\Log::ACTION_SETTING_TYPE_ADD, json_encode($this->request->param())
                 , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));

@@ -61,7 +61,7 @@
                 <tr>
                     <th>ID</th>
                     <th>类别</th>
-                    <th>名称</th>
+                    <!-- <th>名称</th> -->
                     <th>固件版本值</th>
                     <th class="actions">操作</th>
                 </tr>
@@ -114,7 +114,7 @@
                 <tr>
                     <td><span>{$temp.id}</span></td>
                     <td><span>{$temp.category.data}</span></td>
-                    <td><span>{$temp.itemName.data}</span></td>
+                    <!-- <td><span>{$temp.itemName.data}</span></td> -->
                     <td><span>{$temp.data}</span></td>
                     <td class="actions">
                         <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
@@ -143,15 +143,11 @@
         <form class="form-horizontal" method="post" id="form" data-action="{:url('addEdition')}">
             <fieldset>
                 <div class="modal-body control-group">
-                    <label class="control-label" for="data">名称</label>
+                    <label class="control-label" for="data">类别</label>
                     <div class="controls">
-                        <select id="name_id" class="input-xlarge" name="name_id">
-                            {foreach $names as $category}
-                            <optgroup label="{$category.category.data}">
-                                {foreach $category.lists as $name}
-                                <option value="{$name.id}">{$name.data}</option>
-                                {/foreach}
-                            </optgroup>
+                        <select id="category_id" class="input-xlarge" name="category_id">
+                            {foreach $categories as $category}
+                            <option value="{$category.id}">{$category.data}</option>
                             {/foreach}
                         </select>
                     </div>

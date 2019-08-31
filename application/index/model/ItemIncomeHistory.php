@@ -32,6 +32,21 @@ class ItemIncomeHistory extends Model
         ];
     }
 
+    public function getStatusName(){
+
+        $options = $this->getStatusNameOptions();
+
+        return isset($options[$this['type']]) ? $options[$this['type']] : '';
+    }
+
+    public function getStatusNameOptions(){
+        return [
+            self::STATUS_WAIT => '等待审核',
+            self::STATUS_SUCCESS => '审核拒绝',
+            self::STATUS_FAIL => '审核通过',
+        ];
+    }
+
     public function createUser(){
 
         return $this->hasOne("user", "id", "create_user_id");

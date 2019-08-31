@@ -18,6 +18,7 @@ class Item extends Model
     const STATUS_LOSE = 5;//丢失
     const STATUS_FAIL = 6;//入库审核失败
     const STATUS_OUTGO_WAIT = 7;//出库待审核
+    const STATUS_PREPARE = 8; // 预售
 
     public function itemType(){
         return $this->hasOne("item_type", "id", "type_id");
@@ -67,6 +68,7 @@ class Item extends Model
             self::STATUS_LOSE => '丢失',
             self::STATUS_FAIL => '入库失败',
             self::STATUS_OUTGO_WAIT => '出库待审核',
+            self::STATUS_PREPARE => '预售'
         ];
     }
 }

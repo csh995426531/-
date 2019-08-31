@@ -25,13 +25,13 @@ class AccessNode extends Model
             ],
 
             'index/item/inventory' => [
-                'index/item/inventory', 'index/item/changename'
+                'index/item/inventory', 'index/item/changename', 'index/item/cancelprepare', 'index/item/prepare'
             ],
             'index/item/search' => [
                 'index/item/search',
             ],
             'index/item/income' => [
-                'index/item/income', 'index/item/changetype', 'index/item/checknumber'
+                'index/item/income', 'index/item/changetype', 'index/item/checknumber', 'index/item/addincome', 'index/item/deleteagree'
             ],
             'index/item/returnincome' => [
                 'index/item/returnincome', 'index/item/addreturnincome',

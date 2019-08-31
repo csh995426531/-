@@ -9,6 +9,8 @@ use app\index\model\User;
 use think\Db;
 use think\Session;
 use app\index\model\ItemName;
+use PHPExcel;
+use PHPExcel_IOFactory;
 
 class Statistics extends BaseController
 {
@@ -196,10 +198,11 @@ class Statistics extends BaseController
             
             $sql3 = clone $sql;
         
-            $priceTemp = $sql->field("sum(i.price) as income_price,sum(oh.price) as outgo_price")->find();
+            $priceTemp = $sql->field("sum(i.price) as income_price,sum(oh.price) as outgo_price, sum(oh.cost) as cost")->find();
             $incomePrice2 = floatval($priceTemp['income_price']);
             $outgoPrice = floatval($priceTemp['outgo_price']);
-            $profit = $outgoPrice > 0 ? $outgoPrice - $incomePrice2 - 100 : 0; 
+            $cost  = floatval($priceTemp['cost']);
+            $profit = $outgoPrice > 0 ? $outgoPrice - $incomePrice2 - $cost : 0; 
 
             $outgoCount = $sql3->count();
             
@@ -207,6 +210,66 @@ class Statistics extends BaseController
             $aveOutgoPrice = $outgoCount == 0 ? 0 : round($outgoPrice / $outgoCount, 2);
             $aveProfit = $outgoCount == 0 ? 0 : round($profit / $outgoCount, 2);
 
+            if ($this->request->get("sub") == 'excel') {
+                // Create new PHPExcel object
+                $objPHPExcel = new PHPExcel();
+
+                // Set document properties
+                $objPHPExcel->getProperties()->setTitle("库存统计导出");
+
+
+                // Add some data
+                $objPHPExcel->setActiveSheetIndex(0)
+                            ->setCellValue('A1', '开始时间')
+                            ->setCellValue('B1', '结束日期')
+                            ->setCellValue('C1', '产品名称')
+                            ->setCellValue('D1', '进货渠道')
+                            ->setCellValue('F1', '进货人')
+                            ->setCellValue('G1', '出货途径')
+                            ->setCellValue('A2', '开始时间')
+                            ->setCellValue('B2', '结束日期')
+                            ->setCellValue('C2', '产品名称')
+                            ->setCellValue('D2', '进货渠道')
+                            ->setCellValue('F2', '进货人')
+                            ->setCellValue('G2', '出货途径')
+                            ->setCellValue('A3', '开始时间')
+                            ->setCellValue('B3', '结束日期')
+                            ->setCellValue('C3', '产品名称')
+                            ->setCellValue('D3', '进货渠道')
+                            ->setCellValue('F3', '进货人')
+                            ->setCellValue('G3', '出货途径')
+                            ->setCellValue('A4', '开始时间')
+                            ->setCellValue('B4', '结束日期')
+                            ->setCellValue('C4', '产品名称')
+                            ->setCellValue('D4', '进货渠道')
+                            ->setCellValue('F4', '进货人')
+                            ->setCellValue('G4', '出货途径');
+
+                // Rename worksheet
+                $objPHPExcel->getActiveSheet()->setTitle('统计');
+
+
+                // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+                $objPHPExcel->setActiveSheetIndex(0);
+
+
+                // Redirect output to a client’s web browser (Excel2007)
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="01simple.xlsx"');
+                header('Cache-Control: max-age=0');
+                // If you're serving to IE 9, then the following may be needed
+                header('Cache-Control: max-age=1');
+
+                // If you're serving to IE over SSL, then the following may be needed
+                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+                header ('Pragma: public'); // HTTP/1.0
+
+                $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, '库存统计导出');
+                $objWriter->save('php://output');
+                exit;
+            }
         } else {
             $incomePrice = 0;
             $incomeCount = 0;

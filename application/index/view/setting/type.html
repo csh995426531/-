@@ -137,16 +137,22 @@
                         </select>
                     </div>
                 </div>
-                <div class="modal-body control-group">
+                <!-- <div class="modal-body control-group">
                     <label class="control-label" for="data">网络模式</label>
                     <div class="controls">
                         <select id="network_id" class="input-xlarge" name="network_id">
                            
                         </select>
                     </div>
+                </div> -->
+                <div class="modal-body control-group">
+                    <label class="control-label" for="network">网络模式</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="network"  name="network" value="">
+                    </div>
                 </div>
                 <div class="modal-body control-group">
-                    <label class="control-label" for="data">值</label>
+                    <label class="control-label" for="data">型号</label>
                     <div class="controls">
                         <input type="text" class="input-xlarge" id="data"  name="data" value="">
                     </div>
@@ -191,8 +197,8 @@
 <script>
     function changeNameSelected(){
 
-        var str = $("#name_id option:selected").data("network");
-        $("#network_id").html(str)
+        // var str = $("#name_id option:selected").data("network");
+        // $("#network_id").html(str)
     }
 
     $(function(){

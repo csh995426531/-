@@ -24,8 +24,90 @@ use app\index\model\User;
 
 class Item extends BaseController
 {
+
+    // 入库记录处理
+    public function income() {
+
+        $userIds = ItemIncomeHistory::distinct(true)->field('create_user_id')->select();
+
+        $users = User::where('id', 'in', array_column($userIds, 'create_user_id'))->select();
+
+        $nameIds = Db::name('item_income_history')
+            ->alias('t')
+            ->join('item i', 'i.id = t.item_id')
+            ->distinct(true)
+            ->field('i.name_id')
+            ->select();
+
+        $names = ItemName::where('id', 'in', array_column($nameIds, 'name_id'))->select();
+
+        $channelIds = Db::name('item_income_history')
+        ->alias('t')
+        ->join('item i', 'i.id = t.item_id')
+        ->distinct(true)
+        ->field('i.channel_id')
+        ->select();
+
+        $channels = ItemChannel::where("id", 'in', array_column($channelIds, 'channel_id'))->select();
+
+
+        $sql = ItemIncomeHistory::alias('t')
+            ->field('t.*')
+            ->join('item i', 'i.id=t.item_id')
+            ->where("t.status", 'in', [
+                ItemIncomeHistory::STATUS_WAIT, 
+                ItemIncomeHistory::STATUS_FAIL
+            ]);
+
+        $user_id = $this->request->get('user_id');
+
+        if (!empty($user_id) && $user_id > 0) {
+            $sql = $sql->where('t.create_user_id', $user_id);
+        }
+
+        $date = $this->request->get('date');
+
+        if (!empty($date)) {
+
+            $start_time = strtotime($date. '00:00:00');
+            $end_time = strtotime($date. '23:59:59');
+            $sql = $sql->where('t.create_time',  '>=', $start_time)->where('t.create_time', '<=', $end_time);
+        }
+
+        $name_id = $this->request->get('name_id');
+
+        if (!empty($name_id) && $name_id > 0) {
+            $sql = $sql->where('i.name_id', $name_id);
+        }
+
+        $channel_id = $this->request->get('channel_id');
+
+        if (!empty($channel_id) && $channel_id > 0) {
+            $sql = $sql->where('i.channel_id', $channel_id);
+        }
+
+        $lists = $sql->paginate(10);
+    
+        $breadcrumb = '入库记录处理';
+
+        return $this->fetch('income', [
+            'users' => $users,
+            'names' => $names,
+            'channels' => $channels,
+            'lists' => $lists,
+            'breadcrumb' => $breadcrumb,
+        ]);
+    }
+
     //进货入库
-    public function income(){
+    public function addIncome(){
+
+        $id = $this->request->get('id');
+        if ($id) {
+            $history = ItemIncomeHistory::where('id', $id)->find();
+        } else {
+            $history = false;
+        }
 
         if ($this->request->isPost()) {
 
@@ -42,7 +124,6 @@ class Item extends BaseController
             $price = $this->request->post("price");
             $channelId = $this->request->post("channel_id");
             $networkId = $this->request->post("network_id", 0);
-            // var_dump($_POST);die;
 
             Db::startTrans();
             try {
@@ -133,7 +214,7 @@ class Item extends BaseController
                         ])
                     ->find();
 
-                if (!empty($item)) {
+                if (!empty($item) && $item->id != $history->item->id) {
                     throw new \Exception("该型号下该序列号已存在库中");
                 }
               
@@ -145,43 +226,79 @@ class Item extends BaseController
                     $typeId = $type->id;
                 }
                 
-                $model = new \app\index\model\Item;
-                $model->data([
-                    "category_id" => $categoryTd,
-                    "name_id" => $nameId,
-                    "feature_id" => $featureId,
-                    "appearance_id" => $appearanceId,
-                    "edition_id" => $editionId,
-                    "type_id" => $typeId,
-                    "date" => $date,
-                    "number" => $number,
-                    "memo" => $memo,
-                    "price" => $price,
-                    "network_id" => $networkId,
-                    "channel_id" => $channelId,
-                    "status" => \app\index\model\Item::STATUS_INCOME_WAIT,
-                    "create_time" => time(),
-                    "update_time" => time()
-                ]);
+                if (!empty($history)) {
+                    $model = new \app\index\model\Item;
+                    $updated = $model->save([
+                        "category_id" => $categoryTd,
+                        "name_id" => $nameId,
+                        "feature_id" => $featureId,
+                        "appearance_id" => $appearanceId,
+                        "edition_id" => $editionId,
+                        "type_id" => $typeId,
+                        "date" => $date,
+                        "number" => $number,
+                        "memo" => $memo,
+                        "price" => $price,
+                        "network_id" => $networkId,
+                        "channel_id" => $channelId,
+                        "status" => \app\index\model\Item::STATUS_INCOME_WAIT,
+                        "update_time" => time()
+                    ], ['id' => $history->item->id]);
+    
+                    if (!$updated) {
+                        throw new \Exception("库存更新失败");
+                    }
+    
+                    $model = new ItemIncomeHistory;
+                    $updated = $model->save([
+                        "status" => ItemIncomeHistory::STATUS_WAIT,
+                        "update_time" => time()
+                    ], ['id' => $history->id]);
+    
+                    if (!$updated) {
+                        throw new \Exception("入库记录更新失败");
+                    }
 
-                if (!$model->save()) {
-                    throw new \Exception("库存保存失败");
-                }
-
-                $itemId = $model->id;
-
-                $model = new ItemIncomeHistory;
-                $model->data([
-                    "type" => ItemIncomeHistory::TYPE_INCOME,
-                    "item_id" => $itemId,
-                    "create_user_id" => Session::get("user_id"),
-                    "status" => ItemIncomeHistory::STATUS_WAIT,
-                    "create_time" => time(),
-                    "update_time" => time()
-                ]);
-
-                if (!$model->save()) {
-                    throw new \Exception("入库记录保存失败");
+                    $history = ItemIncomeHistory::where('id', $id)->find();
+                } else {
+                    $model = new \app\index\model\Item;
+                    $model->data([
+                        "category_id" => $categoryTd,
+                        "name_id" => $nameId,
+                        "feature_id" => $featureId,
+                        "appearance_id" => $appearanceId,
+                        "edition_id" => $editionId,
+                        "type_id" => $typeId,
+                        "date" => $date,
+                        "number" => $number,
+                        "memo" => $memo,
+                        "price" => $price,
+                        "network_id" => $networkId,
+                        "channel_id" => $channelId,
+                        "status" => \app\index\model\Item::STATUS_INCOME_WAIT,
+                        "create_time" => time(),
+                        "update_time" => time()
+                    ]);
+    
+                    if (!$model->save()) {
+                        throw new \Exception("库存保存失败");
+                    }
+    
+                    $itemId = $model->id;
+    
+                    $model = new ItemIncomeHistory;
+                    $model->data([
+                        "type" => ItemIncomeHistory::TYPE_INCOME,
+                        "item_id" => $itemId,
+                        "create_user_id" => Session::get("user_id"),
+                        "status" => ItemIncomeHistory::STATUS_WAIT,
+                        "create_time" => time(),
+                        "update_time" => time()
+                    ]);
+    
+                    if (!$model->save()) {
+                        throw new \Exception("入库记录保存失败");
+                    }
                 }
 
                 Db::commit();
@@ -228,14 +345,15 @@ class Item extends BaseController
         $channels = ItemChannel::where("type", ItemChannel::TYPE_INCOME)
             ->where("status", ItemChannel::STATUS_ACTIVE)
             ->select();
+        
+        $breadcrumb = $history ?  '入库记录修改' : '进货入库';
 
-        $breadcrumb = '进货入库';
-
-        return $this->fetch('income', [
+        return $this->fetch('add_income', [
             'message' => $message,
             'breadcrumb' => $breadcrumb,
             'names' => $names,
             'channels' => $channels,
+            'history' => $history,
         ]);
     }
 
@@ -283,6 +401,7 @@ class Item extends BaseController
         $result = SetResult(200, 'SUCCESS');
 
         $number = $this->request->get("number");
+        $itemId = $this->request->get('id');
 
         if (empty($number)) {
             $result = SetResult(500, '序列号不能为空');
@@ -291,7 +410,7 @@ class Item extends BaseController
         } elseif (stripos($number, 'O') !== false || stripos($number, 'I') !== false) {
             $result = SetResult(500, '不能含有字母O或I');
         } else {
-            $item = \app\index\model\Item::where("number", $number)->find();
+            $item = \app\index\model\Item::where("number", '=', $number)->where('id', '<>', $itemId)->find();
             if (!empty($item)){
                 $result = SetResult(500, '该序列号已存在');
             }
@@ -467,12 +586,12 @@ class Item extends BaseController
 
         $lists = $sql->field('t.*')
         ->paginate(10);
-
+       
         foreach ($lists as $list) {
 
             $list->typeName = $list->getTypeName();
-            if ($list->item->network_id == 0 && $list->item->type_id > 0)  {
-                $list->item->network_id = $list->item->itemType->itemNetwork->id;
+            if ($list->item->network_id == 0 )  {
+                $list->item->network_id = $list->item->itemNetwork->data;
             }
         }
 
@@ -851,6 +970,7 @@ class Item extends BaseController
         ]);
     }
 
+    // 增加特殊出库
     public function addSpecialOutgo(){
         $result = SetResult(200, '操作成功');
 
@@ -916,6 +1036,7 @@ class Item extends BaseController
             $consignee_address = $this->request->post('consignee_address','');
             $consignee_phone = $this->request->post('consignee_phone','');
             $memo = $this->request->post('memo','');
+            $cost = $this->request->post("cost");
 
             Db::startTrans();
             try {
@@ -934,6 +1055,14 @@ class Item extends BaseController
                     throw new \Exception("价格错误");
                 }
 
+                $cost = floatval($cost);
+                if (empty($cost)) {
+                    throw new \Exception('营销成本不能为空');
+                }
+                if ((!is_int($cost) && !is_float($cost)) || $cost > 1000000 || $cost < 0) {
+                    throw new \Exception("营销成本错误");
+                }
+                
                 $item = \app\index\model\Item::where("id", $itemId)->find();
 
                 if (empty($item) || $item->status != \app\index\model\Item::STATUS_NORMAL) {
@@ -963,6 +1092,7 @@ class Item extends BaseController
                     'consignee_address' => $consignee_address,
                     'consignee_phone' => $consignee_phone,
                     'price' => $price,
+                    'cost' => $cost,
                     'memo' => $memo,
                     'status' => ItemOutgoHistory::STATUS_WAIT,
                     'create_user_id' => Session::get("user_id"),
@@ -1045,7 +1175,8 @@ class Item extends BaseController
 
         $lists = \app\index\model\Item::where("status", "in", [
             \app\index\model\Item::STATUS_NORMAL,
-            \app\index\model\Item::STATUS_OUTGO_WAIT
+            \app\index\model\Item::STATUS_OUTGO_WAIT,
+            \app\index\model\Item::STATUS_PREPARE
         ]);
 
         $typeId = $this->request->get("type_id");
@@ -1083,8 +1214,7 @@ class Item extends BaseController
             ->where("data", $networkId)
             ->column('id');
 
-            $typeArr2 = ItemType::where("network_id" ,  'in',  $networkArr)->field("id")->select();
-            $lists = $lists->where("type_id", 'in',  array_column($typeArr2, 'id'));
+            $lists = $lists->where("network_id", 'in',  $networkArr);
         }
 
         $appearanceId = $this->request->get("appearance_id");
@@ -1135,10 +1265,9 @@ class Item extends BaseController
             $features = [];
         }
 
-        if (!empty($typeIds)) {
+        $networkIds = Db::table('y5g_item')->distinct(true)->field("network_id")->select();
+        if (!empty($networkIds)) {
 
-            $networkIds = ItemType::where("id", 'in', array_column($typeIds, 'type_id'))->distinct(true)->field("network_id")->select();
-            
             $networks = itemNetwork::where("id", 'in', array_column($networkIds, 'network_id'))->distinct(true)->field('data')->select();
         } else {
             $networks = [];
@@ -1171,6 +1300,63 @@ class Item extends BaseController
                 'appearances' => $appearances
             ]
         ]);
+    }
+
+    // 预售
+    public function prepare(){
+        
+        $result = SetResult(200, '操作成功');
+        $id = $this->request->post("id");
+        $info = $this->request->post("prepare");
+
+        if ($id){
+            $item = \app\index\model\Item::where("id", $id)->find();
+
+            if (empty($item)) {
+                $result = SetResult(500, '数据异常');
+            } elseif ($item->status != \app\index\model\Item::STATUS_NORMAL) {
+                $result = SetResult(500, '状态异常');
+            } else {
+                
+                $item->status = \app\index\model\Item::STATUS_PREPARE;
+                $item->memo = $info;
+                $item->update_time = time();
+                if (!$item->save()) {
+                    $result = SetResult(500, '操作失败');
+                }
+            }
+
+        } else {
+            $result = SetResult(500, 'id错误');
+        }
+
+        return $result;
+    }
+
+    // 取消预售
+    public function cancelPrepare(){
+        $result = SetResult(200, '操作成功');
+        $id = $this->request->post("id");
+
+        if ($id){
+            $item = \app\index\model\Item::where("id", $id)->find();
+            if (empty($item)) {
+                $result = SetResult(500, '数据异常');
+            } elseif ($item->status != \app\index\model\Item::STATUS_PREPARE) {
+                $result = SetResult(500, '状态异常');
+            } else {
+                $item->status = \app\index\model\Item::STATUS_NORMAL;
+                $item->memo = '';
+                $item->update_time = time();
+                if (!$item->save()) {
+                    $result = SetResult(500, '操作失败');
+                }
+            }
+        } else {
+            $result = SetResult(500, 'id错误');
+        }
+
+        return $result;
     }
 
     //综合查询
@@ -1320,6 +1506,11 @@ class Item extends BaseController
             'channels' => $channels,
             'dates' => $dates,
             'statuses' => $statuses,
+            'data' =>  [
+                'features' => $features,
+                'networks' => $networks,
+                'appearances' => $appearances
+            ]
         ]);
     }
 

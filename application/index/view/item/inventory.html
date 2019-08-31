@@ -52,7 +52,7 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>入库时间</th>
+                    <th>网络模式</th>
                     <th>型号</th>
                     <th>分类</th>
                     <th>名称</th>
@@ -60,33 +60,33 @@
                     <th>外观</th>
                     <th>序列号</th>
                     <th>固件版本</th>
-                    <th>备注</th>
-                    <th>进货价格</th>
-                    <th>进货渠道</th>
                     <th>状态</th>
-                    <!--<th class="actions">操作</th>-->
+                    <th>库龄</th>
+                    <th class="actions">操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 {volist name='lists' id='temp'}
-                <tr>
+                <tr  <?php if ($temp->status == \app\index\model\Item::STATUS_PREPARE) {echo 'style="background-color:#DCDCDC"';} ?> >
                     <td><span>{$temp.id}</span></td>
-                    <th><span>{$temp.date}</span></th>
+                    <th><span>{$temp.itemNetwork.data}</span></th>
                     <th><span>{$temp.itemType.data}</span></th>
                     <th><span>{$temp.itemCategory.data}</span></th>
                     <th><span>{$temp.itemName.data}</span></th>
                     <th><span>{$temp.itemFeature.data}</span></th>
                     <th><span>{$temp.itemAppearance.data}</span></th>
-                    <th><span>{$temp.number}</span></th>
+                    <th><a href="https://checkcoverage.apple.com/cn/zh/?sn={$temp.number}" target="_blank"><span>{$temp.number}</span></a></th>
                     <th><span>{$temp.itemEdition.data}</span></th>
-                    <th><span>{$temp.memo}</span></th>
-                    <th><span>{$temp.price}</span></th>
-                    <th><span>{$temp.itemChannel.data}</span></th>
-                    <th><span>{$temp.statusName}</span></th>
+                    <th  title="{$temp.memo}" style="cursor: pointer"><span>{$temp.statusName}</span></th>
+                    <th><span><?php echo floor((time() - strtotime($temp->date)) / 86400); ?>天</span></th>
                     <td class="actions">
                         <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
-                        <!--<a class="btn btn-small btn-success allow-item" data-id="{$temp.id}" data-value="1" data-href="{:url('allowAgree')}">通过</a>-->
-                        <!--<a class="btn btn-small btn-danger reject-item" data-id="{$temp.id}" data-value="0" data-href="{:url('rejectAgree')}">拒绝</a>-->
+                        <?php if ($temp->status == \app\index\model\Item::STATUS_NORMAL) {?>
+                        <a class="btn btn-small btn-success prepare-item" data-id="{$temp.id}" data-toggle="modal" href="#prepareItem">预售</a>
+                
+                        <?php }elseif($temp->status == \app\index\model\Item::STATUS_PREPARE){?>
+                        <a class="btn btn-small btn-danger cancelPrepare-item" data-id="{$temp.id}" data-value="0" data-href="{:url('cancelPrepare')}">取消</a>
+                        <?php }?>
                     </td>
                 </tr>
                 {/volist}
@@ -99,20 +99,51 @@
     </div>
 </div>
 
+<div class="modal hide fade" id="prepareItem">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>出库</h3>
+    </div>
+    <form class="form-horizontal" method="post" id="form" data-action="{:url('prepare')}">
+        <fieldset>
+            <div class="modal-body">
+                <input type="hidden" name="id" id="prepare-id" value="" />
+                <div class="control-group">
+                    <label class="control-label" for="prepare">预售备注</label>
+                    <div class="controls">
+                        <textarea class="input-xlarge" name="prepare" id="prepare" rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">关闭</a>
+                <button class="btn btn-success" type="button" id="submit">确定</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
 <script src="/static/js/jquery.min.js"></script>
 <script>
     $(function(){
-        $(".allow-item, .reject-item").click(function(){
+        $(".cancelPrepare-item").click(function(){
+
             var url = $(this).data('href');
             var id = $(this).data('id');
             $.post(url, {id:id}, function (res) {
                 alert(res.data);
-                window.location.replace("<?php echo url('incomeAgree');?>");
+                window.location.reload();
             })
         })
+        $(".prepare-item").click(function(){
+            var id = $(this).data('id');
+            $("#prepare-id").val(id);
+        })
+
+
         $("#name_id").change(function(){
             var val = $(this).val();
-            var data = jQuery.parseJSON($("#data-all").html());
+            var data;
             if (val != '') {
 
                 var url = $(this).data('href');
@@ -120,10 +151,17 @@
                 var name = $(this).val();
                 $.get(url, {name:name}, function(res){
                     data = res.data;
+                    reset(data);
                 })
-            } 
+            } else {
+                data = jQuery.parseJSON($("#data-all").html());
+                reset(data);
+            }
+        }); 
+    })
 
-            var features_str = '<option value=""> - 配置 - </option>';
+    function reset(data){
+        var features_str = '<option value=""> - 配置 - </option>';
             $.each(data.features,function(k,v){
                 features_str += '<option value="'+v.data+'"> '+v.data+' </option>';
             })
@@ -141,6 +179,16 @@
             $('#feature_id').html(features_str);
             $('#network_id').html(networks_str);
             $('#appearance_id').html(appearances_str);
-        }); 
-    })
+    }
+
+    $("#submit").click(function(){
+        var url = $("#form").data('action');
+        var data = $('#form').serialize();
+        $.post(url, data, function (res) {
+            alert(res.data);
+            if (res.code == 200) {
+                window.location.reload();
+            }
+        })
+    });
 </script>
