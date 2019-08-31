@@ -8,22 +8,44 @@
                 <select class="span2" name="type_id">
                     <option value="0"> - 型号 - </option>
                     {foreach $types as $type}
-                    <option value="{$type.id}" {$Think.get.type_id==$type.id ? 'selected' :''}>{$type.data}</opion>
+                    <option value="{$type.id}" 
+                    {$Think.get.type_id==$type.id ? 'selected' :''}>{$type.data}</opion>
                     {/foreach}
                 </select>
-                <select class="span2" name="name_id">
-                    <option value="0"> - 名称 - </option>
+                <select class="span2" name="name_id" id="name_id">
+                    <option value="0" data-appearance="
+                    <option value='0'> - 外观 - </option>
+                    {foreach $appearances as $appearance}
+                        <?php if(isset($_GET['appearance_id']) && $_GET['appearance_id'] == $appearance->id){echo 'selected';}?></option>
+                        <option value='{$appearance.id}'>{$appearance.data}</option>
+                    {/foreach}"  data-feature="
+                    <option value='0'> - 配置 - </option>
+                    {foreach $features as $feature}
+                        <?php if(isset($_GET['feature_id']) && $_GET['feature_id'] == $feature->id){echo 'selected';}?></option>
+                        <option value='{$feature.id}'>{$feature.data}</option>
+                    {/foreach}"> - 名称 - </option>
                     {foreach $names as $name}
-                    <option value="{$name.id}" {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
+                    <option value="{$name.id}"   data-appearance="
+                    <option value='0'> - 外观 - </option>
+                    {foreach $name.itemAppearance as $appearance}
+                        <?php if(isset($_GET['appearance_id']) && $_GET['appearance_id'] == $appearance->id){echo 'selected';}?></option>
+                        <option value='{$appearance.id}'>{$appearance.data}</option>
+                    {/foreach}"  data-feature="
+                    <option value='0'> - 配置 - </option>
+                    {foreach $name.itemFeature as $feature}
+                        <?php if(isset($_GET['feature_id']) && $_GET['feature_id'] == $feature->id){echo 'selected';}?></option>
+                        <option value='{$feature.id}'>{$feature.data}</option>
+                    {/foreach}"
+                    {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
                     {/foreach}
                 </select>
-                <select class="span2" name="feature_id">
+                <select class="span2" name="feature_id" id="feature_id">
                     <option value="0"> - 配置 - </option>
                     {foreach $features as $feature}
                     <option value="{$feature.id}" {$Think.get.feature_id==$feature.id ? 'selected' :''}>{$feature.data}</option>
                     {/foreach}
                 </select>
-                <select class="span2" name="appearance_id">
+                <select class="span2" name="appearance_id" id="appearance_id">
                     <option value="0"> - 外观 - </option>
                     {foreach $appearances as $appearance}
                     <option value="{$appearance.id}" {$Think.get.appearance_id==$appearance.id ? 'selected' :''}>{$appearance.data}</option>
@@ -260,5 +282,21 @@
                 window.location.replace("<?php echo url('specialOutgo');?>");
             })
         })
+
+
+        $("#name_id").change(function () {
+            changeNameSelected();
+        });
+
+        changeNameSelected();
     })
+
+    function changeNameSelected(){
+
+        var appearance_str = $("#name_id option:selected").data("appearance");
+        $("#appearance_id").html(appearance_str)
+
+        var feature_str = $("#name_id option:selected").data("feature");
+        $("#feature_id").html(feature_str)
+    }
 </script>

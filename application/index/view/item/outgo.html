@@ -12,7 +12,22 @@
                     {/foreach}
                 </select>
                 <select class="span2" name="name_id" id='name_id'>
-                    <option value="0"> - 名称 - </option>
+                    <option value="0"  data-appearance="
+                    <option value='0'> - 外观 - </option>
+                    {foreach $appearances as $appearance}
+                        <?php if(isset($_GET['appearance_id']) && $_GET['appearance_id'] == $appearance->id){echo 'selected';}?></option>
+                        <option value='{$appearance.id}'>{$appearance.data}</option>
+                    {/foreach}"  data-feature="
+                    <option value='0'> - 配置 - </option>
+                    {foreach $features as $feature}
+                        <?php if(isset($_GET['feature_id']) && $_GET['feature_id'] == $feature->id){echo 'selected';}?></option>
+                        <option value='{$feature.id}'>{$feature.data}</option>
+                    {/foreach}" data-network="
+                    <option value='0'> - 网络模式 - </option>
+                    {foreach $networks as $network}
+                        <?php if(isset($_GET['network_id']) && $_GET['network_id'] == $network->id){echo 'selected';}?></option>
+                        <option value='{$network.id}'>{$network.data}</option>
+                    {/foreach}" > - 名称 - </option>
                     {foreach $names as $name}
                     <option value="{$name.id}" data-category-id="{$name.category_id}" data-appearance="
                                     <option value='0'> - 外观 - </option>
@@ -24,6 +39,11 @@
                                     {foreach $name.itemFeature as $feature}
                                         <?php if(isset($_GET['feature_id']) && $_GET['feature_id'] == $feature->id){echo 'selected';}?></option>
                                         <option value='{$feature.id}'>{$feature.data}</option>
+                                    {/foreach}" data-network="
+                                    <option value='0'> - 网络模式 - </option>
+                                    {foreach $name.itemNetwork as $network}
+                                        <?php if(isset($_GET['network_id']) && $_GET['network_id'] == $network->id){echo 'selected';}?></option>
+                                        <option value='{$network.id}'>{$network.data}</option>
                                     {/foreach}"
                         {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
                     {/foreach}
@@ -39,6 +59,18 @@
                     {foreach $appearances as $appearance}
                     <option value="{$appearance.id}" {$Think.get.appearance_id==$appearance.id ? 'selected' :''}>{$appearance.data}</option>
                     {/foreach}
+                </select>
+                <select class="span2" name="network_id" id='network_id'>
+                    <option value="0"> - 网络模式 - </option>
+                    {foreach $networks as $network}
+                    <option value="{$network.id}" {$Think.get.network_id==$network.id ? 'selected' :''}>{$network.data}</option>
+                    {/foreach}
+                </select>
+                <input type="text" class="input-large span2" name="keyword" placeholder="序列号" value="{$Think.get.keyword}">
+                <select name="is_prepare" class="span1">
+                        <option value="">- 预售- </option>
+                        <option value="1" {$Think.get.network_id==1 ? 'selected' :''}>-  是 - </option>
+                        <option value="0" {$Think.get.network_id==0 ? 'selected' :''}>-  否 - </option>
                 </select>
                 <button type="submit" class="btn btn-primary">搜索</button>
             </form>
@@ -281,6 +313,9 @@
 
         var feature_str = $("#name_id option:selected").data("feature");
         $("#feature_id").html(feature_str)
+
+        var network_str = $("#name_id option:selected").data("network");
+        $("#network_id").html(network_str)
     }
 
 </script>

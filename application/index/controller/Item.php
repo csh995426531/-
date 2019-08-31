@@ -877,23 +877,33 @@ class Item extends BaseController
             $lists = $lists->where("appearance_id", $appearanceId);
         }
 
+        $keyword = $this->request->get("keyword");
+        if (!empty($keyword)) {
+            $lists = $lists->where("number", 'LIKE', '%'.$keyword.'%');
+        }
+
+        $is_prepare = $this->request->get('is_prepare');
+        if ($is_prepare == 1) {
+            $lists = $lists->where("status", \app\index\model\Item::STATUS_PREPARE);
+        }
+
         $lists = $lists->paginate(10);
 
         foreach ($lists as $list) {
             $list->statusName = $list->getStatusName();
         }
 
-        $types = ItemType::where("status", ItemType::STATUS_ACTIVE)->select();
+        $types = ItemType::select();
 
-        $names = ItemName::where("status", ItemName::STATUS_ACTIVE)->select();
+        $names = ItemName::select();
 
-        $features = ItemFeature::where("status", ItemFeature::STATUS_ACTIVE)->select();
+        $features = ItemFeature::select();
 
-        $appearances = ItemAppearance::where("status", ItemAppearance::STATUS_ACTIVE)->select();
+        $appearances = ItemAppearance::select();
 
-        $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)
-            ->where("status", ItemChannel::STATUS_ACTIVE)
-            ->select();
+        $networks = ItemNetwork::select();
+
+        $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)->select();
 
         $breadcrumb = '销售出库';
 
@@ -905,6 +915,7 @@ class Item extends BaseController
             'names' => $names,
             'features' => $features,
             'appearances' => $appearances,
+            'networks' => $networks,
         ]);
     }
 
@@ -945,17 +956,15 @@ class Item extends BaseController
             $list->statusName = $list->getStatusName();
         }
 
-        $types = ItemType::where("status", ItemType::STATUS_ACTIVE)->select();
+        $types = ItemType::select();
 
-        $names = ItemName::where("status", ItemName::STATUS_ACTIVE)->select();
+        $names = ItemName::select();
 
-        $features = ItemFeature::where("status", ItemFeature::STATUS_ACTIVE)->select();
+        $features = ItemFeature::select();
 
-        $appearances = ItemAppearance::where("status", ItemAppearance::STATUS_ACTIVE)->select();
+        $appearances = ItemAppearance::select();
 
-        $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)
-            ->where("status", ItemChannel::STATUS_ACTIVE)
-            ->select();
+        $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)->select();
 
         $breadcrumb = '特殊出库';
 
