@@ -12,10 +12,10 @@
 
 // [ 应用入口文件 ]
 
-// // 定义应用目录
-define('APP_PATH', __DIR__ . '/../application/');
-// 加载框架引导文件
-require __DIR__ . '/../thinkphp/start.php';
+// // // 定义应用目录
+// define('APP_PATH', __DIR__ . '/../application/');
+// // 加载框架引导文件
+// require __DIR__ . '/../thinkphp/start.php';
 
 header("Content-type:text/html;charset=utf-8");
 //配置信息
@@ -36,12 +36,12 @@ if ($conn->connect_error) {
 echo '连接成功';
 
 // // 使用 sql 创建数据表
-$sql = "ALTER TABLE `maiguo`.`y5g_item` ADD COLUMN `network_id` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '网络模式id' AFTER `update_time`";
+$sql = "ALTER TABLE `maiguo`.`y5g_item_outgo_history` ADD COLUMN `cost` DECIMAL(18,4) UNSIGNED NOT NULL COMMENT '营销成本' AFTER `update_time`;";
 
 if ($conn->query($sql)) {
-    echo "数据表 y5g_item 更新成功";
+    echo "数据表 y5g_item_outgo_history 更新成功";
 } else {
-    echo "数据表 y5g_item 更新失败: " .$conn->error;
+    echo "数据表 y5g_item_outgo_history 更新失败: " .$conn->error;
 }
 die;
 $sql = "INSERT INTO `maiguo`.`y5g_access_node` (`id`, `module`, `controller`, `action`, `name`, `parent_id`, `create_time`, `update_time`) VALUES ('31', 'index', 'item', 'specialoutgo', '特殊出库', '11', '0', '0')";
