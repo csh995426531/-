@@ -385,7 +385,7 @@ class Item extends BaseController
                     ])->select();
         
                     $type->itemName->itemEdition = ItemEdition::where([
-                        "name_id" => $type->name_id,
+                        "category_id" => $type->category_id,
                         "status" => ItemEdition::STATUS_ACTIVE
                     ])->select();
                 }
