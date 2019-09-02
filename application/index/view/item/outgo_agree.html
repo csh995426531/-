@@ -68,6 +68,7 @@
                     <th>出库人</th>
                     <th>出库时间</th>
                     <th>订单号</th>
+                    <th>收货人昵称</th>
                     <th class="actions">操作</th>
                 </tr>
                 </thead>
@@ -122,13 +123,14 @@
                     <th><span>{$temp.item.itemFeature.data}</span></th>
                     <th><span>{$temp.item.itemAppearance.data}</span></th>
                     <th><span>{$temp.item.number}</span></th>
-                    <th><span>{$temp.memo}</span></th>
+                    <th title="{$temp.item.memo}" style="cursor: pointer"><span><?php echo strlen($temp->item->memo) > 10 ? substr($temp->item->memo, 0, 10).'…' : $temp->item->memo; ?></span></th>
                     <th><span>{$temp.price * 1}</span></th>
                     <th><span>{$temp.price * 1 - $temp.item.price * 1 - 100}</span></th>
-                    <th><span>{$temp.itemChannel.data}</span></th>
+                    <th title="{$temp.memo}" style="cursor: pointer"><span>{$temp.itemChannel.data}</span></th>
                     <td><span>{$temp.createUser.username}</span></td>
                     <td><span>{$temp.create_time}</span></td>
                     <td><span>{$temp.order_no}</span></td>
+                    <td><span>{$temp.consignee_nickname}</span></td>
                     <td class="actions">
                         <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
                         <a class="btn btn-small btn-success allow-item" data-id="{$temp.id}" data-value="1" data-href="{:url('allowOutgoAgree')}">通过</a>

@@ -72,12 +72,12 @@
                     <th><span>{$temp.itemNetwork.data}</span></th>
                     <th><span>{$temp.itemType.data}</span></th>
                     <th><span>{$temp.itemCategory.data}</span></th>
-                    <th><span>{$temp.itemName.data}</span></th>
+                    <th title="{$temp.memo}" style="cursor: pointer"><span>{$temp.itemName.data}</span></th>
                     <th><span>{$temp.itemFeature.data}</span></th>
                     <th><span>{$temp.itemAppearance.data}</span></th>
                     <th><a href="https://checkcoverage.apple.com/cn/zh/?sn={$temp.number}" target="_blank"><span>{$temp.number}</span></a></th>
                     <th><span>{$temp.itemEdition.data}</span></th>
-                    <th  title="{$temp.memo}" style="cursor: pointer"><span>{$temp.statusName}</span></th>
+                    <th title="{$temp.prepare}" style="cursor: pointer"><span>{$temp.statusName}</span></th>
                     <th><span><?php echo floor((time() - strtotime($temp->date)) / 86400); ?>天</span></th>
                     <td class="actions">
                         <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->

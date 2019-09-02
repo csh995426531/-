@@ -850,7 +850,8 @@ class Item extends BaseController
 
         $lists = \app\index\model\Item::where("status", "in", [
             \app\index\model\Item::STATUS_NORMAL,
-            \app\index\model\Item::STATUS_OUTGO_WAIT
+            \app\index\model\Item::STATUS_OUTGO_WAIT,
+            \app\index\model\Item::STATUS_PREPARE
         ]);
 
         $typeId = $this->request->get("type_id");
@@ -1074,7 +1075,7 @@ class Item extends BaseController
                 
                 $item = \app\index\model\Item::where("id", $itemId)->find();
 
-                if (empty($item) || $item->status != \app\index\model\Item::STATUS_NORMAL) {
+                if (empty($item) ||  !in_array($item->status, [\app\index\model\Item::STATUS_NORMAL, \app\index\model\Item::STATUS_PREPARE])) {
                     throw new \Exception("库存物品无效");
                 }
 
@@ -1083,7 +1084,7 @@ class Item extends BaseController
                     'update_time' => time(),
                 ], [
                     'id' => $item->id,
-                    'status' => \app\index\model\Item::STATUS_NORMAL
+                    'status' => [\app\index\model\Item::STATUS_NORMAL, \app\index\model\Item::STATUS_PREPARE]
                 ]);
 
                 if ($updated != 1) {
@@ -1328,7 +1329,7 @@ class Item extends BaseController
             } else {
                 
                 $item->status = \app\index\model\Item::STATUS_PREPARE;
-                $item->memo = $info;
+                $item->prepare = $info;
                 $item->update_time = time();
                 if (!$item->save()) {
                     $result = SetResult(500, '操作失败');
@@ -1355,7 +1356,7 @@ class Item extends BaseController
                 $result = SetResult(500, '状态异常');
             } else {
                 $item->status = \app\index\model\Item::STATUS_NORMAL;
-                $item->memo = '';
+                $item->prepare = '';
                 $item->update_time = time();
                 if (!$item->save()) {
                     $result = SetResult(500, '操作失败');

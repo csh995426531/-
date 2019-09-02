@@ -180,10 +180,10 @@
                         <th><span>{$temp.itemAppearance.data}</span></th>
                         <th><span>{$temp.number}</span></th>
                         <th><span>{$temp.itemEdition.data}</span></th>
-                        <th><span>{$temp.memo}</span></th>
+                        <th title="{$temp.memo}" style="cursor: pointer"><span><?php echo strlen($temp->memo) > 10 ? substr($temp->memo, 0, 10).'…' : $temp->memo; ?></span></th>
                         <th><span>{$temp.price}</span></th>
                         <th><span>{$temp.itemChannel.data}</span></th>
-                        <th><span>{$temp.statusName}</span></th>
+                        <th title="{$temp.prepare}" style="cursor: pointer"><span>{$temp.statusName}</span></th>
                         <td class="actions">
                             <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
                             {if condition="$temp.status == 2"}
