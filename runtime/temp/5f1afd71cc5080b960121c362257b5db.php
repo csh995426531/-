@@ -1,6 +1,6 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:72:"/www/wwwroot/maig/public/../application/index/view/setting/category.html";i:1562327613;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1562327611;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:72:"/www/wwwroot/maig/public/../application/index/view/setting/category.html";i:1562975332;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1567309984;}*/ ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%">
 <head>
 
     <meta charset="utf-8">
@@ -22,13 +22,13 @@
     <![endif]-->
 
 </head>
-<body>
+<body style="height:100%">
 
-<div class="container">
-    <div class="row">
-        <div class="span2">
-            <div class="main-left-col">
-                <h1><i class="icon-shopping-cart icon-large"></i> Adminize</h1>
+<div class="container-fluid " style="padding: 0px;height:100%">
+    <div class="row" style="height:100%">
+        <div class="span2" style="width: 9.3%;background: #484646;height:100%">
+            <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
+                <h1><i class="icon-large"></i> 库存管理系统</h1>
                 <ul class="side-nav">
                     <li class="active">
                         <a href="index.html"><i class="icon-home"></i> Dashboard</a>
@@ -43,11 +43,17 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/income'); ?>">进货入库</a></li>
+                            <li><a href="<?php echo url('item/addIncome'); ?>">进货入库</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('item/outgo'); ?>"><i class="icon-reply"></i> 产品出库 </a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
+                        <ul id="item-outgo-dropdown" class="collapse">
+                            <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">特殊出库</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
                         <ul id="examine-dropdown" class="collapse">
@@ -55,13 +61,14 @@
                             <li><a href="<?php echo url('item/outgoAgree'); ?>">出库审核</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <!-- <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
                         <ul id="statistics-dropdown" class="collapse">
                             <li><a href="<?php echo url('/index/statistics/income'); ?>">进货统计</a></li>
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
-                    </li>
+                    </li> -->
+                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
@@ -70,10 +77,10 @@
                             <li><a href="<?php echo url('setting/feature'); ?>">配置录入</a></li>
                             <li><a href="<?php echo url('setting/appearance'); ?>">外观录入</a></li>
                             <li><a href="<?php echo url('setting/edition'); ?>">固件版本录入</a></li>
-                            <li><a href="<?php echo url('setting/type'); ?>">型号录入</a></li>
+                            <li><a href="<?php echo url('setting/type'); ?>">网络模式型号录入</a></li>
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道录入</a></li>
                             <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径录入</a></li>
-                            <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li>
+                            <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -91,7 +98,7 @@
 
         </div> <!-- end span2 -->
 
-        <div class="span10">
+        <div class="span10" style="width: 82%;    margin-left: 2%;height:100%">
 
             <div class="secondary-masthead span12">
 
@@ -122,7 +129,7 @@
 
     <!--<div class="span10">-->
 
-    <!--<div class="slate">-->
+    <!--<div class="">-->
 
         <!--<form class="form-inline">-->
             <!--<input type="text" class="input-large" placeholder="Keyword...">-->
@@ -146,7 +153,7 @@
 <?php echo $message; ?>
 <div class="row">
 
-    <div class="slate">
+    <div class="">
         <div class="span12 listing-buttons">
 
             <!--<button class="btn btn-info">Action</button>-->

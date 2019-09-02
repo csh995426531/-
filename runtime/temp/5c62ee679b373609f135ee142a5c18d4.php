@@ -1,6 +1,6 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"/www/wwwroot/maig/public/../application/index/view/item/income.html";i:1562327612;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1562327611;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"/www/wwwroot/maig/public/../application/index/view/item/income.html";i:1567309987;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1567309984;}*/ ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%">
 <head>
 
     <meta charset="utf-8">
@@ -22,13 +22,13 @@
     <![endif]-->
 
 </head>
-<body>
+<body style="height:100%">
 
-<div class="container">
-    <div class="row">
-        <div class="span2">
-            <div class="main-left-col">
-                <h1><i class="icon-shopping-cart icon-large"></i> Adminize</h1>
+<div class="container-fluid " style="padding: 0px;height:100%">
+    <div class="row" style="height:100%">
+        <div class="span2" style="width: 9.3%;background: #484646;height:100%">
+            <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
+                <h1><i class="icon-large"></i> 库存管理系统</h1>
                 <ul class="side-nav">
                     <li class="active">
                         <a href="index.html"><i class="icon-home"></i> Dashboard</a>
@@ -43,11 +43,17 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/income'); ?>">进货入库</a></li>
+                            <li><a href="<?php echo url('item/addIncome'); ?>">进货入库</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('item/outgo'); ?>"><i class="icon-reply"></i> 产品出库 </a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
+                        <ul id="item-outgo-dropdown" class="collapse">
+                            <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">特殊出库</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
                         <ul id="examine-dropdown" class="collapse">
@@ -55,13 +61,14 @@
                             <li><a href="<?php echo url('item/outgoAgree'); ?>">出库审核</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <!-- <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
                         <ul id="statistics-dropdown" class="collapse">
                             <li><a href="<?php echo url('/index/statistics/income'); ?>">进货统计</a></li>
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
-                    </li>
+                    </li> -->
+                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
@@ -70,10 +77,10 @@
                             <li><a href="<?php echo url('setting/feature'); ?>">配置录入</a></li>
                             <li><a href="<?php echo url('setting/appearance'); ?>">外观录入</a></li>
                             <li><a href="<?php echo url('setting/edition'); ?>">固件版本录入</a></li>
-                            <li><a href="<?php echo url('setting/type'); ?>">型号录入</a></li>
+                            <li><a href="<?php echo url('setting/type'); ?>">网络模式型号录入</a></li>
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道录入</a></li>
                             <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径录入</a></li>
-                            <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li>
+                            <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -91,7 +98,7 @@
 
         </div> <!-- end span2 -->
 
-        <div class="span10">
+        <div class="span10" style="width: 82%;    margin-left: 2%;height:100%">
 
             <div class="secondary-masthead span12">
 
@@ -117,147 +124,108 @@
 
 
             <div class="main-area dashboard">
-                <!--<div class="alert alert-info">-->
-<!--<a class="close" data-dismiss="alert" href="#">x</a>-->
-<!--<h4 class="alert-heading">Information</h4>-->
-<!--This template shows how forms can be laid out for editing content.-->
-<!--</div>-->
-
-<!--<div class="alert alert-error">-->
-<!--<a class="close" data-dismiss="alert" href="#">x</a>-->
-<!--<h4 class="alert-heading">Error</h4>-->
-<!--Example of an error message alert.-->
-<!--</div>-->
-
-<!--<div class="alert alert-success">-->
-<!--<a class="close" data-dismiss="alert" href="#">x</a>-->
-<!--<h4 class="alert-heading">Success</h4>-->
-<!--Example of an success message alert.-->
-<!--</div>-->
-
-<!--<div class="alert alert-warning">-->
-<!--<a class="close" data-dismiss="alert" href="#">x</a>-->
-<!--<h4 class="alert-heading">Warning</h4>-->
-<!--Example of an warning message alert.-->
-<!--</div>-->
-
-<?php echo $message; ?>
+                
 <div class="row">
-    <div class="span12">
-        <div class="slate">
-            <div class="page-header">
-                <h2>进货入库</h2>
-            </div>
-            <form class="form-horizontal" method="post" id="form">
-                <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="date">进货日期</label>
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="date"  name="date" value="" autocomplete="off">
-                        </div>
-                    </div>
 
-                    <input type="hidden" name="category_id" id="category_id">
-                    <input type="hidden" name="name_id" id="name_id">
-                    <input type="hidden" name="feature_id" id="feature_id">
-                    <div class="control-group">
-                        <label class="control-label" for="type_id">型号</label>
-                        <div class="controls">
-                            <select id="type_id" class="input-xlarge" name="type_id">
-                                <?php foreach($types as $type): ?>
-                                    <option value="<?php echo $type['id']; ?>" data-feature-id="<?php echo $type['itemFeature']['id']; ?>" data-category-id="<?php echo $type['category']['id']; ?>" data-name-id="<?php echo $type['itemName']['id']; ?>" data-appearance="
-                                    <?php foreach($type['itemName']['itemAppearance'] as $appearance): ?>
-                                        <option value='<?php echo $appearance['id']; ?>'><?php echo $appearance['data']; ?></option>
-                                    <?php endforeach; ?>"  data-edition="
-                                    <?php foreach($type['itemName']['itemEdition'] as $edition): ?>
-                                        <option value='<?php echo $edition['id']; ?>'><?php echo $edition['data']; ?></option>
-                                    <?php endforeach; ?>"
-                                    ><?php echo $type['data']; ?> (<?php echo $type['category']['data']; ?>-<?php echo $type['itemName']['data']; ?>-<?php echo $type['itemFeature']['data']; ?>)</option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="appearance_id">外观</label>
-                        <div class="controls">
-                            <select id="appearance_id" class="input-xlarge" name="appearance_id">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="number">序列号</label>
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="number" name="number" value="">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="edition_id">固件版本</label>
-                        <div class="controls">
-                            <select id="edition_id" class="input-xlarge" name="edition_id">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="memo">商品备注</label>
-                        <div class="controls">
-                            <textarea class="input-xlarge" name="memo" id="memo" rows="3"></textarea>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="price">进货价格</label>
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="price" name="price" value="">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="channel_id">进货渠道</label>
-                        <div class="controls">
-                            <select id="channel_id" class="input-xlarge" name="channel_id">
-                                <?php foreach($channels as $channel): ?>
-                                    <option value="<?php echo $channel['id']; ?>"><?php echo $channel['data']; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="submit"></label>
-                        <button class="btn btn-success" type="submit" id="submit">确定</button>
-                    </div>
-                </fieldset>
-            </form>
+    <div class="">
+        <div class="span12">
+
+            <form class="form-inline" method="get">
+            <select class="span2" name="user_id">
+                <option value=""> - 入库人 - </option>
+                <?php foreach($users as $user): ?>
+                <option value="<?php echo $user['id']; ?>" <?php echo \think\Request::instance()->get('user_id')==$user['id']?'selected' :''; ?>><?php echo $user['username']; ?></opion>
+                <?php endforeach; ?>
+            </select>
+            <label class="control-label" for="date">进货日期</label>
+            <input type="text" class="input-xlarge span2" id="date"  name="date" value="" data-val="<?php echo \think\Request::instance()->get('date'); ?>" autocomplete="off">
+            <select class="span2" name="name_id">
+                <option value=""> - 名称 - </option>
+                <?php foreach($names as $name): ?>
+                <option value="<?php echo $name['id']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['id']?'selected' :''; ?>><?php echo $name['data']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <select class="span2" name="channel_id">
+                <option value=""> - 进货渠道 - </option>
+                <?php foreach($channels as $channel): ?>
+                <option value="<?php echo $channel['id']; ?>" <?php echo \think\Request::instance()->get('channel_id')==$channel['id']?'selected' :''; ?>><?php echo $channel['data']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit" class="btn btn-primary">搜索</button>
+        </form>
+    </div>
+        <div class="span12">
+            <table class="orders-table table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>审核状态</th>
+                    <th>型号</th>
+                    <th>名称</th>
+                    <th>网络模式</th>
+                    <th>配置</th>
+                    <th>外观</th>
+                    <th>序列号</th>
+                    <th>固件版本</th>
+                    <th>进货价格</th>
+                    <th>进货渠道</th>
+                    <th>入库人</th>
+                    <th>入库时间</th>
+                    <th class="actions">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <?php if(is_array($lists) || $lists instanceof \think\Collection || $lists instanceof \think\Paginator): $i = 0; $__LIST__ = $lists;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$temp): $mod = ($i % 2 );++$i;?>
+                <tr>
+                    <td><span><?php echo $temp['id']; ?></span></td>
+                    <td><span><?php echo $temp->getStatusName(); ?></span></td>
+                    <th><span><?php echo $temp['item']['itemType']['data']; ?></span></th>
+                    <th><span><?php echo $temp['item']['itemName']['data']; ?></span></th>
+                    <th><span><?php echo $temp['item']['itemNetwork']['data']; ?></span></th>
+                    <th><span><?php echo $temp['item']['itemFeature']['data']; ?></span></th>
+                    <th><span><?php echo $temp['item']['itemAppearance']['data']; ?></span></th>
+                    <th><span><?php echo $temp['item']['number']; ?></span></th>
+                    <th><span><?php echo $temp['item']['itemEdition']['data']; ?></span></th>
+                    <!-- <th><span><?php echo $temp['item']['memo']; ?></span></th> -->
+                    <th><span><?php echo $temp['item']['price']; ?></span></th>
+                    <th><span><?php echo $temp['item']['itemChannel']['data']; ?></span></th>
+                    <td><span><?php echo $temp['createUser']['username']; ?></span></td>
+                    <td><span><?php echo $temp['create_time']; ?></span></td>
+                    <td class="actions">
+                        <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
+                        <a class="btn btn-small btn-success update-item" data-id="<?php echo $temp['id']; ?>" data-value="1" data-href="<?php echo url('addIncome'); ?>">修改</a>
+                        <a class="btn btn-small btn-danger delete-item" data-id="<?php echo $temp['id']; ?>" data-value="0" data-href="<?php echo url('deleteAgree'); ?>">删除</a>
+                    </td>
+                </tr>
+                <?php endforeach; endif; else: echo "" ;endif; ?>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <?php echo $lists->render(); ?>
         </div>
     </div>
 </div>
-
-<script src="/static/js/jquery-1.8.3.js"></script>
+<script src="/static/js/jquery.min.js"></script>
 <script>
+    $(function(){
 
-    function changeTypeSelected(){
+        $(".delete-item").click(function(){
+            var url = $(this).data('href');
+            var id = $(this).data('id');
+            $.post(url, {id:id}, function (res) {
+                alert(res.data);
+                window.location.replace("<?php echo url('income');?>");
+            })
+        })
 
-        var feature_id = $("#type_id option:selected").data("feature-id");
-        $("#feature_id").val(feature_id);
-
-        var category_id = $("#type_id option:selected").data("category-id");
-        $("#category_id").val(category_id);
-
-        var name_id = $("#type_id option:selected").data("name-id");
-        $("#name_id").val(name_id);
-console.log(feature_id)
-
-        var appearance_str = $("#type_id option:selected").data("appearance");
-        $("#appearance_id").html(appearance_str)
-
-        var edition_str = $("#type_id option:selected").data("edition");
-        $("#edition_id").html(edition_str)
-    }
-
-
-    $(function () {
-
-        changeTypeSelected();
-        $("#type_id").change(function () {
-            changeTypeSelected();
-        });
+        $(".update-item").click(function(){
+            var url = $(this).data('href');
+            var id = $(this).data('id');
+            url = url + '?id=' + id;
+            window.location.replace(url);
+        })
 
         $.datepicker.regional['zh-CN'] = {
             closeText: '关闭',
@@ -284,11 +252,16 @@ console.log(feature_id)
         $("#date").datepicker({
             dateFormat: "yy-mm-dd",
             todayHighlight: false,
-            minDate: 0,
-            maxDate: "+2D"
+            minDate: "-3600D",
+            maxDate: "+0D"
         });
 
-        $('#date').datepicker("setDate", '+0D');
+        var date_val = $("#date").data('val');
+        if (date_val != '') {
+            $('#date').datepicker("setDate", date_val);
+        } else {
+            $('#date').datepicker("setDate", '+0D');
+        }
 
     })
 </script>

@@ -6,11 +6,13 @@ use app\index\model\ItemChannel;
 use app\index\model\ItemIncomeHistory;
 use app\index\model\ItemOutgoHistory;
 use app\index\model\User;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use think\Db;
 use think\Session;
 use app\index\model\ItemName;
-use PHPExcel;
-use PHPExcel_IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
 
 class Statistics extends BaseController
 {
@@ -211,63 +213,60 @@ class Statistics extends BaseController
             $aveProfit = $outgoCount == 0 ? 0 : round($profit / $outgoCount, 2);
 
             if ($this->request->get("sub") == 'excel') {
-                // Create new PHPExcel object
-                $objPHPExcel = new PHPExcel();
+                set_time_limit(0);
+                $spreadsheet = new Spreadsheet();
+                $sheet = $spreadsheet->getActiveSheet();
+                $sheet->setTitle('库存统计导出');
 
-                // Set document properties
-                $objPHPExcel->getProperties()->setTitle("库存统计导出");
+                $sheet->setCellValue('A1', '开始时间：')
+                    ->setCellValue('A2', '结束日期：')
+                    ->setCellValue('A3', '产品名称：')
+                    ->setCellValue('A4', '进货渠道：')
+                    ->setCellValue('A5', '进货人：')
+                    ->setCellValue('A6', '出货途径：')
 
+                    ->setCellValue('B1', $startDate ?? '')
+                    ->setCellValue('B2', $endDate ?? '')
+                    ->setCellValue('B3', $nameId ? ItemName::where('id', $nameId)->value('data') : '')
+                    ->setCellValue('B4', $incomeChannelId ? ItemChannel::where('id', $incomeChannelId)->value('data') : '')
+                    ->setCellValue('B5', $createUserId ? User::where('id', $createUserId)->value('username') : '')
+                    ->setCellValue('B6', $outgoChannelId ? ItemChannel::where('id', $outgoChannelId)->value('data') : '')
 
-                // Add some data
-                $objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('A1', '开始时间')
-                            ->setCellValue('B1', '结束日期')
-                            ->setCellValue('C1', '产品名称')
-                            ->setCellValue('D1', '进货渠道')
-                            ->setCellValue('F1', '进货人')
-                            ->setCellValue('G1', '出货途径')
-                            ->setCellValue('A2', '开始时间')
-                            ->setCellValue('B2', '结束日期')
-                            ->setCellValue('C2', '产品名称')
-                            ->setCellValue('D2', '进货渠道')
-                            ->setCellValue('F2', '进货人')
-                            ->setCellValue('G2', '出货途径')
-                            ->setCellValue('A3', '开始时间')
-                            ->setCellValue('B3', '结束日期')
-                            ->setCellValue('C3', '产品名称')
-                            ->setCellValue('D3', '进货渠道')
-                            ->setCellValue('F3', '进货人')
-                            ->setCellValue('G3', '出货途径')
-                            ->setCellValue('A4', '开始时间')
-                            ->setCellValue('B4', '结束日期')
-                            ->setCellValue('C4', '产品名称')
-                            ->setCellValue('D4', '进货渠道')
-                            ->setCellValue('F4', '进货人')
-                            ->setCellValue('G4', '出货途径');
+                    ->setCellValue('D1', '进货总数量：')
+                    ->setCellValue('D2', '进货总价格：')
+                    ->setCellValue('D3', '平均进货价格：')
+                    ->setCellValue('D4', '销售总数量：')
+                    ->setCellValue('D5', '平均销售价格：')
+                    ->setCellValue('D6', '总利润：')
+                    ->setCellValue('D7', '平均利润：')
 
-                // Rename worksheet
-                $objPHPExcel->getActiveSheet()->setTitle('统计');
+                    ->setCellValue('E1', $incomeCount)
+                    ->setCellValue('E2', $incomePrice)
+                    ->setCellValue('E3', $aveIncomePrice)
+                    ->setCellValue('E4', $outgoCount)
+                    ->setCellValue('E5', $aveOutgoPrice)
+                    ->setCellValue('E6', $profit)
+                    ->setCellValue('E7', $aveProfit);
 
-
-                // Set active sheet index to the first sheet, so Excel opens this as the first sheet
-                $objPHPExcel->setActiveSheetIndex(0);
-
-
-                // Redirect output to a client’s web browser (Excel2007)
-                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="01simple.xlsx"');
+                ob_end_clean();
+//                if ($format == 'xls') {
+//                    //输出Excel03版本
+                    header('Content-Type:application/vnd.ms-excel');
+                    $class = "\PhpOffice\PhpSpreadsheet\Writer\Xls";
+//                } elseif ($format == 'xlsx') {
+//                    //输出07Excel版本
+//                    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+//                    $class = "\PhpOffice\PhpSpreadsheet\Writer\Xlsx";
+//                }
+                //输出名称
+                header('Content-Disposition:attachment;filename="'.mb_convert_encoding('库存统计导出',"GB2312", "utf-8").'.xls"');
+                //禁止缓存
                 header('Cache-Control: max-age=0');
-                // If you're serving to IE 9, then the following may be needed
-                header('Cache-Control: max-age=1');
+                $writer = new $class($spreadsheet);
+                $writer->save('php://output');
 
-                // If you're serving to IE over SSL, then the following may be needed
-                header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-                header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
-                header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-                header ('Pragma: public'); // HTTP/1.0
-
-                $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, '库存统计导出');
-                $objWriter->save('php://output');
+                $spreadsheet->disconnectWorksheets();
+                unset($spreadsheet);
                 exit;
             }
         } else {

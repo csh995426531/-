@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"/data/www/y5g/public/../application/index/view/setting/name.html";i:1562607977;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562608158;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"/data/www/y5g/public/../application/index/view/setting/name.html";i:1567390641;s:48:"/data/www/y5g/application/index/view/layout.html";i:1567390639;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -43,11 +43,17 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/income'); ?>">进货入库</a></li>
+                            <li><a href="<?php echo url('item/addIncome'); ?>">进货入库</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('item/outgo'); ?>"><i class="icon-reply"></i> 销售出库 </a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
+                        <ul id="item-outgo-dropdown" class="collapse">
+                            <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">特殊出库</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
                         <ul id="examine-dropdown" class="collapse">
@@ -55,13 +61,14 @@
                             <li><a href="<?php echo url('item/outgoAgree'); ?>">出库审核</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <!-- <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
                         <ul id="statistics-dropdown" class="collapse">
                             <li><a href="<?php echo url('/index/statistics/income'); ?>">进货统计</a></li>
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
-                    </li>
+                    </li> -->
+                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
@@ -70,10 +77,10 @@
                             <li><a href="<?php echo url('setting/feature'); ?>">配置录入</a></li>
                             <li><a href="<?php echo url('setting/appearance'); ?>">外观录入</a></li>
                             <li><a href="<?php echo url('setting/edition'); ?>">固件版本录入</a></li>
-                            <li><a href="<?php echo url('setting/type'); ?>">型号录入</a></li>
+                            <li><a href="<?php echo url('setting/type'); ?>">网络模式型号录入</a></li>
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道录入</a></li>
                             <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径录入</a></li>
-                            <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li>
+                            <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
                         </ul>
                     </li>
                     <li class="dropdown">

@@ -60,7 +60,7 @@ return [
     // 默认控制器名
     'default_controller'     => 'Index',
     // 默认操作名
-    'default_action'         => 'index',
+    'default_action'         => 'login',
     // 默认验证器
     'default_validate'       => '',
     // 默认的空控制器名
@@ -85,7 +85,7 @@ return [
     // URL普通方式参数 用于自动生成
     'url_common_param'       => false,
     // URL参数方式 0 按名称成对解析 1 按顺序解析
-    'url_param_type'         => 0,
+    'url_param_type'         => 1,
     // 是否开启路由
     'url_route_on'           => true,
     // 路由使用完整匹配

@@ -1,6 +1,6 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:71:"/www/wwwroot/maig/public/../application/index/view/setting/edition.html";i:1559823029;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1559823025;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:71:"/www/wwwroot/maig/public/../application/index/view/setting/edition.html";i:1567309985;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1567309984;}*/ ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%">
 <head>
 
     <meta charset="utf-8">
@@ -22,13 +22,13 @@
     <![endif]-->
 
 </head>
-<body>
+<body style="height:100%">
 
-<div class="container">
-    <div class="row">
-        <div class="span2">
-            <div class="main-left-col">
-                <h1><i class="icon-shopping-cart icon-large"></i> Adminize</h1>
+<div class="container-fluid " style="padding: 0px;height:100%">
+    <div class="row" style="height:100%">
+        <div class="span2" style="width: 9.3%;background: #484646;height:100%">
+            <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
+                <h1><i class="icon-large"></i> 库存管理系统</h1>
                 <ul class="side-nav">
                     <li class="active">
                         <a href="index.html"><i class="icon-home"></i> Dashboard</a>
@@ -43,11 +43,17 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/income'); ?>">进货入库</a></li>
+                            <li><a href="<?php echo url('item/addIncome'); ?>">进货入库</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('item/outgo'); ?>"><i class="icon-reply"></i> 产品出库 </a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
+                        <ul id="item-outgo-dropdown" class="collapse">
+                            <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">特殊出库</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
                         <ul id="examine-dropdown" class="collapse">
@@ -55,13 +61,14 @@
                             <li><a href="<?php echo url('item/outgoAgree'); ?>">出库审核</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <!-- <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
                         <ul id="statistics-dropdown" class="collapse">
                             <li><a href="<?php echo url('/index/statistics/income'); ?>">进货统计</a></li>
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
-                    </li>
+                    </li> -->
+                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
@@ -70,9 +77,10 @@
                             <li><a href="<?php echo url('setting/feature'); ?>">配置录入</a></li>
                             <li><a href="<?php echo url('setting/appearance'); ?>">外观录入</a></li>
                             <li><a href="<?php echo url('setting/edition'); ?>">固件版本录入</a></li>
-                            <li><a href="<?php echo url('setting/type'); ?>">型号录入</a></li>
+                            <li><a href="<?php echo url('setting/type'); ?>">网络模式型号录入</a></li>
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道录入</a></li>
                             <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径录入</a></li>
+                            <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -90,7 +98,7 @@
 
         </div> <!-- end span2 -->
 
-        <div class="span10">
+        <div class="span10" style="width: 82%;    margin-left: 2%;height:100%">
 
             <div class="secondary-masthead span12">
 
@@ -121,7 +129,7 @@
 
 <!--<div class="span10">-->
 
-<!--<div class="slate">-->
+<!--<div class="">-->
 
 <!--<form class="form-inline">-->
 <!--<input type="text" class="input-large" placeholder="Keyword...">-->
@@ -145,7 +153,7 @@
 <?php echo $message; ?>
 <div class="row">
 
-    <div class="slate">
+    <div class="">
 
         <div class="span12 listing-buttons">
 
@@ -179,7 +187,7 @@
                 <tr>
                     <th>ID</th>
                     <th>类别</th>
-                    <th>名称</th>
+                    <!-- <th>名称</th> -->
                     <th>固件版本值</th>
                     <th class="actions">操作</th>
                 </tr>
@@ -232,12 +240,16 @@
                 <tr>
                     <td><span><?php echo $temp['id']; ?></span></td>
                     <td><span><?php echo $temp['category']['data']; ?></span></td>
-                    <td><span><?php echo $temp['itemName']['data']; ?></span></td>
+                    <!-- <td><span><?php echo $temp['itemName']['data']; ?></span></td> -->
                     <td><span><?php echo $temp['data']; ?></span></td>
                     <td class="actions">
                         <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
                         <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                        <a class="btn btn-small btn-danger del-item" data-id="<?php echo $temp['id']; ?>" data-href="<?php echo url('delEdition'); ?>">删除</a>
+                        <?php if($temp['status'] == 1): ?>
+                        <a class="btn btn-small btn-danger del-item" data-id="<?php echo $temp['id']; ?>" data-href="<?php echo url('delEdition'); ?>">停用</a>
+                        <?php else: ?>
+                        <a class="btn btn-small btn-success del-item" data-id="<?php echo $temp['id']; ?>" data-href="<?php echo url('openEdition'); ?>">启用</a>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
@@ -257,15 +269,11 @@
         <form class="form-horizontal" method="post" id="form" data-action="<?php echo url('addEdition'); ?>">
             <fieldset>
                 <div class="modal-body control-group">
-                    <label class="control-label" for="data">名称</label>
+                    <label class="control-label" for="data">类别</label>
                     <div class="controls">
-                        <select id="name_id" class="input-xlarge" name="name_id">
-                            <?php foreach($names as $category): ?>
-                            <optgroup label="<?php echo $category['category']['data']; ?>">
-                                <?php foreach($category['lists'] as $name): ?>
-                                <option value="<?php echo $name['id']; ?>"><?php echo $name['data']; ?></option>
-                                <?php endforeach; ?>
-                            </optgroup>
+                        <select id="category_id" class="input-xlarge" name="category_id">
+                            <?php foreach($categories as $category): ?>
+                            <option value="<?php echo $category['id']; ?>"><?php echo $category['data']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>

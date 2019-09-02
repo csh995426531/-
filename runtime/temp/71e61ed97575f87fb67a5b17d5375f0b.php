@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:73:"/www/wwwroot/maig/public/../application/index/view/statistics/income.html";i:1559825106;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1559823025;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:73:"/www/wwwroot/maig/public/../application/index/view/statistics/income.html";i:1562387618;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1562387617;}*/ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,6 +73,7 @@
                             <li><a href="<?php echo url('setting/type'); ?>">型号录入</a></li>
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道录入</a></li>
                             <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径录入</a></li>
+                            <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">

@@ -13,19 +13,18 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    // 'hostname'        => '127.0.0.1',
-    'hostname'      => '172.18.0.1',
+//     'hostname'        => '127.0.0.1',//本地
+    'hostname'      => '172.23.0.3', //公司docker mysql地址
     // 数据库名
     'database'        => 'maiguo',
     // 用户名
-    //  'username'        => 'maiguo',
-    'username'        => 'root',
+    //  'username'        => 'maiguo', //线上
+    'username'        => 'root', //本地
     // 密码
-    // 'password'        => 'B6je4LcsY5MApHnr',
-    'password'        => '123456',
+    // 'password'        => 'B6je4LcsY5MApHnr',//线上
+    'password'        => '123456',//本地
     // 端口
      'hostport'        => '3306',
-    // 'hostport'        => '3406',
     // 连接dsn
     'dsn'             => '',
     // 数据库连接参数

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:67:"/www/wwwroot/maig/public/../application/index/view/index/login.html";i:1562327612;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:67:"/www/wwwroot/maig/public/../application/index/view/index/login.html";i:1562975336;}*/ ?>
 <!--<div><img src="<?php echo captcha_src(); ?>" alt="captcha" onclick="this.src='<?php echo captcha_src(); ?>'" /></div>-->
 <!DOCTYPE html>
 <html>

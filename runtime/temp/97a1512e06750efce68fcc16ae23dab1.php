@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"/data/www/y5g/public/../application/index/view/setting/edition.html";i:1562607975;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562608158;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"/data/www/y5g/public/../application/index/view/setting/edition.html";i:1567390641;s:48:"/data/www/y5g/application/index/view/layout.html";i:1567390639;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -43,11 +43,17 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/income'); ?>">进货入库</a></li>
+                            <li><a href="<?php echo url('item/addIncome'); ?>">进货入库</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('item/outgo'); ?>"><i class="icon-reply"></i> 销售出库 </a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
+                        <ul id="item-outgo-dropdown" class="collapse">
+                            <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">特殊出库</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
                         <ul id="examine-dropdown" class="collapse">
@@ -55,13 +61,14 @@
                             <li><a href="<?php echo url('item/outgoAgree'); ?>">出库审核</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <!-- <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
                         <ul id="statistics-dropdown" class="collapse">
                             <li><a href="<?php echo url('/index/statistics/income'); ?>">进货统计</a></li>
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
-                    </li>
+                    </li> -->
+                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
@@ -70,10 +77,10 @@
                             <li><a href="<?php echo url('setting/feature'); ?>">配置录入</a></li>
                             <li><a href="<?php echo url('setting/appearance'); ?>">外观录入</a></li>
                             <li><a href="<?php echo url('setting/edition'); ?>">固件版本录入</a></li>
-                            <li><a href="<?php echo url('setting/type'); ?>">型号录入</a></li>
+                            <li><a href="<?php echo url('setting/type'); ?>">网络模式型号录入</a></li>
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道录入</a></li>
                             <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径录入</a></li>
-                            <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li>
+                            <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -180,7 +187,7 @@
                 <tr>
                     <th>ID</th>
                     <th>类别</th>
-                    <th>名称</th>
+                    <!-- <th>名称</th> -->
                     <th>固件版本值</th>
                     <th class="actions">操作</th>
                 </tr>
@@ -233,7 +240,7 @@
                 <tr>
                     <td><span><?php echo $temp['id']; ?></span></td>
                     <td><span><?php echo $temp['category']['data']; ?></span></td>
-                    <td><span><?php echo $temp['itemName']['data']; ?></span></td>
+                    <!-- <td><span><?php echo $temp['itemName']['data']; ?></span></td> -->
                     <td><span><?php echo $temp['data']; ?></span></td>
                     <td class="actions">
                         <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
@@ -262,15 +269,11 @@
         <form class="form-horizontal" method="post" id="form" data-action="<?php echo url('addEdition'); ?>">
             <fieldset>
                 <div class="modal-body control-group">
-                    <label class="control-label" for="data">名称</label>
+                    <label class="control-label" for="data">类别</label>
                     <div class="controls">
-                        <select id="name_id" class="input-xlarge" name="name_id">
-                            <?php foreach($names as $category): ?>
-                            <optgroup label="<?php echo $category['category']['data']; ?>">
-                                <?php foreach($category['lists'] as $name): ?>
-                                <option value="<?php echo $name['id']; ?>"><?php echo $name['data']; ?></option>
-                                <?php endforeach; ?>
-                            </optgroup>
+                        <select id="category_id" class="input-xlarge" name="category_id">
+                            <?php foreach($categories as $category): ?>
+                            <option value="<?php echo $category['id']; ?>"><?php echo $category['data']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>

@@ -12,14 +12,14 @@
 
 // [ 应用入口文件 ]
 
-// // // 定义应用目录
-// define('APP_PATH', __DIR__ . '/../application/');
-// // 加载框架引导文件
-// require __DIR__ . '/../thinkphp/start.php';
+ // // 定义应用目录
+ define('APP_PATH', __DIR__ . '/../application/');
+ // 加载框架引导文件
+ require __DIR__ . '/../thinkphp/start.php';
 
 header("Content-type:text/html;charset=utf-8");
 //配置信息
-$cfg_dbhost = '127.0.0.1';
+$cfg_dbhost = '172.23.0.3';
 $cfg_dbname = 'maiguo';
 $cfg_dbuser = 'maiguo';
 $cfg_dbpwd = 'B6je4LcsY5MApHnr';

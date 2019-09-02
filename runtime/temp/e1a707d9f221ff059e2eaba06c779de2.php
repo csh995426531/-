@@ -1,6 +1,6 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:73:"/www/wwwroot/maig/public/../application/index/view/item/income_agree.html";i:1559823026;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1559823025;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:73:"/www/wwwroot/maig/public/../application/index/view/item/income_agree.html";i:1567309987;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1567309984;}*/ ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%">
 <head>
 
     <meta charset="utf-8">
@@ -22,13 +22,13 @@
     <![endif]-->
 
 </head>
-<body>
+<body style="height:100%">
 
-<div class="container">
-    <div class="row">
-        <div class="span2">
-            <div class="main-left-col">
-                <h1><i class="icon-shopping-cart icon-large"></i> Adminize</h1>
+<div class="container-fluid " style="padding: 0px;height:100%">
+    <div class="row" style="height:100%">
+        <div class="span2" style="width: 9.3%;background: #484646;height:100%">
+            <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
+                <h1><i class="icon-large"></i> 库存管理系统</h1>
                 <ul class="side-nav">
                     <li class="active">
                         <a href="index.html"><i class="icon-home"></i> Dashboard</a>
@@ -43,11 +43,17 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/income'); ?>">进货入库</a></li>
+                            <li><a href="<?php echo url('item/addIncome'); ?>">进货入库</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('item/outgo'); ?>"><i class="icon-reply"></i> 产品出库 </a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
+                        <ul id="item-outgo-dropdown" class="collapse">
+                            <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">特殊出库</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
                         <ul id="examine-dropdown" class="collapse">
@@ -55,13 +61,14 @@
                             <li><a href="<?php echo url('item/outgoAgree'); ?>">出库审核</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <!-- <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
                         <ul id="statistics-dropdown" class="collapse">
                             <li><a href="<?php echo url('/index/statistics/income'); ?>">进货统计</a></li>
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
-                    </li>
+                    </li> -->
+                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
@@ -70,9 +77,10 @@
                             <li><a href="<?php echo url('setting/feature'); ?>">配置录入</a></li>
                             <li><a href="<?php echo url('setting/appearance'); ?>">外观录入</a></li>
                             <li><a href="<?php echo url('setting/edition'); ?>">固件版本录入</a></li>
-                            <li><a href="<?php echo url('setting/type'); ?>">型号录入</a></li>
+                            <li><a href="<?php echo url('setting/type'); ?>">网络模式型号录入</a></li>
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道录入</a></li>
                             <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径录入</a></li>
+                            <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -90,7 +98,7 @@
 
         </div> <!-- end span2 -->
 
-        <div class="span10">
+        <div class="span10" style="width: 82%;    margin-left: 2%;height:100%">
 
             <div class="secondary-masthead span12">
 
@@ -117,73 +125,49 @@
 
             <div class="main-area dashboard">
                 
-<!--<div class="row">-->
-
-<!--<div class="span10">-->
-
-<!--<div class="slate">-->
-
-<!--<form class="form-inline">-->
-<!--<input type="text" class="input-large" placeholder="Keyword...">-->
-<!--<select class="span2">-->
-<!--<option value=""> - From Date - </option>-->
-<!--</select>-->
-<!--<select class="span2">-->
-<!--<option value=""> - To Date - </option>-->
-<!--</select>-->
-<!--<select class="span2">-->
-<!--<option value=""> - Filter - </option>-->
-<!--</select>-->
-<!--<button type="submit" class="btn btn-primary">Filter Listings</button>-->
-<!--</form>-->
-
-<!--</div>-->
-
-<!--</div>-->
-
 <div class="row">
 
-    <div class="slate">
-        <div class="span12 listing-buttons">
-
-            <!--<button class="btn btn-info">Action</button>-->
-
-            <!--<button class="btn btn-success">Action</button>-->
-
-            <!--<button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>-->
-
-        </div>
-
+    <div class="">
         <div class="span12">
 
-            <!--<div class="page-header">-->
-            <!--<div class="btn-group pull-right">-->
-            <!--<button class="btn dropdown-toggle" data-toggle="dropdown">-->
-            <!--<i class="icon-download-alt"></i> Export-->
-            <!--<span class="caret"></span>-->
-            <!--</button>-->
-            <!--<ul class="dropdown-menu">-->
-            <!--<li><a href="">CSV</a></li>-->
-            <!--<li><a href="">Excel</a></li>-->
-            <!--<li><a href="">PDF</a></li>-->
-            <!--</ul>-->
-            <!--</div>-->
-            <!--<h2>Listings</h2>-->
-            <!--</div>-->
-            <h4 class="span12">总条数：<?php echo $lists->total(); ?></h4>
+            <form class="form-inline" method="get">
+            <select class="span2" name="user_id">
+                <option value=""> - 入库人 - </option>
+                <?php foreach($users as $user): ?>
+                <option value="<?php echo $user['id']; ?>" <?php echo \think\Request::instance()->get('user_id')==$user['id']?'selected' :''; ?>><?php echo $user['username']; ?></opion>
+                <?php endforeach; ?>
+            </select>
+            <label class="control-label" for="date">进货日期</label>
+            <input type="text" class="input-xlarge span2" id="date"  name="date" value="" data-val="<?php echo \think\Request::instance()->get('date'); ?>" autocomplete="off">
+            <select class="span2" name="name_id">
+                <option value=""> - 名称 - </option>
+                <?php foreach($names as $name): ?>
+                <option value="<?php echo $name['id']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['id']?'selected' :''; ?>><?php echo $name['data']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <select class="span2" name="channel_id">
+                <option value=""> - 进货渠道 - </option>
+                <?php foreach($channels as $channel): ?>
+                <option value="<?php echo $channel['id']; ?>" <?php echo \think\Request::instance()->get('channel_id')==$channel['id']?'selected' :''; ?>><?php echo $channel['data']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit" class="btn btn-primary">搜索</button>
+        </form>
+    </div>
+        <div class="span12">
             <table class="orders-table table">
                 <thead>
                 <tr>
+                    <th></th>
                     <th>ID</th>
                     <th>入库类型</th>
                     <th>型号</th>
-                    <th>分类</th>
                     <th>名称</th>
+                    <th>网络模式</th>
                     <th>配置</th>
                     <th>外观</th>
                     <th>序列号</th>
                     <th>固件版本</th>
-                    <th>备注</th>
                     <th>进货价格</th>
                     <th>进货渠道</th>
                     <th>入库人</th>
@@ -192,61 +176,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label label-info">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label label-warning">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label label-important">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label label-inverse">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label label-success">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
 
                 <?php if(is_array($lists) || $lists instanceof \think\Collection || $lists instanceof \think\Paginator): $i = 0; $__LIST__ = $lists;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$temp): $mod = ($i % 2 );++$i;?>
                 <tr>
+                    <td><input type="checkbox" class="checkbox-checked" data-id="<?php echo $temp['id']; ?>"  /></td>
                     <td><span><?php echo $temp['id']; ?></span></td>
                     <td><span><?php echo $temp['typeName']; ?></span></td>
                     <th><span><?php echo $temp['item']['itemType']['data']; ?></span></th>
-                    <th><span><?php echo $temp['item']['itemCategory']['data']; ?></span></th>
                     <th><span><?php echo $temp['item']['itemName']['data']; ?></span></th>
+                    <th><span><?php echo $temp['item']['itemNetwork']['data']; ?></span></th>
                     <th><span><?php echo $temp['item']['itemFeature']['data']; ?></span></th>
                     <th><span><?php echo $temp['item']['itemAppearance']['data']; ?></span></th>
                     <th><span><?php echo $temp['item']['number']; ?></span></th>
                     <th><span><?php echo $temp['item']['itemEdition']['data']; ?></span></th>
-                    <th><span><?php echo $temp['item']['memo']; ?></span></th>
+                    <!-- <th><span><?php echo $temp['item']['memo']; ?></span></th> -->
                     <th><span><?php echo $temp['item']['price']; ?></span></th>
                     <th><span><?php echo $temp['item']['itemChannel']['data']; ?></span></th>
                     <td><span><?php echo $temp['createUser']['username']; ?></span></td>
@@ -258,6 +201,16 @@
                     </td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
+                <tr>
+                    <td><label style="cursor: pointer"><input type="checkbox" id="checkbox-all"  />全选</label> </td>
+                    <td colspan="14">共<?php echo $count; ?>记录 ， 共<?php echo $total; ?>金额</td>
+                </tr>
+                <tr>
+                    <td colspan="15">
+                            <a class="btn btn-small btn-success " id="allow-all" data-href="<?php echo url('allowAgree'); ?>">批量通过</a>
+                            <a class="btn btn-small btn-danger" id="reject-all" data-href="<?php echo url('rejectAgree'); ?>">批量拒绝</a>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -265,38 +218,11 @@
             <?php echo $lists->render(); ?>
         </div>
     </div>
-
-    <!--<div class="span5">-->
-
-    <!--<div class="pagination pull-left">-->
-    <!--<ul>-->
-    <!--<li><a href="#">Prev</a></li>-->
-    <!--<li class="active">-->
-    <!--<a href="#">1</a>-->
-    <!--</li>-->
-    <!--<li><a href="#">2</a></li>-->
-    <!--<li><a href="#">3</a></li>-->
-    <!--<li><a href="#">4</a></li>-->
-    <!--<li><a href="#">Next</a></li>-->
-    <!--</ul>-->
-    <!--</div>-->
-
-    <!--</div>-->
-
-    <!--<div class="span5 listing-buttons pull-right">-->
-
-    <!--<button class="btn btn-info">Action</button>-->
-
-    <!--<button class="btn btn-success">Action</button>-->
-
-    <!--<button class="btn btn-primary">Add New Item</button>-->
-
-    <!--</div>-->
-
 </div>
 <script src="/static/js/jquery.min.js"></script>
 <script>
     $(function(){
+
         $(".allow-item, .reject-item").click(function(){
             var url = $(this).data('href');
             var id = $(this).data('id');
@@ -305,6 +231,103 @@
                 window.location.replace("<?php echo url('incomeAgree');?>");
             })
         })
+
+        $("#checkbox-all").click(function(){
+
+            var all_checked = 1;
+
+            $(".checkbox-checked").each(function(k, v){
+              
+                if ($(v).prop('checked') == false){
+                    all_checked = 0;
+                }
+            })
+            
+            if (all_checked == 1) {
+                $(".checkbox-checked").each(function(k, v){
+                    $(v).prop('checked', false)
+                })
+                $("#checkbox-all").prop('checked', false)
+            } else {
+                $(".checkbox-checked").each(function(k, v){
+                    $(v).prop('checked', true)
+                })
+                $("#checkbox-all").prop('checked', true)
+            }
+        });
+
+        $("#allow-all").click(function(){
+
+            var url = $(this).data('href');
+            var arr = new Array();
+            $(".checkbox-checked").each(function(k, v){
+                if ($(v).prop('checked') == true){
+                    arr. push($(v).data('id'));
+                }
+            })
+
+            if (arr.length > 0) {
+                $.post(url, {id:arr}, function(res) {
+                        alert(res.data)
+                        window.location.replace("<?php echo url('incomeAgree');?>");
+                })
+            }
+        })
+
+        $("#reject-all").click(function(){
+
+            var url = $(this).data('href');
+            var arr = new Array();
+            $(".checkbox-checked").each(function(k, v){
+                if ($(v).prop('checked') == true){
+                    arr. push($(v).data('id'));
+                }
+            })
+
+            if (arr.length > 0) {
+                $.post(url, {id:arr}, function(res) {
+                    alert(res.data)
+                    window.location.replace("<?php echo url('incomeAgree');?>");
+                })
+            }
+        })
+
+        $.datepicker.regional['zh-CN'] = {
+            closeText: '关闭',
+            prevText: '<上月',
+            nextText: '下月>',
+            currentText: '今天',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                '七', '八', '九', '十', '十一', '十二'],
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            weekHeader: '周',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: true,
+            yearSuffix: '年'
+        };
+
+        $.datepicker.setDefaults( $.datepicker.regional[ "zh-CN" ] );
+
+        $("#date").datepicker({
+            dateFormat: "yy-mm-dd",
+            todayHighlight: false,
+            minDate: "-3600D",
+            maxDate: "+0D"
+        });
+
+        var date_val = $("#date").data('val');
+        if (date_val != '') {
+            $('#date').datepicker("setDate", date_val);
+        } else {
+            $('#date').datepicker("setDate", '+0D');
+        }
+
     })
 </script>
             </div>

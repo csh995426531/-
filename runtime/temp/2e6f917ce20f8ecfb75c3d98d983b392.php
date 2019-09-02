@@ -1,6 +1,6 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"/www/wwwroot/maig/public/../application/index/view/item/search.html";i:1562327612;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1562327611;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"/www/wwwroot/maig/public/../application/index/view/item/search.html";i:1567309986;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1567309984;}*/ ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%">
 <head>
 
     <meta charset="utf-8">
@@ -22,13 +22,13 @@
     <![endif]-->
 
 </head>
-<body>
+<body style="height:100%">
 
-<div class="container">
-    <div class="row">
-        <div class="span2">
-            <div class="main-left-col">
-                <h1><i class="icon-shopping-cart icon-large"></i> Adminize</h1>
+<div class="container-fluid " style="padding: 0px;height:100%">
+    <div class="row" style="height:100%">
+        <div class="span2" style="width: 9.3%;background: #484646;height:100%">
+            <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
+                <h1><i class="icon-large"></i> 库存管理系统</h1>
                 <ul class="side-nav">
                     <li class="active">
                         <a href="index.html"><i class="icon-home"></i> Dashboard</a>
@@ -43,11 +43,17 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/income'); ?>">进货入库</a></li>
+                            <li><a href="<?php echo url('item/addIncome'); ?>">进货入库</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('item/outgo'); ?>"><i class="icon-reply"></i> 产品出库 </a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
+                        <ul id="item-outgo-dropdown" class="collapse">
+                            <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">特殊出库</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
                         <ul id="examine-dropdown" class="collapse">
@@ -55,13 +61,14 @@
                             <li><a href="<?php echo url('item/outgoAgree'); ?>">出库审核</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <!-- <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
                         <ul id="statistics-dropdown" class="collapse">
                             <li><a href="<?php echo url('/index/statistics/income'); ?>">进货统计</a></li>
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
-                    </li>
+                    </li> -->
+                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
@@ -70,10 +77,10 @@
                             <li><a href="<?php echo url('setting/feature'); ?>">配置录入</a></li>
                             <li><a href="<?php echo url('setting/appearance'); ?>">外观录入</a></li>
                             <li><a href="<?php echo url('setting/edition'); ?>">固件版本录入</a></li>
-                            <li><a href="<?php echo url('setting/type'); ?>">型号录入</a></li>
+                            <li><a href="<?php echo url('setting/type'); ?>">网络模式型号录入</a></li>
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道录入</a></li>
                             <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径录入</a></li>
-                            <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li>
+                            <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -91,7 +98,7 @@
 
         </div> <!-- end span2 -->
 
-        <div class="span10">
+        <div class="span10" style="width: 82%;    margin-left: 2%;height:100%">
 
             <div class="secondary-masthead span12">
 
@@ -120,64 +127,72 @@
                 
 <div class="row">
 
-    <div class="slate">
+    <div class="">
         <div class="span12">
 
                 <form class="form-inline" method="get">
                 <select class="span2" name="category_id">
-                    <option value="0"> - 分类 - </option>
+                    <option value=""> - 分类 - </option>
                     <?php foreach($categories as $category): ?>
-                    <option value="<?php echo $category['id']; ?>" <?php echo \think\Request::instance()->get('category_id')==$category['id']?'selected' :''; ?>><?php echo $category['data']; ?></opion>
+                    <option value="<?php echo $category['data']; ?>" <?php echo \think\Request::instance()->get('category_id')==$category['data']?'selected' :''; ?>><?php echo $category['data']; ?></opion>
                     <?php endforeach; ?>
                 </select>
                 <select class="span2" name="type_id">
-                    <option value="0"> - 型号 - </option>
+                    <option value=""> - 型号 - </option>
                     <?php foreach($types as $type): ?>
-                    <option value="<?php echo $type['id']; ?>" <?php echo \think\Request::instance()->get('type_id')==$type['id']?'selected' :''; ?>><?php echo $type['data']; ?></opion>
+                    <option value="<?php echo $type['data']; ?>" <?php echo \think\Request::instance()->get('type_id')==$type['data']?'selected' :''; ?>><?php echo $type['data']; ?></opion>
                     <?php endforeach; ?>
                 </select>
-                <select class="span2" name="name_id">
-                    <option value="0"> - 名称 - </option>
+                <span id="data-all" style="display:none"><?php echo json_encode($data); ?></span>
+                <select class="span2" name="name_id" id='name_id'   data-href="<?php echo url('changeName'); ?>">
+                    <option value=""> - 名称 - </option>
                     <?php foreach($names as $name): ?>
-                    <option value="<?php echo $name['id']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['id']?'selected' :''; ?>><?php echo $name['data']; ?></option>
+                    <option value="<?php echo $name['data']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['data']?'selected' :''; ?>><?php echo $name['data']; ?></option>
                     <?php endforeach; ?>
                 </select>
-                <select class="span2" name="feature_id">
-                    <option value="0"> - 配置 - </option>
+                <select class="span2" name="feature_id" id='feature_id'>
+                    <option value=""> - 配置 - </option>
                     <?php foreach($features as $feature): ?>
-                    <option value="<?php echo $feature['id']; ?>" <?php echo \think\Request::instance()->get('feature_id')==$feature['id']?'selected' :''; ?>><?php echo $feature['data']; ?></option>
+                    <option value="<?php echo $feature['data']; ?>" <?php echo \think\Request::instance()->get('feature_id')==$feature['data']?'selected' :''; ?>><?php echo $feature['data']; ?></option>
                     <?php endforeach; ?>
                 </select>
-                <select class="span2" name="appearance_id">
-                    <option value="0"> - 外观 - </option>
+                <select class="span2" name="network_id" id='network_id'>
+                    <option value=""> - 网络模式 - </option>
+                    <?php foreach($networks as $network): ?>
+                    <option value="<?php echo $network['data']; ?>" <?php echo \think\Request::instance()->get('network_id')==$network['data']?'selected' :''; ?>><?php echo $network['data']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <select class="span2" name="appearance_id" id='appearance_id'>
+                    <option value=""> - 外观 - </option>
                     <?php foreach($appearances as $appearance): ?>
-                    <option value="<?php echo $appearance['id']; ?>" <?php echo \think\Request::instance()->get('appearance_id')==$appearance['id']?'selected' :''; ?>><?php echo $appearance['data']; ?></option>
+                    <option value="<?php echo $appearance['data']; ?>" <?php echo \think\Request::instance()->get('appearance_id')==$appearance['data']?'selected' :''; ?>><?php echo $appearance['data']; ?></option>
                     <?php endforeach; ?>
                 </select>
-                <select class="span2" name="edition_id">
-                    <option value="0"> - 固件版本 - </option>
+                <select class="span2" name="edition_id" id='edition_id'>
+                    <option value=""> - 固件版本 - </option>
                     <?php foreach($editions as $edition): ?>
-                    <option value="<?php echo $edition['id']; ?>" <?php echo \think\Request::instance()->get('edition_id')==$edition['id']?'selected' :''; ?>><?php echo $edition['data']; ?></option>
+                    <option value="<?php echo $edition['data']; ?>" <?php echo \think\Request::instance()->get('edition_id')==$edition['data']?'selected' :''; ?>><?php echo $edition['data']; ?></option>
                     <?php endforeach; ?>
                 </select>
                 <select class="span2" name="channel_id">
-                    <option value="0"> - 进货渠道 - </option>
+                    <option value=""> - 进货渠道 - </option>
                     <?php foreach($channels as $channel): ?>
-                    <option value="<?php echo $channel['id']; ?>" <?php echo \think\Request::instance()->get('channel_id')==$channel['id']?'selected' :''; ?>><?php echo $channel['data']; ?></option>
+                    <option value="<?php echo $channel['data']; ?>" <?php echo \think\Request::instance()->get('channel_id')==$channel['data']?'selected' :''; ?>><?php echo $channel['data']; ?></option>
                     <?php endforeach; ?>
                 </select>
                 <select class="span2" name="date">
-                    <option value="0"> - 进货日期 - </option>
+                    <option value=""> - 进货日期 - </option>
                     <?php foreach($dates as $date): ?>
                     <option value="<?php echo $date; ?>" <?php echo \think\Request::instance()->get('date')==$date?'selected' :''; ?>><?php echo $date; ?></option>
                     <?php endforeach; ?>
                 </select>
                 <select class="span2" name="status">
-                    <option value="0"> - 状态 - </option>
+                    <option value=""> - 状态 - </option>
                     <?php if(is_array($statuses) || $statuses instanceof \think\Collection || $statuses instanceof \think\Paginator): if( count($statuses)==0 ) : echo "" ;else: foreach($statuses as $k=>$status): ?>
-                    <option value="<?php echo $k; ?>" <?php echo \think\Request::instance()->get('status')==$status?'selected' :''; ?>><?php echo $status; ?></option>
+                    <option value="<?php echo $k; ?>" <?php echo \think\Request::instance()->get('status')==$k?'selected' :''; ?>><?php echo $status; ?></option>
                     <?php endforeach; endif; else: echo "" ;endif; ?>
                 </select>
+                <input type="text" class="input-large" name="keyword" placeholder="序列号" value="<?php echo \think\Request::instance()->get('keyword'); ?>">
                 <button type="submit" class="btn btn-primary">搜索</button>
             </form>
         </div>
@@ -303,34 +318,6 @@
                 <?php echo $lists->render(); ?>
             </div>
         </div>
-
-        <!--<div class="span5">-->
-
-        <!--<div class="pagination pull-left">-->
-        <!--<ul>-->
-        <!--<li><a href="#">Prev</a></li>-->
-        <!--<li class="active">-->
-        <!--<a href="#">1</a>-->
-        <!--</li>-->
-        <!--<li><a href="#">2</a></li>-->
-        <!--<li><a href="#">3</a></li>-->
-        <!--<li><a href="#">4</a></li>-->
-        <!--<li><a href="#">Next</a></li>-->
-        <!--</ul>-->
-        <!--</div>-->
-
-        <!--</div>-->
-
-        <!--<div class="span5 listing-buttons pull-right">-->
-
-        <!--<button class="btn btn-info">Action</button>-->
-
-        <!--<button class="btn btn-success">Action</button>-->
-
-        <!--<button class="btn btn-primary">Add New Item</button>-->
-
-        <!--</div>-->
-
     </div>
     <script src="/static/js/jquery.min.js"></script>
     <script>
@@ -343,7 +330,46 @@
                     window.location.replace("<?php echo url('incomeAgree');?>");
                 })
             })
+
+            $("#name_id").change(function(){
+                var val = $(this).val();
+                var data;
+                if (val != '') {
+
+                    var url = $(this).data('href');
+
+                    var name = $(this).val();
+                    $.get(url, {name:name}, function(res){
+                        data = res.data;
+                        reset(data);
+                    })
+                } else {
+                    data = jQuery.parseJSON($("#data-all").html());
+                    reset(data);
+                }
+            }); 
         })
+
+        function reset(data){
+            var features_str = '<option value=""> - 配置 - </option>';
+            $.each(data.features,function(k,v){
+                features_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            var networks_str = '<option value=""> - 网络模式 - </option>';
+            $.each(data.networks,function(k,v){
+                networks_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            var appearances_str = '<option value=""> - 外观 - </option>';
+            $.each(data.appearances,function(k,v){
+                appearances_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            $('#feature_id').html(features_str);
+            $('#network_id').html(networks_str);
+            $('#appearance_id').html(appearances_str);
+        }
     </script>
             </div>
 

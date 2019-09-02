@@ -16,20 +16,20 @@ class BaseController extends Controller
 {
 
     public function _initialize(){
-        
+
         $this->checkLogin();
-        $this->checkRules();
     }
 
     protected function checkLogin(){
 
-        if (!in_array($this->request->url(), ["/index/index/login", "/index/index/logout"])) {
+        if (!in_array($this->request->url(), ["/login", "/index/index/logout"])) {
 
             $userId = Session::get("user_id");
 
             if (empty($userId)){
-                $this->redirect("/index/index/login");
+                $this->redirect("/login");
             }
+            $this->checkRules();
         }
     }
 
@@ -40,7 +40,7 @@ class BaseController extends Controller
             ->where("status", UserAccess::STATUS_ACTIVE)
             ->select();
 
-        $nodes = ['index/index/index','index/index/login','index/index/logout'];
+        $nodes = ['login','index/index/logout','index/index/index'];
         if (!empty($userNodes)) {
             $userNodesTemp = collection($userNodes)->toArray();
 
