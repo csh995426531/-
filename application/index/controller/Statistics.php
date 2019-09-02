@@ -225,12 +225,12 @@ class Statistics extends BaseController
                     ->setCellValue('A5', '进货人：')
                     ->setCellValue('A6', '出货途径：')
 
-                    ->setCellValue('B1', $startDate ?? '')
-                    ->setCellValue('B2', $endDate ?? '')
-                    ->setCellValue('B3', $nameId ? ItemName::where('id', $nameId)->value('data') : '')
-                    ->setCellValue('B4', $incomeChannelId ? ItemChannel::where('id', $incomeChannelId)->value('data') : '')
-                    ->setCellValue('B5', $createUserId ? User::where('id', $createUserId)->value('username') : '')
-                    ->setCellValue('B6', $outgoChannelId ? ItemChannel::where('id', $outgoChannelId)->value('data') : '')
+                    ->setCellValue('B1', !empty($startDate) ? $startDate : '')
+                    ->setCellValue('B2', !empty($endDate) ? $endDate : '')
+                    ->setCellValue('B3', !empty($nameId) ? ItemName::where('id', $nameId)->value('data') : '')
+                    ->setCellValue('B4', !empty($incomeChannelId) ? ItemChannel::where('id', $incomeChannelId)->value('data') : '')
+                    ->setCellValue('B5', !empty($createUserId) ? User::where('id', $createUserId)->value('username') : '')
+                    ->setCellValue('B6', !empty($outgoChannelId) ? ItemChannel::where('id', $outgoChannelId)->value('data') : '')
 
                     ->setCellValue('D1', '进货总数量：')
                     ->setCellValue('D2', '进货总价格：')
