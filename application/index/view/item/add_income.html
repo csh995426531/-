@@ -113,7 +113,7 @@
                     <div class="control-group">
                         <label class="control-label" for="number">序列号</label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="number" name="number" value="<?php if($history ){echo $history->item->number;}?>"  data-href="{:url('checkNumber')}" placeholder="序列号不能为空"></span>
+                            <input type="text" class="input-xlarge" id="number" name="number" value="<?php if($history ){echo $history->item->number;}?>"  data-href="{:url('checkNumber')}" placeholder="序列号不能为空"><span id="number_message" style="color: red"></span>
                             <input type="hidden" id="number_status" value="0"/>
                         </div>
                     </div>
@@ -273,7 +273,8 @@
                     $("#number_status").val(1);
                 } else {
                     $("#number_status").val(0);
-                    $("#number").prop('placeholder', res.data);
+                    // $("#number").prop('placeholder', res.data);
+                    alert(res.data);
                 }
             })
         }
@@ -331,7 +332,7 @@
 
         $("#submit").click(function(){
 
-            
+            changeNumber();
             var number = $("#number").val();
             if (number == '') {
                 // $("#number_message").html('序列号不能为空');

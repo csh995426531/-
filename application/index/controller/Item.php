@@ -86,7 +86,7 @@ class Item extends BaseController
             $sql = $sql->where('i.channel_id', $channel_id);
         }
 
-        $lists = $sql->paginate(10);
+        $lists = $sql->paginate(10, false, ['query'=>request()->param() ]);
     
         $breadcrumb = '入库记录处理';
 
@@ -112,7 +112,7 @@ class Item extends BaseController
         if ($this->request->isPost()) {
 
             $date = $this->request->post("date");
-            $typeId = $this->request->post("type_id", 0);
+            $typeId = $this->request->post("type_id");
             $categoryTd = $this->request->post("category_id");
             $nameId = $this->request->post("name_id");
             $featureId = $this->request->post("feature_id");
@@ -136,7 +136,7 @@ class Item extends BaseController
                     throw new \Exception("型号不能为空");
                 }
 
-                $type = ItemType::where("id", $typeId)->find();
+                $type = ItemType::where("data", $typeId)->find();
 
                 if (empty($type) || $type->status != ItemType::STATUS_ACTIVE) {
                     throw new \Exception("型号无效");
@@ -456,7 +456,7 @@ class Item extends BaseController
         }
 
         $lists = $lists->field('t.*')
-            ->paginate(10);     
+            ->paginate(10, false, ['query'=>request()->param() ]); 
 
         $breadcrumb = '退货入库';
 
@@ -549,9 +549,9 @@ class Item extends BaseController
     //入库审核
     public function incomeAgree(){
 
-        $userIds = ItemIncomeHistory::distinct(true)->field('create_user_id')->select();
+        $userIds = ItemIncomeHistory::group('create_user_id')->column('create_user_id');
 
-        $users = User::where('id', 'in', array_column($userIds, 'create_user_id'))->select();
+        $users = User::where('id', 'in', $userIds)->select();
 
         $nameIds = Db::name('item_income_history')
             ->alias('t')
@@ -607,7 +607,7 @@ class Item extends BaseController
         $total = $sql3->sum('i.price');
 
         $lists = $sql->field('t.*')
-        ->paginate(10);
+        ->paginate(10, false, ['query'=>request()->param() ]);
        
         foreach ($lists as $list) {
 
@@ -910,7 +910,7 @@ class Item extends BaseController
             $lists = $lists->where("status", \app\index\model\Item::STATUS_PREPARE);
         }
 
-        $lists = $lists->paginate(10);
+        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
 
         foreach ($lists as $list) {
             $list->statusName = $list->getStatusName();
@@ -973,7 +973,7 @@ class Item extends BaseController
             $lists = $lists->where("appearance_id", $appearanceId);
         }
 
-        $lists = $lists->paginate(10);
+        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
 
         foreach ($lists as $list) {
             $list->statusName = $list->getStatusName();
@@ -1157,7 +1157,7 @@ class Item extends BaseController
     //出库审核
     public function outgoAgree(){
 
-        $lists = ItemOutgoHistory::where("status", ItemOutgoHistory::STATUS_WAIT)->paginate(10);
+        $lists = ItemOutgoHistory::where("status", ItemOutgoHistory::STATUS_WAIT)->paginate(10, false, ['query'=>request()->param() ]);
 
         $breadcrumb = '出库审核';
 
@@ -1266,7 +1266,7 @@ class Item extends BaseController
             $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
         }
 
-        $lists = $lists->paginate(10);
+        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
 
         foreach ($lists as $list) {
             $list->statusName = $list->getStatusName();
@@ -1490,7 +1490,7 @@ class Item extends BaseController
             $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
         }
 
-        $lists = $lists->paginate(10);
+        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
 
         foreach ($lists as $list) {
             $list->statusName = $list->getStatusName();

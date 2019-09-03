@@ -49,7 +49,7 @@ class Log extends BaseController
             $lists = $lists->where("response", $response);
         }
 
-        $lists = $lists->order("id", "desc")->paginate(10);
+        $lists = $lists->order("id", "desc")->paginate(10, false, ['query'=>request()->param() ]);
 
         $createUserIds = Db::table('y5g_log')->distinct(true)->field("user_id")->select();
 

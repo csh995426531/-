@@ -27,7 +27,7 @@ class Setting extends BaseController
             $message = urldecode($message);
         }
 
-        $lists = ItemCategory::paginate(10);
+        $lists = ItemCategory::paginate(10, false, ['query'=>request()->param() ]);
 
         $breadcrumb = '类别录入';
 
@@ -147,7 +147,7 @@ class Setting extends BaseController
 
         $categories = ItemCategory::where('status', ItemCategory::STATUS_ACTIVE)->select();
 
-        $lists = ItemName::paginate(10);
+        $lists = ItemName::paginate(10, false, ['query'=>request()->param() ]);
 
         $breadcrumb = '名称录入';
 
@@ -294,7 +294,7 @@ class Setting extends BaseController
         }
 
 
-        $lists = ItemFeature::paginate(10);
+        $lists = ItemFeature::paginate(10, false, ['query'=>request()->param() ]);
 
         $breadcrumb = '配置录入';
 
@@ -442,7 +442,7 @@ class Setting extends BaseController
             $names[$nameTemp->category_id]['lists'][] = $nameTemp;
         }
 
-        $lists = ItemAppearance::paginate(10);
+        $lists = ItemAppearance::paginate(10, false, ['query'=>request()->param() ]);
 
         $breadcrumb = '外观录入';
 
@@ -592,7 +592,7 @@ class Setting extends BaseController
         $categories = ItemCategory::where('status', ItemCategory::STATUS_ACTIVE)->select();
 
 
-        $lists = ItemEdition::paginate(10);
+        $lists = ItemEdition::paginate(10, false, ['query'=>request()->param() ]);
 
         $breadcrumb = '固件版本录入';
 
@@ -740,7 +740,7 @@ class Setting extends BaseController
             $names[$nameTemp->category_id]['lists'][] = $nameTemp;
         }
 
-        $lists = ItemType::paginate(10);
+        $lists = ItemType::paginate(10, false, ['query'=>request()->param() ]);
 
         $breadcrumb = '网络模式型号录入';
 
@@ -782,7 +782,13 @@ class Setting extends BaseController
             if (empty($name) || $name->status != ItemName::STATUS_ACTIVE) {
                 throw new \Exception("名称无效");
             }
-           
+
+            $type = ItemType::where("data", $data)->find();
+
+            if (!empty($type)) {
+                throw new \Exception("该型号已存在");
+            }
+
             $network = ItemNetwork::where([
                 "data" => $network_data,
                 'name_id' => $nameId
@@ -803,15 +809,6 @@ class Setting extends BaseController
                 if (!$network->save()) {
                     throw new \Exception("保存错误");
                 }
-            }
-          
-            $edition = ItemType::where("data", $data)
-                ->where("name_id", $nameId)
-                ->where("network_id", $network->id)
-                ->find();
-
-            if (!empty($edition)) {
-                throw new \Exception("该型号已存在");
             }
 
             $model = new ItemType;
@@ -904,7 +901,7 @@ class Setting extends BaseController
         }
 
         $lists = ItemChannel::where("type", ItemChannel::TYPE_INCOME)
-            ->paginate(10);
+            ->paginate(10, false, ['query'=>request()->param() ]);
 
         $breadcrumb = '进货渠道录入';
 
@@ -923,7 +920,7 @@ class Setting extends BaseController
         }
 
         $lists = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)
-            ->paginate(10);
+            ->paginate(10, false, ['query'=>request()->param() ]);
 
         $breadcrumb = '出货途径录入';
 
@@ -1065,7 +1062,7 @@ class Setting extends BaseController
         
         $itemNames = ItemName::where('status', ItemName::STATUS_ACTIVE)->select();
 
-        $lists = ItemNetwork::paginate(10);
+        $lists = ItemNetwork::paginate(10, false, ['query'=>request()->param() ]);
 
         $breadcrumb = '网络模式录入';
 
