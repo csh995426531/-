@@ -132,6 +132,16 @@ class Item extends BaseController
                     throw new \Exception("日期错误");
                 }
 
+                if (empty($typeId)) {
+                    throw new \Exception("型号不能为空");
+                }
+
+                $type = ItemType::where("id", $typeId)->find();
+
+                if (empty($type) || $type->status != ItemType::STATUS_ACTIVE) {
+                    throw new \Exception("型号无效");
+                }
+
                 if (empty($categoryTd)) {
                     throw new \Exception("分类不能为空");
                 }
@@ -195,6 +205,8 @@ class Item extends BaseController
                 if (empty($number)) {
                     throw new \Exception("序列号不能为空");
                 }
+
+                $number = strtoupper($number);
 
                 if (empty($price)) {
                     throw new \Exception("价格不能为空");
@@ -1185,7 +1197,7 @@ class Item extends BaseController
 
         $lists = \app\index\model\Item::where("status", "in", [
             \app\index\model\Item::STATUS_NORMAL,
-            \app\index\model\Item::STATUS_OUTGO_WAIT,
+            \app\index\model\Item::STATUS_INCOME_WAIT,
             \app\index\model\Item::STATUS_PREPARE
         ]);
 

@@ -55,7 +55,7 @@
                     <div class="control-group">
                         <label class="control-label" for="type_id">型号</label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="type_id" name="type_id" value="<?php if($history && $history->item->type_id > 0){echo $history->item->itemType->data;}?>" data-href="{:url('changeType')}"><span id="type_message" style="color: brown"></span>
+                            <input type="text" class="input-xlarge" id="type_id" name="type_id" value="<?php if($history && $history->item->type_id > 0){echo $history->item->itemType->data;}?>" data-href="{:url('changeType')}" placeholder="型号不能为空"><span id="type_message" style="color: brown"></span>
                             <input type="hidden"  id="type_status" value="1" />
                         </div>
                     </div>

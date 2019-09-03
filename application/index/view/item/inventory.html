@@ -19,16 +19,16 @@
         <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
         {/foreach}
     </select>
+    <select class="span2" id="network_id" name="network_id">
+        <option value=""> - 网络模式 - </option>
+        {foreach $networks as $network}
+        <option value="{$network.data}" {$Think.get.network_id==$network.data ? 'selected' :''}>{$network.data}</option>
+        {/foreach}
+    </select>
     <select class="span2"  id="feature_id"name="feature_id" >
         <option value=""> - 配置 - </option>
         {foreach $features as $feature}
             <option value="{$feature.data}" {$Think.get.feature_id==$feature.data ? 'selected' :''}>{$feature.data}</option>
-        {/foreach}
-    </select>
-    <select class="span2" id="network_id" name="network_id">
-        <option value=""> - 网络模式 - </option>
-        {foreach $networks as $network}
-            <option value="{$network.data}" {$Think.get.network_id==$network.data ? 'selected' :''}>{$network.data}</option>
         {/foreach}
     </select>
     <select class="span2" id="appearance_id" name="appearance_id">

@@ -24,16 +24,16 @@
                     <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
                     {/foreach}
                 </select>
-                <select class="span2" name="feature_id" id='feature_id'>
-                    <option value=""> - 配置 - </option>
-                    {foreach $features as $feature}
-                    <option value="{$feature.data}" {$Think.get.feature_id==$feature.data ? 'selected' :''}>{$feature.data}</option>
-                    {/foreach}
-                </select>
                 <select class="span2" name="network_id" id='network_id'>
                     <option value=""> - 网络模式 - </option>
                     {foreach $networks as $network}
                     <option value="{$network.data}" {$Think.get.network_id==$network.data ? 'selected' :''}>{$network.data}</option>
+                    {/foreach}
+                </select>
+                <select class="span2" name="feature_id" id='feature_id'>
+                    <option value=""> - 配置 - </option>
+                    {foreach $features as $feature}
+                    <option value="{$feature.data}" {$Think.get.feature_id==$feature.data ? 'selected' :''}>{$feature.data}</option>
                     {/foreach}
                 </select>
                 <select class="span2" name="appearance_id" id='appearance_id'>
@@ -174,7 +174,7 @@
                         <th><span>{$temp.itemAppearance.data}</span></th>
                         <th><span>{$temp.number}</span></th>
                         <th><span>{$temp.itemEdition.data}</span></th>
-                        <th><span>{$temp.memo}</span></th>
+                        <th title="{$temp.memo}" style="cursor: pointer">><span><?php echo mb_strlen($temp->memo) > 10 ? mb_substr($temp->memo, 0, 10).'…' : $temp->memo; ?></span></th>
                         <th><span>{$temp.price}</span></th>
                         <th><span>{$temp.itemChannel.data}</span></th>
                         <th><span>{$temp.statusName}</span></th>
