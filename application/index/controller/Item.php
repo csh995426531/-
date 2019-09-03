@@ -223,11 +223,14 @@ class Item extends BaseController
                         \app\index\model\Item::STATUS_INCOME_WAIT,
                         \app\index\model\Item::STATUS_NORMAL,
                         \app\index\model\Item::STATUS_OUTGO_WAIT,
+                        \app\index\model\Item::STATUS_PREPARE,
                         ])
                     ->find();
 
-                if (!empty($item) && $item->id != $history->item->id) {
-                    throw new \Exception("该型号下该序列号已存在库中");
+                if (!empty($item) && !$history ) {
+                    throw new \Exception("序列号重复");
+                } elseif (!empty($item) && !empty($history) && $item->id != $history->item->id) {
+                    throw new \Exception("序列号重复");
                 }
               
                 if (!empty($typeId) && $typeId !== 0) {
@@ -422,9 +425,16 @@ class Item extends BaseController
         } elseif (stripos($number, 'O') !== false || stripos($number, 'I') !== false) {
             $result = SetResult(500, '不能含有字母O或I');
         } else {
-            $item = \app\index\model\Item::where("number", '=', $number)->where('id', '<>', $itemId)->find();
-            if (!empty($item)){
-                $result = SetResult(500, '该序列号已存在');
+            $item = \app\index\model\Item::where("number", $number)
+                ->where("status", "in", [
+                    \app\index\model\Item::STATUS_INCOME_WAIT,
+                    \app\index\model\Item::STATUS_NORMAL,
+                    \app\index\model\Item::STATUS_OUTGO_WAIT,
+                    \app\index\model\Item::STATUS_PREPARE,
+                ])
+                ->find();
+            if (!empty($item) && $item->id != $itemId){
+                $result = SetResult(500, '序列号重复');
             }
         }
 
@@ -1252,7 +1262,7 @@ class Item extends BaseController
 
         $keyword = $this->request->get("keyword");
 
-        if (!empty($keyword) && $keyword > 0) {
+        if (!empty($keyword)) {
             $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
         }
 
@@ -1476,7 +1486,7 @@ class Item extends BaseController
 
         $keyword = $this->request->get("keyword");
 
-        if (!empty($keyword) && $keyword > 0) {
+        if (!empty($keyword)) {
             $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
         }
 

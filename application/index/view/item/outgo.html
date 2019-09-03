@@ -48,6 +48,12 @@
                         {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
                     {/foreach}
                 </select>
+                <select class="span2" name="network_id" id='network_id'>
+                    <option value="0"> - 网络模式 - </option>
+                    {foreach $networks as $network}
+                    <option value="{$network.id}" {$Think.get.network_id==$network.id ? 'selected' :''}>{$network.data}</option>
+                    {/foreach}
+                </select>
                 <select class="span2" name="feature_id" id='feature_id'>
                     <option value="0"> - 配置 - </option>
                     {foreach $features as $feature}
@@ -58,12 +64,6 @@
                     <option value="0"> - 外观 - </option>
                     {foreach $appearances as $appearance}
                     <option value="{$appearance.id}" {$Think.get.appearance_id==$appearance.id ? 'selected' :''}>{$appearance.data}</option>
-                    {/foreach}
-                </select>
-                <select class="span2" name="network_id" id='network_id'>
-                    <option value="0"> - 网络模式 - </option>
-                    {foreach $networks as $network}
-                    <option value="{$network.id}" {$Think.get.network_id==$network.id ? 'selected' :''}>{$network.data}</option>
                     {/foreach}
                 </select>
                 <input type="text" class="input-large span2" name="keyword" placeholder="序列号" value="{$Think.get.keyword}">
@@ -114,6 +114,7 @@
                         <th>型号</th>
                         <th>分类</th>
                         <th>名称</th>
+                        <th>网络模式</th>
                         <th>配置</th>
                         <th>外观</th>
                         <th>序列号</th>
@@ -176,6 +177,7 @@
                         <th><span>{$temp.itemType.data}</span></th>
                         <th><span>{$temp.itemCategory.data}</span></th>
                         <th><span>{$temp.itemName.data}</span></th>
+                        <th><span>{$temp.itemNetwork.data}</span></th>
                         <th><span>{$temp.itemFeature.data}</span></th>
                         <th><span>{$temp.itemAppearance.data}</span></th>
                         <th><span>{$temp.number}</span></th>
