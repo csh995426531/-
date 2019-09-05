@@ -878,26 +878,46 @@ class Item extends BaseController
 
         $typeId = $this->request->get("type_id");
 
-        if (!empty($typeId) && $typeId > 0) {
-            $lists = $lists->where("type_id", $typeId);
+        if (!empty($typeId)) {
+            $typeArr = ItemType::where("data", $typeId)
+            ->column('id');
+            $lists = $lists->where("type_id", 'in', $typeArr);
         }
 
         $nameId = $this->request->get("name_id");
 
-        if (!empty($nameId) && $nameId > 0) {
-            $lists = $lists->where("name_id", $nameId);
+        if (!empty($nameId)) {
+            $nameArr = ItemName::where("data", $nameId)
+            ->column('id');
+            $lists = $lists->where("name_id",  'in', $nameArr);
         }
 
         $featureId = $this->request->get("feature_id");
 
-        if (!empty($featureId) && $featureId > 0) {
-            $lists = $lists->where("feature_id", $featureId);
+        if (!empty($featureId)) {
+            $featureArr = ItemFeature::where("data", $featureId)
+            ->column('id');
+            $lists = $lists->where("feature_id",  'in', $featureArr);
+        }
+        
+        $networkId = $this->request->get("network_id");
+
+        if (!empty($networkId)) {
+
+            $networkArr = ItemNetwork::where("data", $networkId)
+            ->column('id');
+
+            $lists = $lists->where("network_id", 'in',  $networkArr);
         }
 
         $appearanceId = $this->request->get("appearance_id");
 
-        if (!empty($appearanceId) && $appearanceId > 0) {
-            $lists = $lists->where("appearance_id", $appearanceId);
+        if (!empty($appearanceId)) {
+
+            $appearanceArr = ItemAppearance::where("data", $appearanceId)
+            ->column('id');
+
+            $lists = $lists->where("appearance_id",  'in', $appearanceArr);
         }
 
         $keyword = $this->request->get("keyword");
@@ -916,17 +936,48 @@ class Item extends BaseController
             $list->statusName = $list->getStatusName();
         }
 
-        $types = ItemType::select();
-
-        $names = ItemName::select();
-
-        $features = ItemFeature::select();
-
-        $appearances = ItemAppearance::select();
-
-        $networks = ItemNetwork::select();
-
         $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)->select();
+
+        $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
+
+        if (!empty($typeIds)) {
+            $types = ItemType::where("id", 'in', array_column($typeIds, 'type_id'))->distinct(true)->field('data')->select();
+        } else {
+            $types = [];
+        }
+
+        $nameIds = Db::table('y5g_item')->distinct(true)->field("name_id")->select();
+    
+        if (!empty($nameIds)) {
+            $names = ItemName::where("id", 'in', array_column($nameIds, 'name_id'))->distinct(true)->field('data')->select();
+        } else {
+            $names = [];
+        }
+
+        $featureIds = Db::table('y5g_item')->distinct(true)->field("feature_id")->select();
+
+        if (!empty($featureIds)) {
+            $features = ItemFeature::where("id", 'in', array_column($featureIds, 'feature_id'))->distinct(true)->field('data')->select();
+  
+        } else {
+            $features = [];
+        }
+
+        $networkIds = Db::table('y5g_item')->distinct(true)->field("network_id")->select();
+        if (!empty($networkIds)) {
+
+            $networks = itemNetwork::where("id", 'in', array_column($networkIds, 'network_id'))->distinct(true)->field('data')->select();
+        } else {
+            $networks = [];
+        }
+
+        $appearanceIds = Db::table('y5g_item')->distinct(true)->field("appearance_id")->select();
+
+        if (!empty($appearanceIds)) {
+            $appearances = ItemAppearance::where("id", 'in', array_column($appearanceIds, 'appearance_id'))->distinct(true)->field('data')->select();
+        } else {
+            $appearances = [];
+        }
 
         $breadcrumb = '销售出库';
 
@@ -939,6 +990,11 @@ class Item extends BaseController
             'features' => $features,
             'appearances' => $appearances,
             'networks' => $networks,
+            'data' =>  [
+                'features' => $features,
+                'networks' => $networks,
+                'appearances' => $appearances
+            ]
         ]);
     }
 
@@ -951,26 +1007,46 @@ class Item extends BaseController
 
         $typeId = $this->request->get("type_id");
 
-        if (!empty($typeId) && $typeId > 0) {
-            $lists = $lists->where("type_id", $typeId);
+        if (!empty($typeId)) {
+            $typeArr = ItemType::where("data", $typeId)
+            ->column('id');
+            $lists = $lists->where("type_id", 'in', $typeArr);
         }
 
         $nameId = $this->request->get("name_id");
 
-        if (!empty($nameId) && $nameId > 0) {
-            $lists = $lists->where("name_id", $nameId);
+        if (!empty($nameId)) {
+            $nameArr = ItemName::where("data", $nameId)
+            ->column('id');
+            $lists = $lists->where("name_id",  'in', $nameArr);
         }
 
         $featureId = $this->request->get("feature_id");
 
-        if (!empty($featureId) && $featureId > 0) {
-            $lists = $lists->where("feature_id", $featureId);
+        if (!empty($featureId)) {
+            $featureArr = ItemFeature::where("data", $featureId)
+            ->column('id');
+            $lists = $lists->where("feature_id",  'in', $featureArr);
+        }
+        
+        $networkId = $this->request->get("network_id");
+
+        if (!empty($networkId)) {
+
+            $networkArr = ItemNetwork::where("data", $networkId)
+            ->column('id');
+
+            $lists = $lists->where("network_id", 'in',  $networkArr);
         }
 
         $appearanceId = $this->request->get("appearance_id");
 
-        if (!empty($appearanceId) && $appearanceId > 0) {
-            $lists = $lists->where("appearance_id", $appearanceId);
+        if (!empty($appearanceId)) {
+
+            $appearanceArr = ItemAppearance::where("data", $appearanceId)
+            ->column('id');
+
+            $lists = $lists->where("appearance_id",  'in', $appearanceArr);
         }
 
         $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
@@ -979,13 +1055,46 @@ class Item extends BaseController
             $list->statusName = $list->getStatusName();
         }
 
-        $types = ItemType::select();
+        $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
 
-        $names = ItemName::select();
+        if (!empty($typeIds)) {
+            $types = ItemType::where("id", 'in', array_column($typeIds, 'type_id'))->distinct(true)->field('data')->select();
+        } else {
+            $types = [];
+        }
 
-        $features = ItemFeature::select();
+        $nameIds = Db::table('y5g_item')->distinct(true)->field("name_id")->select();
+    
+        if (!empty($nameIds)) {
+            $names = ItemName::where("id", 'in', array_column($nameIds, 'name_id'))->distinct(true)->field('data')->select();
+        } else {
+            $names = [];
+        }
 
-        $appearances = ItemAppearance::select();
+        $featureIds = Db::table('y5g_item')->distinct(true)->field("feature_id")->select();
+
+        if (!empty($featureIds)) {
+            $features = ItemFeature::where("id", 'in', array_column($featureIds, 'feature_id'))->distinct(true)->field('data')->select();
+  
+        } else {
+            $features = [];
+        }
+
+        $networkIds = Db::table('y5g_item')->distinct(true)->field("network_id")->select();
+        if (!empty($networkIds)) {
+
+            $networks = itemNetwork::where("id", 'in', array_column($networkIds, 'network_id'))->distinct(true)->field('data')->select();
+        } else {
+            $networks = [];
+        }
+
+        $appearanceIds = Db::table('y5g_item')->distinct(true)->field("appearance_id")->select();
+
+        if (!empty($appearanceIds)) {
+            $appearances = ItemAppearance::where("id", 'in', array_column($appearanceIds, 'appearance_id'))->distinct(true)->field('data')->select();
+        } else {
+            $appearances = [];
+        }
 
         $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)->select();
 
@@ -999,6 +1108,12 @@ class Item extends BaseController
             'names' => $names,
             'features' => $features,
             'appearances' => $appearances,
+            'networks' => $networks,
+            'data' =>  [
+                'features' => $features,
+                'networks' => $networks,
+                'appearances' => $appearances
+            ]
         ]);
     }
 
@@ -1214,8 +1329,7 @@ class Item extends BaseController
         $typeId = $this->request->get("type_id");
 
         if (!empty($typeId)) {
-            $typeArr = ItemType::where("status", ItemType::STATUS_ACTIVE)
-            ->where("data", $typeId)
+            $typeArr = ItemType::where("data", $typeId)
             ->column('id');
             $lists = $lists->where("type_id", 'in', $typeArr);
         }
@@ -1223,8 +1337,7 @@ class Item extends BaseController
         $nameId = $this->request->get("name_id");
 
         if (!empty($nameId)) {
-            $nameArr = ItemName::where("status", ItemName::STATUS_ACTIVE)
-            ->where("data", $nameId)
+            $nameArr = ItemName::where("data", $nameId)
             ->column('id');
             $lists = $lists->where("name_id",  'in', $nameArr);
         }
@@ -1232,8 +1345,7 @@ class Item extends BaseController
         $featureId = $this->request->get("feature_id");
 
         if (!empty($featureId)) {
-            $featureArr = ItemFeature::where("status", ItemFeature::STATUS_ACTIVE)
-            ->where("data", $featureId)
+            $featureArr = ItemFeature::where("data", $featureId)
             ->column('id');
             $lists = $lists->where("feature_id",  'in', $featureArr);
         }
@@ -1242,8 +1354,7 @@ class Item extends BaseController
 
         if (!empty($networkId)) {
 
-            $networkArr = ItemNetwork::where("status", ItemNetwork::STATUS_ACTIVE)
-            ->where("data", $networkId)
+            $networkArr = ItemNetwork::where("data", $networkId)
             ->column('id');
 
             $lists = $lists->where("network_id", 'in',  $networkArr);
@@ -1253,8 +1364,7 @@ class Item extends BaseController
 
         if (!empty($appearanceId)) {
 
-            $appearanceArr = ItemAppearance::where("status", ItemAppearance::STATUS_ACTIVE)
-            ->where("data", $appearanceId)
+            $appearanceArr = ItemAppearance::where("data", $appearanceId)
             ->column('id');
 
             $lists = $lists->where("appearance_id",  'in', $appearanceArr);
@@ -1398,8 +1508,7 @@ class Item extends BaseController
         $typeId = $this->request->get("type_id");
 
         if (!empty($typeId)) {
-            $typeArr = ItemType::where("status", ItemType::STATUS_ACTIVE)
-                ->where("data", $typeId)
+            $typeArr = ItemType::where("data", $typeId)
                 ->column('id');
             $lists = $lists->where("type_id",  'in', $typeArr);
         }
@@ -1407,8 +1516,7 @@ class Item extends BaseController
         $nameId = $this->request->get("name_id");
 
         if (!empty($nameId)) {
-            $nameArr = ItemName::where("status", ItemName::STATUS_ACTIVE)
-            ->where("data", $nameId)
+            $nameArr = ItemName::where("data", $nameId)
             ->column('id');
             $lists = $lists->where("name_id",  'in', $nameArr);
         }
@@ -1416,8 +1524,7 @@ class Item extends BaseController
         $featureId = $this->request->get("feature_id");
 
         if (!empty($featureId)) {
-            $featureArr = ItemFeature::where("status", ItemFeature::STATUS_ACTIVE)
-            ->where("data", $featureId)
+            $featureArr = ItemFeature::where("data", $featureId)
             ->column('id');
             
             $lists = $lists->where("feature_id",  'in',  $featureArr);
@@ -1427,8 +1534,7 @@ class Item extends BaseController
 
         if (!empty($networkId)) {
 
-            $networkArr = ItemNetwork::where("status", ItemNetwork::STATUS_ACTIVE)
-            ->where("data", $networkId)
+            $networkArr = ItemNetwork::where("data", $networkId)
             ->column('id');
 
             $typeArr2 = ItemType::where("network_id" ,  'in',  $networkArr)->field("id")->select();
@@ -1439,8 +1545,7 @@ class Item extends BaseController
 
         if (!empty($appearanceId)) {
 
-            $appearanceArr = ItemAppearance::where("status", ItemAppearance::STATUS_ACTIVE)
-            ->where("data", $appearanceId)
+            $appearanceArr = ItemAppearance::where("data", $appearanceId)
             ->column('id');
             $lists = $lists->where("appearance_id",  'in', $appearanceArr);
         }
@@ -1448,8 +1553,7 @@ class Item extends BaseController
         $categoryId = $this->request->get("category_id");
 
         if (!empty($categoryId)) {
-            $categoryArr = ItemCategory::where("status", ItemCategory::STATUS_ACTIVE)
-            ->where("data", $categoryId)
+            $categoryArr = ItemCategory::where("data", $categoryId)
             ->column('id');
             $lists = $lists->where("category_id",  'in', $categoryArr);
         }
@@ -1457,8 +1561,7 @@ class Item extends BaseController
         $editionId = $this->request->get("edition_id");
 
         if (!empty($editionId)) {
-            $editionArr = ItemEdition::where("status", ItemEdition::STATUS_ACTIVE)
-            ->where("data", $editionId)
+            $editionArr = ItemEdition::where("data", $editionId)
             ->column('id');
             $lists = $lists->where("edition_id",  'in', $editionArr);
         }
@@ -1466,8 +1569,7 @@ class Item extends BaseController
         $channelId = $this->request->get("channel_id");
 
         if (!empty($channelId)) {
-            $channelArr = ItemChannel::where("status", ItemChannel::STATUS_ACTIVE)
-            ->where("data", $channelId)
+            $channelArr = ItemChannel::where("data", $channelId)
             ->column('id');
             $lists = $lists->where("channel_id",  'in', $channelArr);
         }
