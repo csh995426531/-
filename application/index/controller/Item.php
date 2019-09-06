@@ -442,17 +442,21 @@ class Item extends BaseController
     }
 
     //退货入库
-    public function returnIncome($keyword=''){
+    public function returnIncome(){
 
+        $keyword = $this->request->get('keyword');
         $lists = ItemOutgoHistory::alias("t")
             ->join("item i", 't.item_id=i.id')
             ->where("t.status", ItemOutgoHistory::STATUS_SUCCESS);
 
-
         if (!empty($keyword)) {
-            $lists = $lists->where("t.order_no", "like", "%".$keyword."%")
-                ->whereOr("t.consignee_nickname", "like", "%".$keyword."%")
-                ->whereOr('i.number','like',"%".$keyword."%");
+            $lists = $lists->where(function($lists) use($keyword) {
+                $lists->whereOr([
+                    "t.order_no" => ['like', "%".$keyword."%"],
+                    "t.consignee_nickname" => ['like', "%".$keyword."%"],
+                    "i.number" => ['like', "%".$keyword."%"]
+                ]);
+            });
         }
 
         $lists = $lists->field('t.*')
