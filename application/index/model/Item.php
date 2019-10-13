@@ -11,13 +11,13 @@ use think\Model;
 
 class Item extends Model
 {
-    const STATUS_INCOME_WAIT = 1;//入库待审核
+    const STATUS_INCOME_WAIT = 1;//入库待核
     const STATUS_NORMAL = 2;//在库
     const STATUS_SOLD = 3;//已售
     const STATUS_REPAIR = 4;//维修
     const STATUS_LOSE = 5;//丢失
     const STATUS_FAIL = 6;//入库审核失败
-    const STATUS_OUTGO_WAIT = 7;//出库待审核
+    const STATUS_OUTGO_WAIT = 7;//出库待核
     const STATUS_PREPARE = 8; // 预售
 
     public function itemType(){
@@ -51,7 +51,7 @@ class Item extends Model
     public function itemNetwork(){
         return $this->hasOne("item_network", "id", "network_id");
     }
-
+  
     public function getStatusName(){
 
         $options = $this->getStatusOptions();
@@ -59,15 +59,24 @@ class Item extends Model
         return isset($options[$this['status']]) ? $options[$this['status']] :'';
     }
 
+    public function getLastOutgoNo(){
+
+        $orderNo = ItemOutgoHistory::where([
+            'item_id' => ['=', $this['id']],
+            'status' => ['in', [ItemOutgoHistory::STATUS_SUCCESS, ItemOutgoHistory::STATUS_RETURN]]
+        ])->order('id', 'desc')->find();
+        return $orderNo ? $orderNo->order_no : '';
+    }
+
     public function getStatusOptions(){
         return [
-            self::STATUS_INCOME_WAIT => '入库待审核',
+            self::STATUS_INCOME_WAIT => '入库待核',
             self::STATUS_NORMAL=> '在库',
             self::STATUS_SOLD => '已售',
             self::STATUS_REPAIR => '维修',
             self::STATUS_LOSE => '丢失',
             self::STATUS_FAIL => '入库失败',
-            self::STATUS_OUTGO_WAIT => '出库待审核',
+            self::STATUS_OUTGO_WAIT => '出库待核',
             self::STATUS_PREPARE => '预售'
         ];
     }

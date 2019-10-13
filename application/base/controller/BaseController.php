@@ -40,7 +40,7 @@ class BaseController extends Controller
             ->where("status", UserAccess::STATUS_ACTIVE)
             ->select();
 
-        $nodes = ['login','index/index/logout','index/index/index'];
+        $nodes = ['login','index/index/logout','index/index/index', 'index/item/changename', 'index/item/changecategory'];
         if (!empty($userNodes)) {
             $userNodesTemp = collection($userNodes)->toArray();
 

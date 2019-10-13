@@ -1,10 +1,10 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/www/wwwroot/maig/public/../application/index/view/item/inventory.html";i:1567309987;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1567309984;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/www/wwwroot/maig/public/../application/index/view/item/inventory.html";i:1568277263;s:52:"/www/wwwroot/maig/application/index/view/layout.html";i:1568365065;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
 
     <meta charset="utf-8">
-    <title>库存管理系统</title>
+    <title>库存管理</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -28,7 +28,7 @@
     <div class="row" style="height:100%">
         <div class="span2" style="width: 9.3%;background: #484646;height:100%">
             <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
-                <h1><i class="icon-large"></i> 库存管理系统</h1>
+                <h1><i class="icon-large"></i> <img src="/bg.png"></h1>
                 <ul class="side-nav">
                     <li class="active">
                         <a href="index.html"><i class="icon-home"></i> Dashboard</a>
@@ -37,6 +37,7 @@
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-dropdown" href="#"><i class="icon-th"></i> 库存查询 <b class="caret"></b></a>
                         <ul id="item-dropdown" class="collapse">
                             <li><a href="<?php echo url('item/inventory'); ?>">在库查询</a></li>
+                           
                             <li><a href="<?php echo url('item/search'); ?>">综合查询</a></li>
                         </ul>
                     </li>
@@ -44,6 +45,7 @@
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
                             <li><a href="<?php echo url('item/addIncome'); ?>">进货入库</a></li>
+                           <li><a href="<?php echo url('item/income'); ?>">入库待核</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
@@ -68,18 +70,18 @@
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
                     </li> -->
-                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>统计</a></li>
+                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>数据统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
-                            <li><a href="<?php echo url('setting/category'); ?>">类别录入</a></li>
-                            <li><a href="<?php echo url('setting/name'); ?>">名称录入</a></li>
-                            <li><a href="<?php echo url('setting/feature'); ?>">配置录入</a></li>
-                            <li><a href="<?php echo url('setting/appearance'); ?>">外观录入</a></li>
-                            <li><a href="<?php echo url('setting/edition'); ?>">固件版本录入</a></li>
-                            <li><a href="<?php echo url('setting/type'); ?>">网络模式型号录入</a></li>
-                            <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道录入</a></li>
-                            <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径录入</a></li>
+                            <li><a href="<?php echo url('setting/category'); ?>">产品类别</a></li>
+                            <li><a href="<?php echo url('setting/name'); ?>">产品名称</a></li>
+                           <li><a href="<?php echo url('setting/type'); ?>">网络型号</a></li>
+                            <li><a href="<?php echo url('setting/feature'); ?>">产品配置</a></li>
+                            <li><a href="<?php echo url('setting/appearance'); ?>">产品外观</a></li>
+                            <li><a href="<?php echo url('setting/edition'); ?>">产品版本</a></li>
+                            <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道</a></li>
+                            <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li>
                             <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
                         </ul>
                     </li>
@@ -91,7 +93,7 @@
                             <li><a href="<?php echo url('members/updateAccess'); ?>">权限修改</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('/index/log/index'); ?>"><i class="icon-book"></i> 日志 </a></li>
+                    <li><a href="<?php echo url('/index/log/index'); ?>"><i class="icon-book"></i> 系统日志 </a></li>
                 </ul>
 
             </div> <!-- end main-left-col -->
@@ -145,16 +147,16 @@
         <option value="<?php echo $name['data']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['data']?'selected' :''; ?>><?php echo $name['data']; ?></option>
         <?php endforeach; ?>
     </select>
+    <select class="span2" id="network_id" name="network_id">
+        <option value=""> - 网络模式 - </option>
+        <?php foreach($networks as $network): ?>
+        <option value="<?php echo $network['data']; ?>" <?php echo \think\Request::instance()->get('network_id')==$network['data']?'selected' :''; ?>><?php echo $network['data']; ?></option>
+        <?php endforeach; ?>
+    </select>
     <select class="span2"  id="feature_id"name="feature_id" >
         <option value=""> - 配置 - </option>
         <?php foreach($features as $feature): ?>
             <option value="<?php echo $feature['data']; ?>" <?php echo \think\Request::instance()->get('feature_id')==$feature['data']?'selected' :''; ?>><?php echo $feature['data']; ?></option>
-        <?php endforeach; ?>
-    </select>
-    <select class="span2" id="network_id" name="network_id">
-        <option value=""> - 网络模式 - </option>
-        <?php foreach($networks as $network): ?>
-            <option value="<?php echo $network['data']; ?>" <?php echo \think\Request::instance()->get('network_id')==$network['data']?'selected' :''; ?>><?php echo $network['data']; ?></option>
         <?php endforeach; ?>
     </select>
     <select class="span2" id="appearance_id" name="appearance_id">
@@ -178,14 +180,16 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>网络模式</th>
                     <th>型号</th>
                     <th>分类</th>
                     <th>名称</th>
+                    <th>网络模式</th>
                     <th>配置</th>
                     <th>外观</th>
-                    <th>序列号</th>
-                    <th>固件版本</th>
+                    <th>版本</th>
+                     <th>序列号</th>
+                                <th>进货价格</th>  
+                                 <th>备注</th> 
                     <th>状态</th>
                     <th>库龄</th>
                     <th class="actions">操作</th>
@@ -195,15 +199,20 @@
                 <?php if(is_array($lists) || $lists instanceof \think\Collection || $lists instanceof \think\Paginator): $i = 0; $__LIST__ = $lists;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$temp): $mod = ($i % 2 );++$i;?>
                 <tr  <?php if ($temp->status == \app\index\model\Item::STATUS_PREPARE) {echo 'style="background-color:#DCDCDC"';} ?> >
                     <td><span><?php echo $temp['id']; ?></span></td>
-                    <th><span><?php echo $temp['itemNetwork']['data']; ?></span></th>
                     <th><span><?php echo $temp['itemType']['data']; ?></span></th>
                     <th><span><?php echo $temp['itemCategory']['data']; ?></span></th>
-                    <th><span><?php echo $temp['itemName']['data']; ?></span></th>
+                    <th title="<?php echo $temp['memo']; ?>" style="cursor: pointer"><span><?php echo $temp['itemName']['data']; ?></span></th>
+                    <th><span><?php echo $temp['itemNetwork']['data']; ?></span></th>
                     <th><span><?php echo $temp['itemFeature']['data']; ?></span></th>
                     <th><span><?php echo $temp['itemAppearance']['data']; ?></span></th>
-                    <th><a href="https://checkcoverage.apple.com/cn/zh/?sn=<?php echo $temp['number']; ?>" target="_blank"><span><?php echo $temp['number']; ?></span></a></th>
                     <th><span><?php echo $temp['itemEdition']['data']; ?></span></th>
-                    <th  title="<?php echo $temp['memo']; ?>" style="cursor: pointer"><span><?php echo $temp['statusName']; ?></span></th>
+                    <th><a href="https://checkcoverage.apple.com/cn/zh/?sn=<?php echo $temp['number']; ?>" target="_blank"><span><?php echo $temp['number']; ?></span></a></th>
+
+                  <th><span><?php echo $temp['price']; ?></span></th>
+                  <th title="<?php echo $temp['memo']; ?>" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 10 ? mb_substr($temp->memo, 0, 10).'…' : $temp->memo; ?></span></th>
+                  
+                  
+                    <th title="<?php echo $temp['prepare']; ?>" style="cursor: pointer"><span><?php echo $temp['statusName']; ?></span></th>
                     <th><span><?php echo floor((time() - strtotime($temp->date)) / 86400); ?>天</span></th>
                     <td class="actions">
                         <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
@@ -219,7 +228,7 @@
                 </tbody>
             </table>
         </div>
-        <div>
+        <div class="pull-right">
             <?php echo $lists->render(); ?>
         </div>
     </div>

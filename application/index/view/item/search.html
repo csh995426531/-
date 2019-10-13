@@ -5,20 +5,20 @@
         <div class="span12">
 
                 <form class="form-inline" method="get">
-                <select class="span2" name="category_id">
+                <select class="span2" name="category_id" id='category_id' data-href="{:url('changeCategory')}">
                     <option value=""> - 分类 - </option>
                     {foreach $categories as $category}
                     <option value="{$category.data}" {$Think.get.category_id==$category.data? 'selected' :''}>{$category.data}</opion>
                     {/foreach}
                 </select>
-                <select class="span2" name="type_id">
+                <select class="span2" name="type_id" id='type_id'>
                     <option value=""> - 型号 - </option>
                     {foreach $types as $type}
                     <option value="{$type.data}" {$Think.get.type_id==$type.data ? 'selected' :''}>{$type.data}</opion>
                     {/foreach}
                 </select>
                 <span id="data-all" style="display:none">{$data|json_encode}</span>
-                <select class="span2" name="name_id" id='name_id'   data-href="{:url('changeName')}">
+                <select class="span2" name="name_id" id='name_id' data-href="{:url('changeName')}">
                     <option value=""> - 名称 - </option>
                     {foreach $names as $name}
                     <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
@@ -105,18 +105,20 @@
                     <tr>
                         <th>ID</th>
                         <th>进货日期</th>
-                        <th>型号</th>
+                         <!--<th>型号</th>-->
                         <th>分类</th>
                         <th>名称</th>
                         <th>网络模式</th>
                         <th>配置</th>
                         <th>外观</th>
                         <th>序列号</th>
+                        <th>订单号</th>
                         <th>固件版本</th>
                         <th>备注</th>
                         <th>进货价格</th>
                         <th>进货渠道</th>
                         <th>状态</th>
+                 
                         <!--<th class="actions">操作</th>-->
                     </tr>
                     </thead>
@@ -168,18 +170,21 @@
                     <tr>
                         <td><span>{$temp.id}</span></td>
                         <th><span>{$temp.date}</span></th>
-                        <th><span>{$temp.itemType.data}</span></th>
+                          <!--<th><span>{$temp.itemType.data}</span></th>-->
                         <th><span>{$temp.itemCategory.data}</span></th>
                         <th><span>{$temp.itemName.data}</span></th>
                         <th><span>{$temp.itemNetwork.data}</span></th>
                         <th><span>{$temp.itemFeature.data}</span></th>
                         <th><span>{$temp.itemAppearance.data}</span></th>
-                        <th><span>{$temp.number}</span></th>
+                           <!--<th><span>{$temp.number}</span></th>-->
+                        <th><a href="https://checkcoverage.apple.com/cn/zh/?sn={$temp.number}" target="_blank"><span>{$temp.number}</span></a></th>
+                        <th><span>{$temp.lastOutNo}</span></th>
                         <th><span>{$temp.itemEdition.data}</span></th>
                         <th title="{$temp.memo}" style="cursor: pointer">><span><?php echo mb_strlen($temp->memo) > 10 ? mb_substr($temp->memo, 0, 10).'…' : $temp->memo; ?></span></th>
                         <th><span>{$temp.price}</span></th>
                         <th><span>{$temp.itemChannel.data}</span></th>
                         <th><span>{$temp.statusName}</span></th>
+
                         <!--<td class="actions">-->
                             <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
                             <!--<a class="btn btn-small btn-success allow-item" data-id="{$temp.id}" data-value="1" data-href="{:url('allowAgree')}">通过</a>-->
@@ -224,6 +229,48 @@
                     reset(data);
                 }
             }); 
+
+            $("#category_id").change(function(){
+                var val = $(this).val();
+                var data;
+                if (val != '') {
+
+                    var url = $(this).data('href');
+                    $.get(url, {category:val}, function(res){
+                        data = res.data;console.log(data);
+                        reset(data);
+
+                        var types_str = '<option value=""> - 型号 - </option>';
+                        $.each(data.types,function(k,v){
+                            types_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+                        })
+
+                        var names_str = '<option value=""> - 分类 - </option>';
+                        $.each(data.names,function(k,v){
+                            names_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+                        })
+
+                        $('#type_id').html(types_str);
+                        $('#name_id').html(names_str);
+                    })
+                } else {
+                    data = jQuery.parseJSON($("#data-all").html());
+                    reset(data);
+
+                    var types_str = '<option value=""> - 型号 - </option>';
+                    $.each(data.types,function(k,v){
+                        types_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+                    })
+
+                    var names_str = '<option value=""> - 分类 - </option>';
+                    $.each(data.names,function(k,v){
+                        names_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+                    })
+
+                    $('#type_id').html(types_str);
+                    $('#name_id').html(names_str);
+                }
+            })
         })
 
         function reset(data){

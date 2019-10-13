@@ -5,7 +5,7 @@
         <div class="span12">
 
             <form class="form-inline" method="get">
-                <input type="text" class="input-large" name="keyword" placeholder="序列号/订单号/收货人昵称">
+                <input type="text" class="input-large" name="keyword" placeholder="序列号/订单号/收货人昵称" value="{$Think.get.keyword}">
                 <button type="submit" class="btn btn-primary">搜索</button>
             </form>
 
@@ -45,8 +45,9 @@
                     <tr>
                         <th>ID</th>
                         <th>型号</th>
-                        <th>分类</th>
+                          <!--<th>分类</th>-->
                         <th>名称</th>
+                        <th>网络</th>
                         <th>配置</th>
                         <th>外观</th>
                         <th>序列号</th>
@@ -57,7 +58,7 @@
                         <th>出货人</th>
                         <th>出货时间</th>
                         <th>订单号</th>
-                        <th>收货人昵称</th>
+                     <!-- <th>收货昵称</th>-->
                         <th class="actions">操作</th>
                     </tr>
                     </thead>
@@ -108,9 +109,10 @@
                     {volist name='lists' id='temp'}
                     <tr>
                         <td><span>{$temp.id}</span></td>
-                        <th><span>{$temp.item.itemType.data}</span></th>
+                        <!--<th><span>{$temp.item.itemType.data}</span></th>-->
                         <th><span>{$temp.item.itemCategory.data}</span></th>
                         <th><span>{$temp.item.itemName.data}</span></th>
+                         <th><span>{$temp.item.itemNetWork.data}</span></th>
                         <th><span>{$temp.item.itemFeature.data}</span></th>
                         <th><span>{$temp.item.itemAppearance.data}</span></th>
                         <th><span>{$temp.item.number}</span></th>
@@ -121,7 +123,7 @@
                         <td><span>{$temp.createUser.username}</span></td>
                         <td><span>{$temp.create_time}</span></td>
                         <td><span>{$temp.order_no}</span></td>
-                        <td><span>{$temp.consignee_nickname}</span></td>
+                         <!-- <td><span>{$temp.consignee_nickname}</span></td>-->
                         <td class="actions">
                             <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
 

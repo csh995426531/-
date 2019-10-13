@@ -54,11 +54,17 @@ class Item extends BaseController
         $sql = ItemIncomeHistory::alias('t')
             ->field('t.*')
             ->join('item i', 'i.id=t.item_id')
-            ->where("t.status", 'in', [
-                ItemIncomeHistory::STATUS_WAIT, 
-                ItemIncomeHistory::STATUS_FAIL
+            ->where([
+                "t.status" => ['in', [
+                    ItemIncomeHistory::STATUS_WAIT, 
+                    ItemIncomeHistory::STATUS_FAIL
+                ]],
+                "t.type" => ['=', ItemIncomeHistory::TYPE_INCOME]
+            ])->whereOr([
+                "t.status" => ['=', ItemIncomeHistory::STATUS_WAIT],
+                "t.type" => ['=', ItemIncomeHistory::TYPE_RETURN_INCOME]
             ]);
-
+var_dump($sql->)
         $user_id = $this->request->get('user_id');
 
         if (!empty($user_id) && $user_id > 0) {
@@ -442,17 +448,21 @@ class Item extends BaseController
     }
 
     //退货入库
-    public function returnIncome($keyword=''){
+    public function returnIncome(){
 
+        $keyword = $this->request->get('keyword');
         $lists = ItemOutgoHistory::alias("t")
             ->join("item i", 't.item_id=i.id')
             ->where("t.status", ItemOutgoHistory::STATUS_SUCCESS);
 
-
         if (!empty($keyword)) {
-            $lists = $lists->where("t.order_no", "like", "%".$keyword."%")
-                ->whereOr("t.consignee_nickname", "like", "%".$keyword."%")
-                ->whereOr('i.number','like',"%".$keyword."%");
+            $lists = $lists->where(function($lists) use($keyword) {
+                $lists->whereOr([
+                    "t.order_no" => ['like', "%".$keyword."%"],
+                    "t.consignee_nickname" => ['like', "%".$keyword."%"],
+                    "i.number" => ['like', "%".$keyword."%"]
+                ]);
+            });
         }
 
         $lists = $lists->field('t.*')
@@ -878,26 +888,46 @@ class Item extends BaseController
 
         $typeId = $this->request->get("type_id");
 
-        if (!empty($typeId) && $typeId > 0) {
-            $lists = $lists->where("type_id", $typeId);
+        if (!empty($typeId)) {
+            $typeArr = ItemType::where("data", $typeId)
+            ->column('id');
+            $lists = $lists->where("type_id", 'in', $typeArr);
         }
 
         $nameId = $this->request->get("name_id");
 
-        if (!empty($nameId) && $nameId > 0) {
-            $lists = $lists->where("name_id", $nameId);
+        if (!empty($nameId)) {
+            $nameArr = ItemName::where("data", $nameId)
+            ->column('id');
+            $lists = $lists->where("name_id",  'in', $nameArr);
         }
 
         $featureId = $this->request->get("feature_id");
 
-        if (!empty($featureId) && $featureId > 0) {
-            $lists = $lists->where("feature_id", $featureId);
+        if (!empty($featureId)) {
+            $featureArr = ItemFeature::where("data", $featureId)
+            ->column('id');
+            $lists = $lists->where("feature_id",  'in', $featureArr);
+        }
+        
+        $networkId = $this->request->get("network_id");
+
+        if (!empty($networkId)) {
+
+            $networkArr = ItemNetwork::where("data", $networkId)
+            ->column('id');
+
+            $lists = $lists->where("network_id", 'in',  $networkArr);
         }
 
         $appearanceId = $this->request->get("appearance_id");
 
-        if (!empty($appearanceId) && $appearanceId > 0) {
-            $lists = $lists->where("appearance_id", $appearanceId);
+        if (!empty($appearanceId)) {
+
+            $appearanceArr = ItemAppearance::where("data", $appearanceId)
+            ->column('id');
+
+            $lists = $lists->where("appearance_id",  'in', $appearanceArr);
         }
 
         $keyword = $this->request->get("keyword");
@@ -916,17 +946,48 @@ class Item extends BaseController
             $list->statusName = $list->getStatusName();
         }
 
-        $types = ItemType::select();
-
-        $names = ItemName::select();
-
-        $features = ItemFeature::select();
-
-        $appearances = ItemAppearance::select();
-
-        $networks = ItemNetwork::select();
-
         $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)->select();
+
+        $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
+
+        if (!empty($typeIds)) {
+            $types = ItemType::where("id", 'in', array_column($typeIds, 'type_id'))->distinct(true)->field('data')->select();
+        } else {
+            $types = [];
+        }
+
+        $nameIds = Db::table('y5g_item')->distinct(true)->field("name_id")->select();
+    
+        if (!empty($nameIds)) {
+            $names = ItemName::where("id", 'in', array_column($nameIds, 'name_id'))->distinct(true)->field('data')->select();
+        } else {
+            $names = [];
+        }
+
+        $featureIds = Db::table('y5g_item')->distinct(true)->field("feature_id")->select();
+
+        if (!empty($featureIds)) {
+            $features = ItemFeature::where("id", 'in', array_column($featureIds, 'feature_id'))->distinct(true)->field('data')->select();
+  
+        } else {
+            $features = [];
+        }
+
+        $networkIds = Db::table('y5g_item')->distinct(true)->field("network_id")->select();
+        if (!empty($networkIds)) {
+
+            $networks = itemNetwork::where("id", 'in', array_column($networkIds, 'network_id'))->distinct(true)->field('data')->select();
+        } else {
+            $networks = [];
+        }
+
+        $appearanceIds = Db::table('y5g_item')->distinct(true)->field("appearance_id")->select();
+
+        if (!empty($appearanceIds)) {
+            $appearances = ItemAppearance::where("id", 'in', array_column($appearanceIds, 'appearance_id'))->distinct(true)->field('data')->select();
+        } else {
+            $appearances = [];
+        }
 
         $breadcrumb = '销售出库';
 
@@ -939,38 +1000,78 @@ class Item extends BaseController
             'features' => $features,
             'appearances' => $appearances,
             'networks' => $networks,
+            'data' =>  [
+                'features' => $features,
+                'networks' => $networks,
+                'appearances' => $appearances
+            ]
         ]);
     }
 
     //特殊出库
     public function specialOutgo(){
-        $lists = \app\index\model\Item::where("status", "in", [
-            \app\index\model\Item::STATUS_NORMAL,
-            \app\index\model\Item::STATUS_OUTGO_WAIT
-        ]);
+
+        $status = $this->request->get("status");
+
+        if (empty($status)) {
+            $status = [
+                \app\index\model\Item::STATUS_NORMAL,
+                \app\index\model\Item::STATUS_REPAIR
+            ];
+        } else {
+            $status = [$status];
+        }
+
+        $lists = \app\index\model\Item::where("status", "in", $status);
 
         $typeId = $this->request->get("type_id");
 
-        if (!empty($typeId) && $typeId > 0) {
-            $lists = $lists->where("type_id", $typeId);
+        if (!empty($typeId)) {
+            $typeArr = ItemType::where("data", $typeId)
+            ->column('id');
+            $lists = $lists->where("type_id", 'in', $typeArr);
         }
 
         $nameId = $this->request->get("name_id");
 
-        if (!empty($nameId) && $nameId > 0) {
-            $lists = $lists->where("name_id", $nameId);
+        if (!empty($nameId)) {
+            $nameArr = ItemName::where("data", $nameId)
+            ->column('id');
+            $lists = $lists->where("name_id",  'in', $nameArr);
         }
 
         $featureId = $this->request->get("feature_id");
 
-        if (!empty($featureId) && $featureId > 0) {
-            $lists = $lists->where("feature_id", $featureId);
+        if (!empty($featureId)) {
+            $featureArr = ItemFeature::where("data", $featureId)
+            ->column('id');
+            $lists = $lists->where("feature_id",  'in', $featureArr);
+        }
+        
+        $networkId = $this->request->get("network_id");
+
+        if (!empty($networkId)) {
+
+            $networkArr = ItemNetwork::where("data", $networkId)
+            ->column('id');
+
+            $lists = $lists->where("network_id", 'in',  $networkArr);
         }
 
         $appearanceId = $this->request->get("appearance_id");
 
-        if (!empty($appearanceId) && $appearanceId > 0) {
-            $lists = $lists->where("appearance_id", $appearanceId);
+        if (!empty($appearanceId)) {
+
+            $appearanceArr = ItemAppearance::where("data", $appearanceId)
+            ->column('id');
+
+            $lists = $lists->where("appearance_id",  'in', $appearanceArr);
+        }
+
+        $keyword = $this->request->get("keyword");
+
+        if (!empty($keyword)) {
+            $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
         }
 
         $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
@@ -979,17 +1080,55 @@ class Item extends BaseController
             $list->statusName = $list->getStatusName();
         }
 
-        $types = ItemType::select();
+        $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
 
-        $names = ItemName::select();
+        if (!empty($typeIds)) {
+            $types = ItemType::where("id", 'in', array_column($typeIds, 'type_id'))->distinct(true)->field('data')->select();
+        } else {
+            $types = [];
+        }
 
-        $features = ItemFeature::select();
+        $nameIds = Db::table('y5g_item')->distinct(true)->field("name_id")->select();
+    
+        if (!empty($nameIds)) {
+            $names = ItemName::where("id", 'in', array_column($nameIds, 'name_id'))->distinct(true)->field('data')->select();
+        } else {
+            $names = [];
+        }
 
-        $appearances = ItemAppearance::select();
+        $featureIds = Db::table('y5g_item')->distinct(true)->field("feature_id")->select();
+
+        if (!empty($featureIds)) {
+            $features = ItemFeature::where("id", 'in', array_column($featureIds, 'feature_id'))->distinct(true)->field('data')->select();
+  
+        } else {
+            $features = [];
+        }
+
+        $networkIds = Db::table('y5g_item')->distinct(true)->field("network_id")->select();
+        if (!empty($networkIds)) {
+
+            $networks = itemNetwork::where("id", 'in', array_column($networkIds, 'network_id'))->distinct(true)->field('data')->select();
+        } else {
+            $networks = [];
+        }
+
+        $appearanceIds = Db::table('y5g_item')->distinct(true)->field("appearance_id")->select();
+
+        if (!empty($appearanceIds)) {
+            $appearances = ItemAppearance::where("id", 'in', array_column($appearanceIds, 'appearance_id'))->distinct(true)->field('data')->select();
+        } else {
+            $appearances = [];
+        }
 
         $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)->select();
 
-        $breadcrumb = '特殊出库';
+        $status = [
+            \app\index\model\Item::STATUS_NORMAL => '在库',
+            \app\index\model\Item::STATUS_OUTGO_WAIT => '出库待核'
+        ];
+
+        $breadcrumb = '维修返库';
 
         return $this->fetch('special_outgo', [
             'breadcrumb' => $breadcrumb,
@@ -999,6 +1138,153 @@ class Item extends BaseController
             'names' => $names,
             'features' => $features,
             'appearances' => $appearances,
+            'networks' => $networks,
+            'data' =>  [
+                'features' => $features,
+                'networks' => $networks,
+                'appearances' => $appearances
+            ],
+            'status' => $status
+        ]);
+    }
+
+    //特殊出库2
+    public function specialOutgo2(){
+
+        $status = $this->request->get("status");
+
+        if (empty($status)) {
+            $status = [
+                \app\index\model\Item::STATUS_NORMAL,
+                \app\index\model\Item::STATUS_LOSE
+            ];
+        } else {
+            $status = [$status];
+        }
+
+        $lists = \app\index\model\Item::where("status", "in", $status);
+
+        $typeId = $this->request->get("type_id");
+
+        if (!empty($typeId)) {
+            $typeArr = ItemType::where("data", $typeId)
+            ->column('id');
+            $lists = $lists->where("type_id", 'in', $typeArr);
+        }
+
+        $nameId = $this->request->get("name_id");
+
+        if (!empty($nameId)) {
+            $nameArr = ItemName::where("data", $nameId)
+            ->column('id');
+            $lists = $lists->where("name_id",  'in', $nameArr);
+        }
+
+        $featureId = $this->request->get("feature_id");
+
+        if (!empty($featureId)) {
+            $featureArr = ItemFeature::where("data", $featureId)
+            ->column('id');
+            $lists = $lists->where("feature_id",  'in', $featureArr);
+        }
+        
+        $networkId = $this->request->get("network_id");
+
+        if (!empty($networkId)) {
+
+            $networkArr = ItemNetwork::where("data", $networkId)
+            ->column('id');
+
+            $lists = $lists->where("network_id", 'in',  $networkArr);
+        }
+
+        $appearanceId = $this->request->get("appearance_id");
+
+        if (!empty($appearanceId)) {
+
+            $appearanceArr = ItemAppearance::where("data", $appearanceId)
+            ->column('id');
+
+            $lists = $lists->where("appearance_id",  'in', $appearanceArr);
+        }
+
+        $keyword = $this->request->get("keyword");
+
+        if (!empty($keyword)) {
+            $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
+        }
+
+        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
+
+        foreach ($lists as $list) {
+            $list->statusName = $list->getStatusName();
+        }
+
+        $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
+
+        if (!empty($typeIds)) {
+            $types = ItemType::where("id", 'in', array_column($typeIds, 'type_id'))->distinct(true)->field('data')->select();
+        } else {
+            $types = [];
+        }
+
+        $nameIds = Db::table('y5g_item')->distinct(true)->field("name_id")->select();
+    
+        if (!empty($nameIds)) {
+            $names = ItemName::where("id", 'in', array_column($nameIds, 'name_id'))->distinct(true)->field('data')->select();
+        } else {
+            $names = [];
+        }
+
+        $featureIds = Db::table('y5g_item')->distinct(true)->field("feature_id")->select();
+
+        if (!empty($featureIds)) {
+            $features = ItemFeature::where("id", 'in', array_column($featureIds, 'feature_id'))->distinct(true)->field('data')->select();
+  
+        } else {
+            $features = [];
+        }
+
+        $networkIds = Db::table('y5g_item')->distinct(true)->field("network_id")->select();
+        if (!empty($networkIds)) {
+
+            $networks = itemNetwork::where("id", 'in', array_column($networkIds, 'network_id'))->distinct(true)->field('data')->select();
+        } else {
+            $networks = [];
+        }
+
+        $appearanceIds = Db::table('y5g_item')->distinct(true)->field("appearance_id")->select();
+
+        if (!empty($appearanceIds)) {
+            $appearances = ItemAppearance::where("id", 'in', array_column($appearanceIds, 'appearance_id'))->distinct(true)->field('data')->select();
+        } else {
+            $appearances = [];
+        }
+
+        $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)->select();
+
+        $status = [
+            \app\index\model\Item::STATUS_NORMAL => '在库',
+            \app\index\model\Item::STATUS_OUTGO_WAIT => '出库待核'
+        ];
+
+        $breadcrumb = '盘点丢失';
+
+        return $this->fetch('special_outgo2', [
+            'breadcrumb' => $breadcrumb,
+            'channels' => $channels,
+            'lists' => $lists,
+            'types' => $types,
+            'names' => $names,
+            'features' => $features,
+            'appearances' => $appearances,
+            'networks' => $networks,
+            'data' =>  [
+                'features' => $features,
+                'networks' => $networks,
+                'appearances' => $appearances
+            ],
+            'status' => $status
         ]);
     }
 
@@ -1006,7 +1292,7 @@ class Item extends BaseController
     public function addSpecialOutgo(){
         $result = SetResult(200, '操作成功');
 
-        $itemId = $this->request->param('item_id');
+        $itemId = $_POST['item_id'];
         $status = $this->request->param('type');
 
         if ($this->request->isPost()) {
@@ -1019,22 +1305,24 @@ class Item extends BaseController
                     throw new Exception("操作类型错误");
                 }
 
-                $item = \app\index\model\Item::where("id", $itemId)->find();
-
-                if (empty($item) || $item->status != \app\index\model\Item::STATUS_NORMAL) {
-                    throw new \Exception("库存物品无效");
-                }
-
-                $updated = $item->save([
-                    'status' => $status,
-                    'update_time' => time(),
-                ], [
-                    'id' => $item->id,
-                    'status' => \app\index\model\Item::STATUS_NORMAL
-                ]);
-
-                if ($updated != 1) {
-                    throw new \Exception("库存更新失败");
+                if (is_array($itemId)) {
+                    $success = 0;
+                    $fail = 0;
+                    foreach ($itemId as $tempId) {
+                        
+                        $res = $this->doAddSpecialOutgo($tempId, $status);
+                        if (!$res) {
+                            $fail++;
+                        } else {
+                            $success++;
+                        }
+                    }
+                    $result = SetResult(200, '成功：'. $success.'，失败：'. $fail);
+                } else {
+                    $res = $this->doAddSpecialOutgo($itemId, $status);
+                    if (!$res) {
+                        $result = SetResult(500, '失败');
+                    }
                 }
                 
                 AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
@@ -1044,11 +1332,114 @@ class Item extends BaseController
                 AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
                 , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
             }
-        } else {
-            $result = SetResult(500, '请求方式错误');
         }
 
         return $result;
+    }
+
+    protected function doAddSpecialOutgo($itemId, $status) {
+
+        try {
+
+            $item = \app\index\model\Item::where("id", $itemId)->find();
+
+            if (empty($item) || $item->status != \app\index\model\Item::STATUS_NORMAL) {
+                throw new \Exception("库存物品无效");
+            }
+    
+            $updated = $item->save([
+                'status' => $status,
+                'update_time' => time(),
+            ], [
+                'id' => $item->id,
+                'status' => \app\index\model\Item::STATUS_NORMAL
+            ]);
+    
+            if ($updated != 1) {
+                throw new \Exception("库存更新失败");
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    // 返库特殊出库
+    public function cancelSpecialOutgo(){
+        $result = SetResult(200, '操作成功');
+       
+        $itemId = $_POST['item_id'];
+        $status = $this->request->param('type');
+
+        if ($this->request->isPost()) {
+
+            try {
+                if (empty($itemId)) {
+                    throw new Exception("itemid错误");
+                }
+                if (!in_array($status,  [4,5])) {
+                    throw new Exception("操作类型错误");
+                }
+
+                if (is_array($itemId)) {
+                    $success = 0;
+                    $fail = 0;
+                    foreach ($itemId as $tempId) {
+                        
+                        $res = $this->doCancelSpecialOutgo($tempId);
+                        if (!$res) {
+                            $fail++;
+                        } else {
+                            $success++;
+                        }
+                    }
+                    $result = SetResult(200, '成功：'. $success.'，失败：'. $fail);
+                } else {
+                    $res = $this->doCancelSpecialOutgo($itemId);
+                    if (!$res) {
+                        $result = SetResult(500, '失败');
+                    }
+                }
+                
+                AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
+                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+            } catch (\Exception $e) {
+                $result = SetResult(500, $e->getMessage());
+                AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
+                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+            }
+        }
+
+        return $result;
+    }
+
+    protected function doCancelSpecialOutgo($itemId) {
+
+        try {
+
+            $item = \app\index\model\Item::where("id", $itemId)->find();
+
+            if (empty($item) || !in_array($item->status, [\app\index\model\Item::STATUS_REPAIR, \app\index\model\Item::STATUS_LOSE])) {
+                throw new \Exception("库存物品无效");
+            }
+    
+            $updated = $item->save([
+                'status' => \app\index\model\Item::STATUS_NORMAL,
+                'update_time' => time(),
+            ], [
+                'id' => $item->id,
+                'status' => $item->status
+            ]);
+    
+            if ($updated != 1) {
+                throw new \Exception("库存更新失败");
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     //添加出库记录
@@ -1157,11 +1548,67 @@ class Item extends BaseController
     //出库审核
     public function outgoAgree(){
 
-        $lists = ItemOutgoHistory::where("status", ItemOutgoHistory::STATUS_WAIT)->paginate(10, false, ['query'=>request()->param() ]);
+        $nameIds = Db::name('item_outgo_history')
+            ->alias('t')
+            ->join('item i', 'i.id = t.item_id')
+            ->distinct(true)
+            ->field('i.name_id')
+            ->select();
+
+        $names = ItemName::where('id', 'in', array_column($nameIds, 'name_id'))->select();
+
+        $channelIds = Db::name('item_outgo_history')
+            ->alias('t')
+            ->join('item i', 'i.id = t.item_id')
+            ->distinct(true)
+            ->field('i.channel_id')
+            ->select();
+
+        $channels = ItemChannel::where("id", 'in', array_column($channelIds, 'channel_id'))->select();
+
+        $sql = ItemOutgoHistory::alias('t')->join('item i', 'i.id=t.item_id')->where("t.status", ItemOutgoHistory::STATUS_WAIT);
+
+        $date = $this->request->get('date');
+
+        if (!empty($date)) {
+
+            $start_time = strtotime($date. '00:00:00');
+            $end_time = strtotime($date. '23:59:59');
+            $sql = $sql->where('t.create_time',  '>=', $start_time)->where('t.create_time', '<=', $end_time);
+        }
+
+        $name_id = $this->request->get('name_id');
+
+        if (!empty($name_id) && $name_id > 0) {
+            $sql = $sql->where('i.name_id', $name_id);
+        }
+
+        $channel_id = $this->request->get('channel_id');
+
+        if (!empty($channel_id) && $channel_id > 0) {
+            $sql = $sql->where('i.channel_id', $channel_id);
+        }
+
+        $keyword = $this->request->get('keyword');
+        
+        if (!empty($keyword)) {
+            $lists = $sql->where(function($sql) use($keyword) {
+                $sql->whereOr([
+                    "t.order_no" => ['like', "%".$keyword."%"],
+                    "t.consignee_nickname" => ['like', "%".$keyword."%"],
+                    "i.number" => ['like', "%".$keyword."%"]
+                ]);
+            });
+        }
+
+        $lists = $sql->field('t.*')
+        ->paginate(10, false, ['query'=>request()->param() ]);
 
         $breadcrumb = '出库审核';
 
         return $this->fetch('outgo_agree', [
+            'names' => $names,
+            'channels' => $channels,
             'lists' => $lists,
             'breadcrumb' => $breadcrumb,
         ]);
@@ -1202,6 +1649,50 @@ class Item extends BaseController
         }
     }
 
+    public function changeCategory(){
+        $category = $this->request->get('category');
+        if (!empty($category)) {
+            $categoryId = ItemCategory::where("data", $category)
+                ->column('id');
+            if (!empty($categoryId)) {
+
+                $types = ItemType::where("status", ItemType::STATUS_ACTIVE)
+                    ->where("category_id", 'in', $categoryId)
+                    ->field('data')
+                    ->select();
+
+                $names = ItemName::where("status", ItemName::STATUS_ACTIVE)
+                    ->where("category_id", 'in', $categoryId)
+                    ->field('data')
+                    ->select();
+
+                $features = ItemFeature::where("status", ItemFeature::STATUS_ACTIVE)
+                    ->where("category_id", 'in', $categoryId)
+                    ->field('data')
+                    ->select();
+        
+                $networks = ItemNetwork::where("status", ItemNetwork::STATUS_ACTIVE)
+                    ->where("category_id", 'in', $categoryId)
+                    ->field('data')
+                    ->select();
+        
+                $appearances = ItemAppearance::where("status", ItemAppearance::STATUS_ACTIVE)
+                    ->where("category_id", 'in', $categoryId)
+                    ->field('data')
+                    ->select();
+
+                $result = SetResult(200,  [
+                    'types' => $types,
+                    'names' => $names,
+                    'features' => $features,
+                    'networks' => $networks,
+                    'appearances' => $appearances
+                ]);
+                return $result;
+            }
+        }
+    }
+
     //在库查询
     public function inventory(){
 
@@ -1214,8 +1705,7 @@ class Item extends BaseController
         $typeId = $this->request->get("type_id");
 
         if (!empty($typeId)) {
-            $typeArr = ItemType::where("status", ItemType::STATUS_ACTIVE)
-            ->where("data", $typeId)
+            $typeArr = ItemType::where("data", $typeId)
             ->column('id');
             $lists = $lists->where("type_id", 'in', $typeArr);
         }
@@ -1223,8 +1713,7 @@ class Item extends BaseController
         $nameId = $this->request->get("name_id");
 
         if (!empty($nameId)) {
-            $nameArr = ItemName::where("status", ItemName::STATUS_ACTIVE)
-            ->where("data", $nameId)
+            $nameArr = ItemName::where("data", $nameId)
             ->column('id');
             $lists = $lists->where("name_id",  'in', $nameArr);
         }
@@ -1232,8 +1721,7 @@ class Item extends BaseController
         $featureId = $this->request->get("feature_id");
 
         if (!empty($featureId)) {
-            $featureArr = ItemFeature::where("status", ItemFeature::STATUS_ACTIVE)
-            ->where("data", $featureId)
+            $featureArr = ItemFeature::where("data", $featureId)
             ->column('id');
             $lists = $lists->where("feature_id",  'in', $featureArr);
         }
@@ -1242,8 +1730,7 @@ class Item extends BaseController
 
         if (!empty($networkId)) {
 
-            $networkArr = ItemNetwork::where("status", ItemNetwork::STATUS_ACTIVE)
-            ->where("data", $networkId)
+            $networkArr = ItemNetwork::where("data", $networkId)
             ->column('id');
 
             $lists = $lists->where("network_id", 'in',  $networkArr);
@@ -1253,8 +1740,7 @@ class Item extends BaseController
 
         if (!empty($appearanceId)) {
 
-            $appearanceArr = ItemAppearance::where("status", ItemAppearance::STATUS_ACTIVE)
-            ->where("data", $appearanceId)
+            $appearanceArr = ItemAppearance::where("data", $appearanceId)
             ->column('id');
 
             $lists = $lists->where("appearance_id",  'in', $appearanceArr);
@@ -1398,8 +1884,7 @@ class Item extends BaseController
         $typeId = $this->request->get("type_id");
 
         if (!empty($typeId)) {
-            $typeArr = ItemType::where("status", ItemType::STATUS_ACTIVE)
-                ->where("data", $typeId)
+            $typeArr = ItemType::where("data", $typeId)
                 ->column('id');
             $lists = $lists->where("type_id",  'in', $typeArr);
         }
@@ -1407,8 +1892,7 @@ class Item extends BaseController
         $nameId = $this->request->get("name_id");
 
         if (!empty($nameId)) {
-            $nameArr = ItemName::where("status", ItemName::STATUS_ACTIVE)
-            ->where("data", $nameId)
+            $nameArr = ItemName::where("data", $nameId)
             ->column('id');
             $lists = $lists->where("name_id",  'in', $nameArr);
         }
@@ -1416,8 +1900,7 @@ class Item extends BaseController
         $featureId = $this->request->get("feature_id");
 
         if (!empty($featureId)) {
-            $featureArr = ItemFeature::where("status", ItemFeature::STATUS_ACTIVE)
-            ->where("data", $featureId)
+            $featureArr = ItemFeature::where("data", $featureId)
             ->column('id');
             
             $lists = $lists->where("feature_id",  'in',  $featureArr);
@@ -1427,8 +1910,7 @@ class Item extends BaseController
 
         if (!empty($networkId)) {
 
-            $networkArr = ItemNetwork::where("status", ItemNetwork::STATUS_ACTIVE)
-            ->where("data", $networkId)
+            $networkArr = ItemNetwork::where("data", $networkId)
             ->column('id');
 
             $typeArr2 = ItemType::where("network_id" ,  'in',  $networkArr)->field("id")->select();
@@ -1439,8 +1921,7 @@ class Item extends BaseController
 
         if (!empty($appearanceId)) {
 
-            $appearanceArr = ItemAppearance::where("status", ItemAppearance::STATUS_ACTIVE)
-            ->where("data", $appearanceId)
+            $appearanceArr = ItemAppearance::where("data", $appearanceId)
             ->column('id');
             $lists = $lists->where("appearance_id",  'in', $appearanceArr);
         }
@@ -1448,8 +1929,7 @@ class Item extends BaseController
         $categoryId = $this->request->get("category_id");
 
         if (!empty($categoryId)) {
-            $categoryArr = ItemCategory::where("status", ItemCategory::STATUS_ACTIVE)
-            ->where("data", $categoryId)
+            $categoryArr = ItemCategory::where("data", $categoryId)
             ->column('id');
             $lists = $lists->where("category_id",  'in', $categoryArr);
         }
@@ -1457,8 +1937,7 @@ class Item extends BaseController
         $editionId = $this->request->get("edition_id");
 
         if (!empty($editionId)) {
-            $editionArr = ItemEdition::where("status", ItemEdition::STATUS_ACTIVE)
-            ->where("data", $editionId)
+            $editionArr = ItemEdition::where("data", $editionId)
             ->column('id');
             $lists = $lists->where("edition_id",  'in', $editionArr);
         }
@@ -1466,8 +1945,7 @@ class Item extends BaseController
         $channelId = $this->request->get("channel_id");
 
         if (!empty($channelId)) {
-            $channelArr = ItemChannel::where("status", ItemChannel::STATUS_ACTIVE)
-            ->where("data", $channelId)
+            $channelArr = ItemChannel::where("data", $channelId)
             ->column('id');
             $lists = $lists->where("channel_id",  'in', $channelArr);
         }
@@ -1494,6 +1972,7 @@ class Item extends BaseController
 
         foreach ($lists as $list) {
             $list->statusName = $list->getStatusName();
+            $list->lastOutNo = $list->getLastOutgoNo();
         }
 
         $types = ItemType::where("status", ItemType::STATUS_ACTIVE)->distinct(true)->field('data')->select();
@@ -1511,7 +1990,8 @@ class Item extends BaseController
         $editions = ItemEdition::where("status",  ItemEdition::STATUS_ACTIVE)->distinct(true)->field('data')->select();
 
         $channels = ItemChannel::where("status",  ItemChannel::STATUS_ACTIVE)->distinct(true)->field('data')->select();
-
+      
+      
         $dates = Db::table('y5g_item')->distinct(true)->field("date")->select();
 
         $dates = array_column($dates, 'date');
@@ -1539,6 +2019,8 @@ class Item extends BaseController
             'dates' => $dates,
             'statuses' => $statuses,
             'data' =>  [
+                'types' => $types,
+                'names' => $names,
                 'features' => $features,
                 'networks' => $networks,
                 'appearances' => $appearances
@@ -1548,10 +2030,42 @@ class Item extends BaseController
 
     //通过出库审核
     public function allowOutgoAgree(){
+        $id = $_POST['id'];
+       
+        if ( empty($id)) {
+           return SetResult(500, 'id不能为空');
+        }
 
+        if (is_array(($id))) {
+
+            $success =0;
+            $fail = 0;
+
+            foreach ($id as $temp) {
+                $result = $this->doAllowOutgoAgree($temp);
+
+                if ($result['code'] == 200) {
+                    $success++;
+                } else {
+                    $fail++;
+                }
+            }
+
+            if ($success >0) {
+                $msg = '成功：'. $success.'，失败：'. $fail;
+                $result = SetResult(200, $msg);
+            } else {
+                $result = SetResult(500, '操作失败');
+            }
+        } else {
+            $result = $this->doAllowOutgoAgree($id);
+        }
+
+        return $result;
+    }
+
+    public function doAllowOutgoAgree($id){
         $result = SetResult(200, '保存成功');
-
-        $id = $this->request->param('id');
 
         Db::startTrans();
         try {
@@ -1611,10 +2125,42 @@ class Item extends BaseController
 
     //拒绝出库审核
     public function rejectOutgoAgree(){
+        $id = $_POST['id'];
+
+        if ( empty($id)) {
+            return SetResult(500, 'id不能为空');
+         }
+
+         if (is_array($id)) {
+            $success =0;
+            $fail = 0;
+
+            foreach ($id as $temp) {
+                $result = $this->doRejectOutgoAgree($temp);
+
+                if ($result['code'] == 200) {
+                    $success++;
+                } else {
+                    $fail++;
+                }
+            }
+
+            if ($success >0) {
+                $msg = '成功：'. $success.'，失败：'. $fail;
+                $result = SetResult(200, $msg);
+            } else {
+                $result = SetResult(500, '操作失败');
+            }
+         } else {
+             $result = $this->doRejectOutgoAgree($id);
+         }
+
+         return $result;
+    }
+
+    public function doRejectOutgoAgree($id) {
+
         $result = SetResult(200, '操作成功');
-
-        $id = $this->request->param('id');
-
         Db::startTrans();
         try {
 

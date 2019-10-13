@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:63:"/data/www/y5g/public/../application/index/view/index/login.html";i:1567390640;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:63:"/data/www/y5g/public/../application/index/view/index/login.html";i:1570202077;}*/ ?>
 <!--<div><img src="<?php echo captcha_src(); ?>" alt="captcha" onclick="this.src='<?php echo captcha_src(); ?>'" /></div>-->
 <!DOCTYPE html>
 <html>

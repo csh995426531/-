@@ -40,7 +40,7 @@ class AccessNode extends Model
                 'index/item/outgo', 'index/item/addoutgo',
             ],
             'index/item/specialoutgo' => [
-                'index/item/specialoutgo', 'index/item/addspecialoutgo',
+                'index/item/specialoutgo', 'index/item/specialoutgo2', 'index/item/addspecialoutgo', 'index/item/cancelspecialoutgo',
             ],
             'index/item/incomeagree' => [
                 'index/item/incomeagree','index/item/allowagree','index/item/rejectagree',

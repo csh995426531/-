@@ -6,71 +6,41 @@
 
             <form class="form-inline" method="get">
                 <select class="span2" name="type_id">
-                    <option value="0"> - 型号 - </option>
+                    <option value=""> - 型号 - </option>
                     {foreach $types as $type}
-                    <option value="{$type.id}" {$Think.get.type_id==$type.id ? 'selected' :''}>{$type.data}</opion>
+                    <option value="{$type.data}" {$Think.get.type_id==$type.data ? 'selected' :''}>{$type.data}</opion>
                     {/foreach}
                 </select>
-                <select class="span2" name="name_id" id='name_id'>
-                    <option value="0"  data-appearance="
-                    <option value='0'> - 外观 - </option>
-                    {foreach $appearances as $appearance}
-                        <?php if(isset($_GET['appearance_id']) && $_GET['appearance_id'] == $appearance->id){echo 'selected';}?></option>
-                        <option value='{$appearance.id}'>{$appearance.data}</option>
-                    {/foreach}"  data-feature="
-                    <option value='0'> - 配置 - </option>
-                    {foreach $features as $feature}
-                        <?php if(isset($_GET['feature_id']) && $_GET['feature_id'] == $feature->id){echo 'selected';}?></option>
-                        <option value='{$feature.id}'>{$feature.data}</option>
-                    {/foreach}" data-network="
-                    <option value='0'> - 网络模式 - </option>
-                    {foreach $networks as $network}
-                        <?php if(isset($_GET['network_id']) && $_GET['network_id'] == $network->id){echo 'selected';}?></option>
-                        <option value='{$network.id}'>{$network.data}</option>
-                    {/foreach}" > - 名称 - </option>
+                <span id="data-all" style="display:none">{$data|json_encode}</span>
+                <select class="span2" name="name_id" id='name_id'   data-href="{:url('changeName')}">
+                    <option value=""> - 名称 - </option>
                     {foreach $names as $name}
-                    <option value="{$name.id}" data-category-id="{$name.category_id}" data-appearance="
-                                    <option value='0'> - 外观 - </option>
-                                    {foreach $name.itemAppearance as $appearance}
-                                        <?php if(isset($_GET['appearance_id']) && $_GET['appearance_id'] == $appearance->id){echo 'selected';}?></option>
-                                        <option value='{$appearance.id}'>{$appearance.data}</option>
-                                    {/foreach}"  data-feature="
-                                    <option value='0'> - 配置 - </option>
-                                    {foreach $name.itemFeature as $feature}
-                                        <?php if(isset($_GET['feature_id']) && $_GET['feature_id'] == $feature->id){echo 'selected';}?></option>
-                                        <option value='{$feature.id}'>{$feature.data}</option>
-                                    {/foreach}" data-network="
-                                    <option value='0'> - 网络模式 - </option>
-                                    {foreach $name.itemNetwork as $network}
-                                        <?php if(isset($_GET['network_id']) && $_GET['network_id'] == $network->id){echo 'selected';}?></option>
-                                        <option value='{$network.id}'>{$network.data}</option>
-                                    {/foreach}"
-                        {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
+                    <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
                     {/foreach}
                 </select>
                 <select class="span2" name="network_id" id='network_id'>
-                    <option value="0"> - 网络模式 - </option>
+                    <option value=""> - 网络模式 - </option>
                     {foreach $networks as $network}
-                    <option value="{$network.id}" {$Think.get.network_id==$network.id ? 'selected' :''}>{$network.data}</option>
+                    <option value="{$network.data}" {$Think.get.network_id==$network.data ? 'selected' :''}>{$network.data}</option>
                     {/foreach}
                 </select>
                 <select class="span2" name="feature_id" id='feature_id'>
-                    <option value="0"> - 配置 - </option>
+                    <option value=""> - 配置 - </option>
                     {foreach $features as $feature}
-                    <option value="{$feature.id}" {$Think.get.feature_id==$feature.id ? 'selected' :''}>{$feature.data}</option>
+                    <option value="{$feature.data}" {$Think.get.feature_id==$feature.data ? 'selected' :''}>{$feature.data}</option>
                     {/foreach}
                 </select>
                 <select class="span2" name="appearance_id" id='appearance_id'>
-                    <option value="0"> - 外观 - </option>
+                    <option value=""> - 外观 - </option>
                     {foreach $appearances as $appearance}
-                    <option value="{$appearance.id}" {$Think.get.appearance_id==$appearance.id ? 'selected' :''}>{$appearance.data}</option>
+                    <option value="{$appearance.data}" {$Think.get.appearance_id==$appearance.data ? 'selected' :''}>{$appearance.data}</option>
                     {/foreach}
                 </select>
                 <input type="text" class="input-large span2" name="keyword" placeholder="序列号" value="{$Think.get.keyword}">
                 <select name="is_prepare" class="span1">
                         <option value="">- 预售- </option>
-                        <option value="1" {$Think.get.network_id==1 ? 'selected' :''}>-  是 - </option>
-                        <option value="0" {$Think.get.network_id==0 ? 'selected' :''}>-  否 - </option>
+                        <option value="1" {$Think.get.is_prepare==1 ? 'selected' :''}>-  是 - </option>
+                        <option value="0" {$Think.get.is_prepare==0 ? 'selected' :''}>-  否 - </option>
                 </select>
                 <button type="submit" class="btn btn-primary">搜索</button>
             </form>
@@ -188,10 +158,10 @@
                         <th title="{$temp.prepare}" style="cursor: pointer"><span>{$temp.statusName}</span></th>
                         <td class="actions">
                             <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
-                            {if condition="$temp.status == 2"}
+                            <?php if(in_array($temp->status, [2,8])){?>
                             <a class="btn btn-small btn-success add-outgo" data-toggle="modal" href="#addOutgo" data-id="{$temp.id}">出库</a>
                             <!--<a class="btn btn-small btn-danger reject-item" data-id="{$temp.id}" data-value="0" data-href="{:url('rejectAgree')}">拒绝</a>-->
-                            {/if}
+                            <?php }?>
                         </td>
                     </tr>
                     {/volist}
@@ -242,35 +212,12 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="consignee_nickname">收货人昵称</label>
+                            <label class="control-label" for="consignee_nickname">买家昵称</label>
                             <div class="controls">
                                 <input type="text" class="input-xlarge" id="consignee_nickname" name="consignee_nickname" value="">
                             </div>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label" for="consignee">收货人</label>
-                            <div class="controls">
-                                <input type="text" class="input-xlarge" id="consignee" name="consignee" value="">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="consignee_address">收货人地址</label>
-                            <div class="controls">
-                                <input type="text" class="input-xlarge" id="consignee_address" name="consignee_address" value="">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="consignee_phone">收货人手机号</label>
-                            <div class="controls">
-                                <input type="text" class="input-xlarge" id="consignee_phone" name="consignee_phone" value="">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="memo">订单备注</label>
-                            <div class="controls">
-                                <textarea class="input-xlarge" name="memo" id="memo" rows="2"></textarea>
-                            </div>
-                        </div>
+                       
                     </div>
                     <div class="modal-footer">
                         <a href="#" class="btn" data-dismiss="modal">关闭</a>
@@ -301,13 +248,47 @@
             })
         });
 
-        $("#name_id").change(function () {
-            changeNameSelected();
-        });
+        $("#name_id").change(function(){
+            var val = $(this).val();
+            var data;
+            if (val != '') {
 
-        changeNameSelected();
+                var url = $(this).data('href');
+
+                var name = $(this).val();
+                $.get(url, {name:name}, function(res){
+                    data = res.data;
+                    reset(data);
+                })
+            } else {
+                data = jQuery.parseJSON($("#data-all").html());
+                reset(data);
+            }
+        }); 
+
+        // changeNameSelected();
     })
 
+    function reset(data){
+        var features_str = '<option value=""> - 配置 - </option>';
+        $.each(data.features,function(k,v){
+            features_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+        })
+
+        var networks_str = '<option value=""> - 网络模式 - </option>';
+        $.each(data.networks,function(k,v){
+            networks_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+        })
+
+        var appearances_str = '<option value=""> - 外观 - </option>';
+        $.each(data.appearances,function(k,v){
+            appearances_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+        })
+
+        $('#feature_id').html(features_str);
+        $('#network_id').html(networks_str);
+        $('#appearance_id').html(appearances_str);
+    }
     function changeNameSelected(){
 
         var appearance_str = $("#name_id option:selected").data("appearance");
