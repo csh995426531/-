@@ -1,10 +1,10 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:68:"/data/www/y5g/public/../application/index/view/setting/category.html";i:1567390641;s:48:"/data/www/y5g/application/index/view/layout.html";i:1567390639;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:68:"/data/www/y5g/public/../application/index/view/setting/category.html";i:1571076281;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
 
     <meta charset="utf-8">
-    <title>库存管理系统</title>
+    <title>库存管理</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -28,7 +28,7 @@
     <div class="row" style="height:100%">
         <div class="span2" style="width: 9.3%;background: #484646;height:100%">
             <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
-                <h1><i class="icon-large"></i> 库存管理系统</h1>
+                <h1><i class="icon-large"></i> <img src="/bg.png"></h1>
                 <ul class="side-nav">
                     <li class="active">
                         <a href="index.html"><i class="icon-home"></i> Dashboard</a>
@@ -37,6 +37,7 @@
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-dropdown" href="#"><i class="icon-th"></i> 库存查询 <b class="caret"></b></a>
                         <ul id="item-dropdown" class="collapse">
                             <li><a href="<?php echo url('item/inventory'); ?>">在库查询</a></li>
+                           
                             <li><a href="<?php echo url('item/search'); ?>">综合查询</a></li>
                         </ul>
                     </li>
@@ -44,6 +45,7 @@
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
                             <li><a href="<?php echo url('item/addIncome'); ?>">进货入库</a></li>
+                           <li><a href="<?php echo url('item/income'); ?>">入库待核</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
@@ -51,7 +53,8 @@
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
                         <ul id="item-outgo-dropdown" class="collapse">
                             <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
-                            <li><a href="<?php echo url('item/specialOutgo'); ?>">特殊出库</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">维修返库</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo2'); ?>">盘点丢失</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -68,18 +71,18 @@
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
                     </li> -->
-                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>统计</a></li>
+                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>数据统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
-                            <li><a href="<?php echo url('setting/category'); ?>">类别录入</a></li>
-                            <li><a href="<?php echo url('setting/name'); ?>">名称录入</a></li>
-                            <li><a href="<?php echo url('setting/feature'); ?>">配置录入</a></li>
-                            <li><a href="<?php echo url('setting/appearance'); ?>">外观录入</a></li>
-                            <li><a href="<?php echo url('setting/edition'); ?>">固件版本录入</a></li>
-                            <li><a href="<?php echo url('setting/type'); ?>">网络模式型号录入</a></li>
-                            <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道录入</a></li>
-                            <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径录入</a></li>
+                            <li><a href="<?php echo url('setting/category'); ?>">产品类别</a></li>
+                            <li><a href="<?php echo url('setting/name'); ?>">产品名称</a></li>
+                           <li><a href="<?php echo url('setting/type'); ?>">网络型号</a></li>
+                            <li><a href="<?php echo url('setting/feature'); ?>">产品配置</a></li>
+                            <li><a href="<?php echo url('setting/appearance'); ?>">产品外观</a></li>
+                            <li><a href="<?php echo url('setting/edition'); ?>">产品版本</a></li>
+                            <li><a href="<?php echo url('setting/incomeChannel'); ?>">渠道录入</a></li>
+                            <!-- <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li> -->
                             <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
                         </ul>
                     </li>
@@ -91,7 +94,7 @@
                             <li><a href="<?php echo url('members/updateAccess'); ?>">权限修改</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('/index/log/index'); ?>"><i class="icon-book"></i> 日志 </a></li>
+                    <li><a href="<?php echo url('/index/log/index'); ?>"><i class="icon-book"></i> 系统日志 </a></li>
                 </ul>
 
             </div> <!-- end main-left-col -->
@@ -245,13 +248,15 @@
                         <?php else: ?>
                         <a class="btn btn-small btn-success del-item" data-id="<?php echo $temp['id']; ?>" data-href="<?php echo url('openCategory'); ?>">启用</a>
                         <?php endif; ?>
+
+                        <!-- <button class="btn btn-primary" data-toggle="modal" href="#updateItem" >修改</button> -->
                     </td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
                 </tbody>
             </table>
         </div>
-        <div>
+        <div class="pull-right">
             <?php echo $lists->render(); ?>
         </div>
     </div>

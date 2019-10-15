@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:62:"/data/www/y5g/public/../application/index/view/item/outgo.html";i:1570202078;s:48:"/data/www/y5g/application/index/view/layout.html";i:1570265802;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:62:"/data/www/y5g/public/../application/index/view/item/outgo.html";i:1570202078;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -81,8 +81,8 @@
                             <li><a href="<?php echo url('setting/feature'); ?>">产品配置</a></li>
                             <li><a href="<?php echo url('setting/appearance'); ?>">产品外观</a></li>
                             <li><a href="<?php echo url('setting/edition'); ?>">产品版本</a></li>
-                            <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道</a></li>
-                            <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li>
+                            <li><a href="<?php echo url('setting/incomeChannel'); ?>">渠道录入</a></li>
+                            <!-- <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li> -->
                             <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
                         </ul>
                     </li>

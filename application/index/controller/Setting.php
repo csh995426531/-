@@ -900,10 +900,13 @@ class Setting extends BaseController
             $message = urldecode($message);
         }
 
-        $lists = ItemChannel::where("type", ItemChannel::TYPE_INCOME)
-            ->paginate(10, false, ['query'=>request()->param() ]);
+        $lists = ItemChannel::paginate(10, false, ['query'=>request()->param()]);
 
-        $breadcrumb = '进货渠道录入';
+        $itemChannel = new ItemChannel; 
+        foreach ($lists as $list) {
+            $list['type_name'] = $itemChannel->formatTypeName($list->type);
+        }
+        $breadcrumb = '渠道录入';
 
         return $this->fetch("income_channel", [
             'message' => $message,

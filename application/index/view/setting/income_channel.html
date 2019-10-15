@@ -35,6 +35,7 @@
                 <thead>
                 <tr>
                     <th>ID</th>
+                    <th>类型</th>
                     <th>渠道值</th>
                     <th class="actions">操作</th>
                 </tr>
@@ -86,6 +87,7 @@
                 {volist name='lists' id='temp'}
                 <tr>
                     <td><span>{$temp.id}</span></td>
+                    <td><span>{$temp.type_name}</span></td>
                     <td><span>{$temp.data}</span></td>
                     <td class="actions">
                         <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
@@ -114,6 +116,15 @@
         <form class="form-horizontal" method="post" id="form" data-action="{:url('addChannel')}">
             <fieldset>
                 <input type="hidden" name="type" value="1">
+                <div class="modal-body control-group">
+                    <label class="control-label" for="data">类型：</label>
+                    <div class="controls">
+                        <select name="type">
+                            <option value="1">进货类型</option>
+                            <option value="2">出货类型</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="modal-body control-group">
                     <label class="control-label" for="data">值</label>
                     <div class="controls">

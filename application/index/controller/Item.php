@@ -64,7 +64,7 @@ class Item extends BaseController
                 "t.status" => ['=', ItemIncomeHistory::STATUS_WAIT],
                 "t.type" => ['=', ItemIncomeHistory::TYPE_RETURN_INCOME]
             ]);
-var_dump($sql->)
+
         $user_id = $this->request->get('user_id');
 
         if (!empty($user_id) && $user_id > 0) {
