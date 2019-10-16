@@ -814,7 +814,12 @@ class Setting extends BaseController
                 throw new \Exception("名称无效");
             }
 
-            $type = ItemType::where("data", $data)->find();
+            $id = $this->request->param('id', 0);
+
+            $type = ItemType::where([
+                "data" => ['=', $data],
+                "id" => ['<>', $id],
+            ])->find();
 
             if (!empty($type)) {
                 throw new \Exception("该型号已存在");
@@ -843,18 +848,33 @@ class Setting extends BaseController
             }
 
             $model = new ItemType;
-            $model->data([
-                'category_id' => $name->category_id,
-                'name_id' => $nameId,
-                'network_id' => $network->id,
-                'data' => $data,
-                'status' => ItemType::STATUS_ACTIVE,
-                'create_time' => time(),
-                'update_time' => time()
-            ]);
-
-            if (!$model->save()) {
-                throw new \Exception("保存错误");
+            
+            if (!empty($id)) {
+    
+                if (!$model->update([
+                    'id' => $id,
+                    'category_id' => $name->category_id,
+                    'name_id' => $nameId,
+                    'network_id' => $network->id,
+                    'data' => $data,
+                    'update_time' => time()
+                ])) {
+                    throw new \Exception("保存错误");
+                }
+            } else {
+                $model->data([
+                    'category_id' => $name->category_id,
+                    'name_id' => $nameId,
+                    'network_id' => $network->id,
+                    'data' => $data,
+                    'status' => ItemType::STATUS_ACTIVE,
+                    'create_time' => time(),
+                    'update_time' => time()
+                ]);
+    
+                if (!$model->save()) {
+                    throw new \Exception("保存错误");
+                }
             }
 
             AddLog(\app\index\model\Log::ACTION_SETTING_TYPE_ADD, json_encode($this->request->param())

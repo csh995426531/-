@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"/data/www/y5g/public/../application/index/view/setting/type.html";i:1570202080;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"/data/www/y5g/public/../application/index/view/setting/type.html";i:1571251377;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -139,7 +139,7 @@
 
             <!--<button class="btn btn-success">Action</button>-->
 
-            <button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>
+            <button class="btn btn-primary" id='add' data-toggle="modal" href="#addItem" >录入</button>
 
         </div>
 
@@ -230,6 +230,7 @@
                         <?php else: ?>
                         <a class="btn btn-small btn-success del-item" data-id="<?php echo $temp['id']; ?>" data-href="<?php echo url('openType'); ?>">启用</a>
                         <?php endif; ?>
+                        <button class="btn btn-primary edit"  data-toggle="modal" href="#addItem" data-id="<?php echo $temp['id']; ?>" data-name_id="<?php echo $temp['name_id']; ?>" data-network_id="<?php echo $temp['network_id']; ?>" data-network="<?php echo $temp['itemNetwork']['data']; ?>" data-data="<?php echo $temp['data']; ?>">修改</button>
                     </td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
@@ -278,6 +279,7 @@
                     <label class="control-label" for="network">网络模式</label>
                     <div class="controls">
                         <input type="text" class="input-xlarge" id="network"  name="network" value="">
+                        <input type="hidden" class="input-xlarge" id="network_id"  name="network_id" value="">
                     </div>
                 </div>
                 <div class="modal-body control-group">
@@ -353,7 +355,37 @@
                 alert(res.data);
                 window.location.replace("<?php echo url('type');?>");
             })
-        })
+        });
+
+        $(".edit").click(function(){
+            var id = $(this).data('id');
+            var name_id = $(this).data('name_id');
+            var network_id = $(this).data('network_id');
+            var network = $(this).data('network');
+            var data = $(this).data('data');
+
+            $("#id").val(id);
+            $('#data').val(data);
+            $('#network').val(network);
+            $('#network_id').val(network_id);
+            $('#name_id option').each(function(k, v) {
+                if ($(v).val() == name_id) {
+                    $(v).prop('selected', true)
+                }
+            });
+        });
+
+        $("#add").click(function(){
+
+            $("#id").val('');
+            $('#data').val('');
+            $('#network').val('');
+            $('#network_id').val('');
+            $('#name_id option').each(function(k, v) {
+                $(v).prop('selected', false)
+            });
+        });
+
     })
 </script>
             </div>
