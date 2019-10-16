@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:68:"/data/www/y5g/public/../application/index/view/setting/category.html";i:1571076281;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:68:"/data/www/y5g/public/../application/index/view/setting/category.html";i:1571246803;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -163,7 +163,7 @@
 
             <!--<button class="btn btn-success">Action</button>-->
 
-            <button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>
+            <button class="btn btn-primary" id="add" data-toggle="modal" href="#addItem" >录入</button>
 
         </div>
 
@@ -249,7 +249,7 @@
                         <a class="btn btn-small btn-success del-item" data-id="<?php echo $temp['id']; ?>" data-href="<?php echo url('openCategory'); ?>">启用</a>
                         <?php endif; ?>
 
-                        <!-- <button class="btn btn-primary" data-toggle="modal" href="#updateItem" >修改</button> -->
+                        <button class="btn btn-primary edit"  data-toggle="modal" href="#addItem" data-id="<?php echo $temp['id']; ?>" data-data="<?php echo $temp['data']; ?>">修改</button>
                     </td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
@@ -268,6 +268,7 @@
         </div>
         <form class="form-horizontal" method="post" id="form" data-action="<?php echo url('addCategory'); ?>">
             <fieldset>
+                <input type="hidden" name="id" id="id"/>
                 <div class="modal-body control-group">
                     <label class="control-label" for="data">值</label>
                     <div class="controls">
@@ -328,6 +329,16 @@
                 alert(res.data);
                 window.location.replace("<?php echo url('category');?>");
             })
+        })
+        $(".edit").click(function(){
+            var id = $(this).data('id');
+            var data = $(this).data('data');
+            $("#id").val(id)
+            $('#data').val(data)
+        })
+        $("#add").click(function(){
+            $("#id").val('');
+            $('#data').val('');
         })
     })
 </script>

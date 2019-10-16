@@ -51,22 +51,37 @@ class Setting extends BaseController
                 throw new \Exception("值不能为空");
             }
 
-            $category = ItemCategory::where("data", $data)->find();
+            $id = $this->request->param('id', 0);
+
+            $category = ItemCategory::where([
+                "data" => ['=', $data],
+                'id' => ['<>', $id]
+            ])->find();
 
             if (!empty($category)) {
                 throw new \Exception("该类别已存在");
             }
 
             $model = new ItemCategory;
-            $model->data([
-                'data' => $data,
-                'status' => ItemCategory::STATUS_ACTIVE,
-                'create_time' => time(),
-                'update_time' => time()
-            ]);
 
-            if (!$model->save()) {
-                throw new \Exception("保存错误");
+            if ($id) {
+                if (!$model->update([
+                    'id' => $id,
+                    'data' => $data,
+                    'update_time' => time()
+                ])) {
+                    throw new \Exception("保存错误");
+                }
+            } else {
+                $model->data([
+                    'data' => $data,
+                    'status' => ItemCategory::STATUS_ACTIVE,
+                    'create_time' => time(),
+                    'update_time' => time()
+                ]);
+                if (!$model->save()) {
+                    throw new \Exception("保存错误");
+                }
             }
 
             AddLog(\app\index\model\Log::ACTION_SETTING_CATEGORY_ADD, json_encode($this->request->param())
@@ -184,24 +199,40 @@ class Setting extends BaseController
                 throw new \Exception("类别无效");
             }
 
-            $name = ItemName::where("data", $data)
-                ->find();
+            $id = $this->request->param('id', 0);
+
+            $name = ItemName::where([
+                "data" => ['=', $data],
+                "id" => ['<>', $id],
+            ])->find();
 
             if (!empty($name)) {
                 throw new \Exception("该名称已存在");
             }
 
             $model = new ItemName;
-            $model->data([
-                'category_id' => $categoryId,
-                'data' => $data,
-                'status' => ItemName::STATUS_ACTIVE,
-                'create_time' => time(),
-                'update_time' => time()
-            ]);
 
-            if (!$model->save()) {
-                throw new \Exception("保存错误");
+            if ($id) {
+                if (!$model->update([
+                    'id' => $id,
+                    'category_id' => $categoryId,
+                    'data' => $data,
+                    'update_time' => time()
+                ])) {
+                    throw new \Exception("保存错误");
+                }
+            } else {
+                $model->data([
+                    'category_id' => $categoryId,
+                    'data' => $data,
+                    'status' => ItemName::STATUS_ACTIVE,
+                    'create_time' => time(),
+                    'update_time' => time()
+                ]);
+    
+                if (!$model->save()) {
+                    throw new \Exception("保存错误");
+                }
             }
 
             AddLog(\app\index\model\Log::ACTION_SETTING_NAME_ADD, json_encode($this->request->param())
