@@ -28,7 +28,7 @@ class AccessNode extends Model
                 'index/item/inventory', 'index/item/changename', 'index/item/cancelprepare', 'index/item/prepare'
             ],
             'index/item/search' => [
-                'index/item/search',
+                'index/item/search','index/item/history',
             ],
             'index/item/income' => [
                 'index/item/income', 'index/item/changetype', 'index/item/checknumber', 'index/item/addincome', 'index/item/deleteagree'

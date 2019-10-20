@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1570352955;s:48:"/data/www/y5g/application/index/view/layout.html";i:1570265802;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1571567069;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -81,8 +81,8 @@
                             <li><a href="<?php echo url('setting/feature'); ?>">产品配置</a></li>
                             <li><a href="<?php echo url('setting/appearance'); ?>">产品外观</a></li>
                             <li><a href="<?php echo url('setting/edition'); ?>">产品版本</a></li>
-                            <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道</a></li>
-                            <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li>
+                            <li><a href="<?php echo url('setting/incomeChannel'); ?>">渠道录入</a></li>
+                            <!-- <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li> -->
                             <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
                         </ul>
                     </li>
@@ -248,7 +248,7 @@
                         <th>进货渠道</th>
                         <th>状态</th>
                  
-                        <!--<th class="actions">操作</th>-->
+                        <th class="actions">操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -309,16 +309,17 @@
                         <th><a href="https://checkcoverage.apple.com/cn/zh/?sn=<?php echo $temp['number']; ?>" target="_blank"><span><?php echo $temp['number']; ?></span></a></th>
                         <th><span><?php echo $temp['lastOutNo']; ?></span></th>
                         <th><span><?php echo $temp['itemEdition']['data']; ?></span></th>
-                        <th title="<?php echo $temp['memo']; ?>" style="cursor: pointer">><span><?php echo mb_strlen($temp->memo) > 10 ? mb_substr($temp->memo, 0, 10).'…' : $temp->memo; ?></span></th>
+                        <th title="<?php echo $temp['memo']; ?>" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 10 ? mb_substr($temp->memo, 0, 10).'…' : $temp->memo; ?></span></th>
                         <th><span><?php echo $temp['price']; ?></span></th>
                         <th><span><?php echo $temp['itemChannel']['data']; ?></span></th>
                         <th><span><?php echo $temp['statusName']; ?></span></th>
 
-                        <!--<td class="actions">-->
+                        <td class="actions">
+                            <a class="btn btn-small btn-info" href="<?php echo url('item/history',['item_id'=>$temp['id']]); ?>">商品历史</a>
                             <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
                             <!--<a class="btn btn-small btn-success allow-item" data-id="<?php echo $temp['id']; ?>" data-value="1" data-href="<?php echo url('allowAgree'); ?>">通过</a>-->
                             <!--<a class="btn btn-small btn-danger reject-item" data-id="<?php echo $temp['id']; ?>" data-value="0" data-href="<?php echo url('rejectAgree'); ?>">拒绝</a>-->
-                        <!--</td>-->
+                        </td>
                     </tr>
                     <?php endforeach; endif; else: echo "" ;endif; ?>
                     </tbody>

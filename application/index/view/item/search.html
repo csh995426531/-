@@ -119,7 +119,7 @@
                         <th>进货渠道</th>
                         <th>状态</th>
                  
-                        <!--<th class="actions">操作</th>-->
+                        <th class="actions">操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -180,16 +180,17 @@
                         <th><a href="https://checkcoverage.apple.com/cn/zh/?sn={$temp.number}" target="_blank"><span>{$temp.number}</span></a></th>
                         <th><span>{$temp.lastOutNo}</span></th>
                         <th><span>{$temp.itemEdition.data}</span></th>
-                        <th title="{$temp.memo}" style="cursor: pointer">><span><?php echo mb_strlen($temp->memo) > 10 ? mb_substr($temp->memo, 0, 10).'…' : $temp->memo; ?></span></th>
+                        <th title="{$temp.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 10 ? mb_substr($temp->memo, 0, 10).'…' : $temp->memo; ?></span></th>
                         <th><span>{$temp.price}</span></th>
                         <th><span>{$temp.itemChannel.data}</span></th>
                         <th><span>{$temp.statusName}</span></th>
 
-                        <!--<td class="actions">-->
+                        <td class="actions">
+                            <a class="btn btn-small btn-info" href="{:url('item/history',['item_id'=>$temp.id])}">商品历史</a>
                             <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
                             <!--<a class="btn btn-small btn-success allow-item" data-id="{$temp.id}" data-value="1" data-href="{:url('allowAgree')}">通过</a>-->
                             <!--<a class="btn btn-small btn-danger reject-item" data-id="{$temp.id}" data-value="0" data-href="{:url('rejectAgree')}">拒绝</a>-->
-                        <!--</td>-->
+                        </td>
                     </tr>
                     {/volist}
                     </tbody>

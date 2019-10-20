@@ -52,6 +52,12 @@ class ItemIncomeHistory extends Model
         return $this->hasOne("user", "id", "create_user_id");
     }
 
+
+    public function updateUser(){
+
+        return $this->hasOne("user", "id", "update_user_id");
+    }
+
     public function item(){
         return $this->hasOne("item", "id", "item_id");
     }

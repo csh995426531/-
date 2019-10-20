@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:69:"/data/www/y5g/public/../application/index/view/item/income_agree.html";i:1570202078;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:69:"/data/www/y5g/public/../application/index/view/item/income_agree.html";i:1571558430;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -134,29 +134,29 @@
         <div class="span12">
 
             <form class="form-inline" method="get">
-            <select class="span2" name="user_id">
-                <option value=""> - 入库人 - </option>
-                <?php foreach($users as $user): ?>
-                <option value="<?php echo $user['id']; ?>" <?php echo \think\Request::instance()->get('user_id')==$user['id']?'selected' :''; ?>><?php echo $user['username']; ?></opion>
-                <?php endforeach; ?>
-            </select>
-            <label class="control-label" for="date">进货日期</label>
-            <input type="text" class="input-xlarge span2" id="date"  name="date" value="" data-val="<?php echo \think\Request::instance()->get('date'); ?>" autocomplete="off">
-            <select class="span2" name="name_id">
-                <option value=""> - 名称 - </option>
-                <?php foreach($names as $name): ?>
-                <option value="<?php echo $name['id']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['id']?'selected' :''; ?>><?php echo $name['data']; ?></option>
-                <?php endforeach; ?>
-            </select>
-            <select class="span2" name="channel_id">
-                <option value=""> - 进货渠道 - </option>
-                <?php foreach($channels as $channel): ?>
-                <option value="<?php echo $channel['id']; ?>" <?php echo \think\Request::instance()->get('channel_id')==$channel['id']?'selected' :''; ?>><?php echo $channel['data']; ?></option>
-                <?php endforeach; ?>
-            </select>
-            <button type="submit" class="btn btn-primary">搜索</button>
-        </form>
-    </div>
+                <select class="span2" name="user_id">
+                    <option value=""> - 入库人 - </option>
+                    <?php foreach($users as $user): ?>
+                    <option value="<?php echo $user['id']; ?>" <?php echo \think\Request::instance()->get('user_id')==$user['id']?'selected' :''; ?>><?php echo $user['username']; ?></opion>
+                    <?php endforeach; ?>
+                </select>
+                <label class="control-label" for="date">进货日期</label>
+                <input type="text" class="input-xlarge span2" id="date"  name="date" value="" data-val="<?php echo \think\Request::instance()->get('date'); ?>" autocomplete="off">
+                <select class="span2" name="name_id">
+                    <option value=""> - 名称 - </option>
+                    <?php foreach($names as $name): ?>
+                    <option value="<?php echo $name['id']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['id']?'selected' :''; ?>><?php echo $name['data']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <select class="span2" name="channel_id">
+                    <option value=""> - 进货渠道 - </option>
+                    <?php foreach($channels as $channel): ?>
+                    <option value="<?php echo $channel['id']; ?>" <?php echo \think\Request::instance()->get('channel_id')==$channel['id']?'selected' :''; ?>><?php echo $channel['data']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <button type="submit" class="btn btn-primary">搜索</button>
+            </form>
+        </div>
   
         <div class="span12">
             <table class="orders-table table">

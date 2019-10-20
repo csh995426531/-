@@ -13,6 +13,7 @@ use app\index\model\ItemCategory;
 use app\index\model\ItemChannel;
 use app\index\model\ItemEdition;
 use app\index\model\ItemFeature;
+use app\index\model\ItemHistory;
 use app\index\model\ItemIncomeHistory;
 use app\index\model\ItemName;
 use app\index\model\ItemOutgoHistory;
@@ -21,6 +22,7 @@ use app\index\model\ItemNetwork;
 use think\Db;
 use think\Session;
 use app\index\model\User;
+use app\index\service\Item as ItemService;
 
 class Item extends BaseController
 {
@@ -320,6 +322,8 @@ class Item extends BaseController
                     if (!$model->save()) {
                         throw new \Exception("入库记录保存失败");
                     }
+
+                    ItemService::getInstance()->createHistory($itemId, ItemHistory::EVENT_INCOME, $model->id, 1);
                 }
 
                 Db::commit();
@@ -542,6 +546,8 @@ class Item extends BaseController
                 throw new \Exception("入库记录保存失败");
             }
 
+            ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_RETURN, $model->id, 1);
+
             Db::commit();
             AddLog(\app\index\model\Log::ACTION_ITEM_RETURN_INCOME, json_encode($this->request->param())
                 , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
@@ -690,6 +696,7 @@ class Item extends BaseController
             }
 
             $updated = $history->save([
+                'update_user_id' => Session::get("user_id"),
                 'status' => ItemIncomeHistory::STATUS_SUCCESS,
                 'update_time' => time(),
             ], [
@@ -735,6 +742,11 @@ class Item extends BaseController
                 if ($updated != 1) {
                     throw new \Exception("出库记录更新失败");
                 }
+
+                ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_RETURN_AGREE, $history->id, 1);
+            }else {
+
+                ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_INCOME_AGREE, $history->id, 1);
             }
 
             Db::commit();
@@ -804,6 +816,7 @@ class Item extends BaseController
             }
 
             $updated = $history->save([
+                'update_user_id' => Session::get("user_id"),
                 'status' => ItemIncomeHistory::STATUS_FAIL,
                 'update_time' => time(),
             ], [
@@ -849,6 +862,7 @@ class Item extends BaseController
                 if ($updated != 1) {
                     throw new \Exception("出库记录更新失败");
                 }
+                ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_RETURN_AGREE, $history->id, 2);
             } else {
 
                 $updated = $item->save([
@@ -862,6 +876,7 @@ class Item extends BaseController
                 if ($updated != 1) {
                     throw new \Exception("库存记录更新失败");
                 }
+                ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_INCOME_AGREE, $history->id, 2);
             }
 
             Db::commit();
@@ -1527,6 +1542,8 @@ class Item extends BaseController
                     throw new \Exception("出库记录保存失败");
                 }
 
+                ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_OUTGO, $model->id, 1);
+
                 Db::commit();
                 AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO, json_encode($this->request->param())
                     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
@@ -2081,6 +2098,7 @@ class Item extends BaseController
             }
 
             $updated = $history->save([
+                'update_user_id' => Session::get("user_id"),
                 'status' => ItemOutgoHistory::STATUS_SUCCESS,
                 'update_time' => time(),
             ], [
@@ -2109,6 +2127,8 @@ class Item extends BaseController
             if ($updated != 1) {
                 throw new \Exception("库存记录更新失败");
             }
+
+            ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_OUTGO_AGREE, $history->id, 1);
 
             Db::commit();
             AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO_AGREE_SUCCESS, json_encode($this->request->param())
@@ -2175,6 +2195,7 @@ class Item extends BaseController
             }
 
             $updated = $history->save([
+                'update_user_id' => Session::get("user_id"),
                 'status' => ItemOutgoHistory::STATUS_FAIL,
                 'update_time' => time(),
             ], [
@@ -2204,6 +2225,8 @@ class Item extends BaseController
                 throw new \Exception("库存记录更新失败");
             }
 
+            ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_OUTGO_AGREE, $history->id, 2);
+
             Db::commit();
             AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO_AGREE_REJECT, json_encode($this->request->param())
                 , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
@@ -2215,6 +2238,25 @@ class Item extends BaseController
         }
 
         return $result;
+    }
+
+    public function history($itemId){
+
+        $lists = ItemHistory::where('item_id', $itemId)->order('id desc')->paginate(10, false, ['query'=>request()->param() ]);
+  
+        foreach ($lists as $list) {
+            
+            $list->eventName = $list->getEventName();
+            $list->resultName = $list->getResultName();
+        }
+
+        $breadcrumb = '商品历史';
+
+        return $this->fetch('history', [
+    
+            'lists' => $lists,
+            'breadcrumb' => $breadcrumb
+        ]);
     }
 
 }
