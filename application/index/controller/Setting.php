@@ -362,9 +362,12 @@ class Setting extends BaseController
                 throw new \Exception("名称无效");
             }
 
-            $feature = ItemFeature::where("data", $data)
-                ->where("name_id", $nameId)
-                ->find();
+            $id = $this->request->param('id');
+
+            $feature = ItemFeature::where([
+                "data" => ['=', $data],
+                "id" => ['<>', $id],
+            ])->find();
 
             if (!empty($feature)) {
                 throw new \Exception("该配置已存在");
@@ -380,8 +383,29 @@ class Setting extends BaseController
                 'update_time' => time()
             ]);
 
-            if (!$model->save()) {
-                throw new \Exception("保存错误");
+            if ($id) {
+                if (!$model->update([
+                    'id' => $id,
+                    'category_id' => $name->category_id,
+                    'name_id' => $nameId,
+                    'data' => $data,
+                    'update_time' => time()
+                ])) {
+                    throw new \Exception("保存错误");
+                }
+            } else {
+                $model->data([
+                    'category_id' => $name->category_id,
+                    'name_id' => $nameId,
+                    'data' => $data,
+                    'status' => ItemFeature::STATUS_ACTIVE,
+                    'create_time' => time(),
+                    'update_time' => time()
+                ]);
+    
+                if (!$model->save()) {
+                    throw new \Exception("保存错误");
+                }
             }
 
             AddLog(\app\index\model\Log::ACTION_SETTING_FEATURE_ADD, json_encode($this->request->param())
@@ -510,26 +534,46 @@ class Setting extends BaseController
                 throw new \Exception("名称无效");
             }
 
-            $appearance = ItemAppearance::where("data", $data)
-                ->where("name_id", $nameId)
-                ->find();
+
+            $id = $this->request->param('id');
+
+            $appearance = ItemAppearance::where([
+                'id' => ['<>', $id],
+                'data' => ['=', $data],
+                'name_id' => ['=', $nameId]
+            ])->find();
 
             if (!empty($appearance)) {
                 throw new \Exception("该外观已存在");
             }
 
             $model = new ItemAppearance;
-            $model->data([
-                'category_id' => $name->category_id,
-                'name_id' => $nameId,
-                'data' => $data,
-                'status' => ItemAppearance::STATUS_ACTIVE,
-                'create_time' => time(),
-                'update_time' => time()
-            ]);
 
-            if (!$model->save()) {
-                throw new \Exception("保存错误");
+            if ($id) {
+
+                if (!$model->update([
+                    'id' => $id,
+                    'category_id' => $name->category_id,
+                    'name_id' => $nameId,
+                    'data' => $data,
+                    'update_time' => time()
+                ])) {
+                    throw new \Exception("保存错误");
+                };
+
+            } else {
+                $model->data([
+                    'category_id' => $name->category_id,
+                    'name_id' => $nameId,
+                    'data' => $data,
+                    'status' => ItemAppearance::STATUS_ACTIVE,
+                    'create_time' => time(),
+                    'update_time' => time()
+                ]);
+    
+                if (!$model->save()) {
+                    throw new \Exception("保存错误");
+                }
             }
 
             AddLog(\app\index\model\Log::ACTION_SETTING_APPEARANCE_ADD, json_encode($this->request->param())
@@ -660,26 +704,46 @@ class Setting extends BaseController
                 throw new \Exception("类别无效");
             }
 
-            $edition = ItemEdition::where("data", $data)
-                ->where("category_id", $categoryId)
-                ->find();
+            $id = $this->request->param('id');
+
+            $edition = ItemEdition::where([
+                'id' => ['<>', $id],
+                'data' => ['=', $data],
+                'category_id' => ['=', $categoryId],
+            ])->find();
 
             if (!empty($edition)) {
                 throw new \Exception("该类别下固件版本已存在");
             }
 
             $model = new ItemEdition;
-            $model->data([
-                'category_id' => $categoryId,
-                'name_id' => 0,
-                'data' => $data,
-                'status' => ItemEdition::STATUS_ACTIVE,
-                'create_time' => time(),
-                'update_time' => time()
-            ]);
 
-            if (!$model->save()) {
-                throw new \Exception("保存错误");
+            if ($id) {
+                if (!$model->update([
+                    'id' => $id,
+                    'category_id' => $categoryId,
+                    'name_id' => 0,
+                    'data' => $data,
+                    'update_time' => time()
+                ])) {
+                    if (!$model->save()) {
+                        throw new \Exception("保存错误");
+                    }
+                }
+            } else {
+
+                $model->data([
+                    'category_id' => $categoryId,
+                    'name_id' => 0,
+                    'data' => $data,
+                    'status' => ItemEdition::STATUS_ACTIVE,
+                    'create_time' => time(),
+                    'update_time' => time()
+                ]);
+    
+                if (!$model->save()) {
+                    throw new \Exception("保存错误");
+                }
             }
 
             AddLog(\app\index\model\Log::ACTION_SETTING_EDITION_ADD, json_encode($this->request->param())
@@ -951,7 +1015,13 @@ class Setting extends BaseController
             $message = urldecode($message);
         }
 
-        $lists = ItemChannel::paginate(10, false, ['query'=>request()->param()]);
+        $type = $this->request->param('type', 0);
+
+        if ($type > 0) {
+            $lists = ItemChannel::where('type', $type)->paginate(10, false, ['query'=>request()->param()]);
+        } else {
+            $lists = ItemChannel::paginate(10, false, ['query'=>request()->param()]);
+        }
 
         $itemChannel = new ItemChannel; 
         foreach ($lists as $list) {
@@ -972,10 +1042,8 @@ class Setting extends BaseController
         if (!empty($message)) {
             $message = urldecode($message);
         }
-
         $lists = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)
             ->paginate(10, false, ['query'=>request()->param() ]);
-
         $breadcrumb = '出货途径录入';
 
         return $this->fetch("outgo_channel", [
@@ -989,9 +1057,7 @@ class Setting extends BaseController
     public function addChannel() {
 
         $result = SetResult(200, '保存成功');
-
         $data = $this->request->param('data');
-
         $type = $this->request->param('type');
 
         try {
@@ -999,30 +1065,40 @@ class Setting extends BaseController
             if (empty($data)) {
                 throw new \Exception("值不能为空");
             }
-
             if (empty($type)) {
                 throw new \Exception("渠道类型错误");
             }
 
-            $category = ItemChannel::where("data", $data)
-                ->where("type", $type)
-                ->find();
-
+            $id = $this->request->param('id');
+            $category = ItemChannel::where([
+                "id" => ['<>', $id],
+                "type" => ['=', $data],
+                "data" => ['=', $data]
+            ])->find();
             if (!empty($category)) {
                 throw new \Exception("该渠道已存在");
             }
 
             $model = new ItemChannel;
-            $model->data([
-                'data' => $data,
-                'type' => $type,
-                'status' => ItemChannel::STATUS_ACTIVE,
-                'create_time' => time(),
-                'update_time' => time()
-            ]);
-
-            if (!$model->save()) {
-                throw new \Exception("保存错误");
+            if ($id) {  
+                if (!$model->update([
+                    'id' => $id,
+                    'data' => $data,
+                    'update_time' => time()
+                ])) {
+                    throw new \Exception("保存错误");
+                }
+            } else {
+                $model->data([
+                    'data' => $data,
+                    'type' => $type,
+                    'status' => ItemChannel::STATUS_ACTIVE,
+                    'create_time' => time(),
+                    'update_time' => time()
+                ]);
+                if (!$model->save()) {
+                    throw new \Exception("保存错误");
+                }
             }
 
             AddLog(\app\index\model\Log::ACTION_SETTING_CHANNEL_ADD, json_encode($this->request->param())

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"/data/www/y5g/public/../application/index/view/setting/type.html";i:1571251377;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"/data/www/y5g/public/../application/index/view/setting/type.html";i:1571554594;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -230,7 +230,7 @@
                         <?php else: ?>
                         <a class="btn btn-small btn-success del-item" data-id="<?php echo $temp['id']; ?>" data-href="<?php echo url('openType'); ?>">启用</a>
                         <?php endif; ?>
-                        <button class="btn btn-primary edit"  data-toggle="modal" href="#addItem" data-id="<?php echo $temp['id']; ?>" data-name_id="<?php echo $temp['name_id']; ?>" data-network_id="<?php echo $temp['network_id']; ?>" data-network="<?php echo $temp['itemNetwork']['data']; ?>" data-data="<?php echo $temp['data']; ?>">修改</button>
+                        <button class="btn btn-info edit"  data-toggle="modal" href="#addItem" data-id="<?php echo $temp['id']; ?>" data-name_id="<?php echo $temp['name_id']; ?>" data-network_id="<?php echo $temp['network_id']; ?>" data-network="<?php echo $temp['itemNetwork']['data']; ?>" data-data="<?php echo $temp['data']; ?>">修改</button>
                     </td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
@@ -249,6 +249,7 @@
         </div>
         <form class="form-horizontal" method="post" id="form" data-action="<?php echo url('addType'); ?>">
             <fieldset>
+                <input type="hidden" name="id" id="id"/>
                 <div class="modal-body control-group">
                     <label class="control-label" for="data">名称</label>
                     <div class="controls">
@@ -267,14 +268,6 @@
                         </select>
                     </div>
                 </div>
-                <!-- <div class="modal-body control-group">
-                    <label class="control-label" for="data">网络模式</label>
-                    <div class="controls">
-                        <select id="network_id" class="input-xlarge" name="network_id">
-                           
-                        </select>
-                    </div>
-                </div> -->
                 <div class="modal-body control-group">
                     <label class="control-label" for="network">网络模式</label>
                     <div class="controls">

@@ -34,7 +34,7 @@
 
             <!--<button class="btn btn-success">Action</button>-->
 
-            <button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>
+            <button class="btn btn-primary" id='add' data-toggle="modal" href="#addItem" >录入</button>
 
         </div>
 
@@ -123,6 +123,8 @@
                         {else /}
                         <a class="btn btn-small btn-success del-item" data-id="{$temp.id}" data-href="{:url('openAppearance')}">启用</a>
                         {/if}
+                        <button class="btn btn-info edit"  data-toggle="modal" href="#addItem" data-id="{$temp.id}" data-data="{$temp.data}">修改</button>
+
                     </td>
                 </tr>
                 {/volist}
@@ -141,6 +143,7 @@
         </div>
         <form class="form-horizontal" method="post" id="form" data-action="{:url('addAppearance')}">
             <fieldset>
+                <input type="hidden" name="id" id="id"/>
                 <div class="modal-body control-group">
                     <label class="control-label" for="data">名称</label>
                     <div class="controls">
@@ -215,6 +218,27 @@
                 alert(res.data);
                 window.location.replace("<?php echo url('appearance');?>");
             })
+        })
+
+        $(".edit").click(function(){
+            var id = $(this).data('id');
+            var name_id = $(this).data('name_id');
+            var data = $(this).data('data');
+            console.log(name_id)
+            $("#id").val(id);
+            $('#data').val(data);
+            $('#name_id option').each(function(k, v) {
+                if ($(v).val() == name_id) {
+                    $(v).prop('selected', true)
+                }
+            });
+        });
+        $("#add").click(function(){
+            $("#id").val('');
+            $('#data').val('');
+            $('#name_id option').each(function(k, v) {
+                $(v).prop('selected', false)
+            });
         })
     })
 </script>

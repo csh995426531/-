@@ -5,29 +5,29 @@
         <div class="span12">
 
             <form class="form-inline" method="get">
-            <select class="span2" name="user_id">
-                <option value=""> - 入库人 - </option>
-                {foreach $users as $user}
-                <option value="{$user.id}" {$Think.get.user_id==$user.id ? 'selected' :''}>{$user.username}</opion>
-                {/foreach}
-            </select>
-            <label class="control-label" for="date">进货日期</label>
-            <input type="text" class="input-xlarge span2" id="date"  name="date" value="" data-val="{$Think.get.date}" autocomplete="off">
-            <select class="span2" name="name_id">
-                <option value=""> - 名称 - </option>
-                {foreach $names as $name}
-                <option value="{$name.id}" {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
-                {/foreach}
-            </select>
-            <select class="span2" name="channel_id">
-                <option value=""> - 进货渠道 - </option>
-                {foreach $channels as $channel}
-                <option value="{$channel.id}" {$Think.get.channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
-                {/foreach}
-            </select>
-            <button type="submit" class="btn btn-primary">搜索</button>
-        </form>
-    </div>
+                <select class="span2" name="user_id">
+                    <option value=""> - 入库人 - </option>
+                    {foreach $users as $user}
+                    <option value="{$user.id}" {$Think.get.user_id==$user.id ? 'selected' :''}>{$user.username}</opion>
+                    {/foreach}
+                </select>
+                <label class="control-label" for="date">进货日期</label>
+                <input type="text" class="input-xlarge span2" id="date"  name="date" value="" data-val="{$Think.get.date}" autocomplete="off">
+                <select class="span2" name="name_id">
+                    <option value=""> - 名称 - </option>
+                    {foreach $names as $name}
+                    <option value="{$name.id}" {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
+                    {/foreach}
+                </select>
+                <select class="span2" name="channel_id">
+                    <option value=""> - 进货渠道 - </option>
+                    {foreach $channels as $channel}
+                    <option value="{$channel.id}" {$Think.get.channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
+                    {/foreach}
+                </select>
+                <button type="submit" class="btn btn-primary">搜索</button>
+            </form>
+        </div>
   
         <div class="span12">
             <table class="orders-table table">

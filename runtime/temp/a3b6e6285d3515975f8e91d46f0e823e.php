@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"/data/www/y5g/public/../application/index/view/setting/feature.html";i:1570202081;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"/data/www/y5g/public/../application/index/view/setting/feature.html";i:1571555639;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -229,6 +229,7 @@
                         <?php else: ?>
                         <a class="btn btn-small btn-success del-item" data-id="<?php echo $temp['id']; ?>" data-href="<?php echo url('openFeature'); ?>">启用</a>
                         <?php endif; ?>
+                        <button class="btn btn-info edit"  data-toggle="modal" href="#addItem" data-id="<?php echo $temp['id']; ?>" data-name_id="<?php echo $temp['name_id']; ?>" data-data="<?php echo $temp['data']; ?>">修改</button>
                     </td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
@@ -247,6 +248,7 @@
         </div>
         <form class="form-horizontal" method="post" id="form" data-action="<?php echo url('addFeature'); ?>">
             <fieldset>
+                <input type="hidden" name="id" id="id"/>
                 <div class="modal-body control-group">
                     <label class="control-label" for="data">名称</label>
                     <div class="controls">
@@ -321,6 +323,27 @@
                 alert(res.data);
                 window.location.replace("<?php echo url('feature');?>");
             })
+        })
+        
+        $(".edit").click(function(){
+            var id = $(this).data('id');
+            var name_id = $(this).data('name_id');
+            var data = $(this).data('data');
+            console.log(name_id)
+            $("#id").val(id);
+            $('#data').val(data);
+            $('#name_id option').each(function(k, v) {
+                if ($(v).val() == name_id) {
+                    $(v).prop('selected', true)
+                }
+            });
+        });
+        $("#add").click(function(){
+            $("#id").val('');
+            $('#data').val('');
+            $('#name_id option').each(function(k, v) {
+                $(v).prop('selected', false)
+            });
         })
     })
 </script>

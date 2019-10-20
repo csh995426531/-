@@ -35,7 +35,7 @@
 
             <!--<button class="btn btn-success">Action</button>-->
 
-            <button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>
+            <button class="btn btn-primary" id='add' data-toggle="modal" href="#addItem" >录入</button>
 
         </div>
 
@@ -124,7 +124,8 @@
                         {else /}
                         <a class="btn btn-small btn-success del-item" data-id="{$temp.id}" data-href="{:url('openEdition')}">启用</a>
                         {/if}
-                    </td>
+                        <button class="btn btn-info edit"  data-toggle="modal" href="#addItem" data-id="{$temp.id}" data-category_id="{$temp.category_id}" data-data="{$temp.data}">修改</button>
+                   </td>
                 </tr>
                 {/volist}
                 </tbody>
@@ -142,6 +143,7 @@
         </div>
         <form class="form-horizontal" method="post" id="form" data-action="{:url('addEdition')}">
             <fieldset>
+                <input type="hidden" name="id" id="id"/>
                 <div class="modal-body control-group">
                     <label class="control-label" for="data">类别</label>
                     <div class="controls">
@@ -212,6 +214,26 @@
                 alert(res.data);
                 window.location.replace("<?php echo url('edition');?>");
             })
+        })
+        $(".edit").click(function(){
+            var id = $(this).data('id');
+            var category_id = $(this).data('category_id');
+            var data = $(this).data('data');
+
+            $("#id").val(id);
+            $('#data').val(data);
+            $('#category_id option').each(function(k, v) {
+                if ($(v).val() == category_id) {
+                    $(v).prop('selected', true)
+                }
+            });
+        });
+        $("#add").click(function(){
+            $("#id").val('');
+            $('#data').val('');
+            $('#category_id option').each(function(k, v) {
+                $(v).prop('selected', false)
+            });
         })
     })
 </script>

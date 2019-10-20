@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"/data/www/y5g/public/../application/index/view/setting/name.html";i:1571248245;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"/data/www/y5g/public/../application/index/view/setting/name.html";i:1571554288;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -226,7 +226,7 @@
                         <?php else: ?>
                         <a class="btn btn-small btn-success del-item" data-id="<?php echo $temp['id']; ?>" data-href="<?php echo url('openName'); ?>">启用</a>
                         <?php endif; ?>
-                        <button class="btn btn-primary edit"  data-toggle="modal" href="#addItem" data-id="<?php echo $temp['id']; ?>" data-category_id="<?php echo $temp['category_id']; ?>" data-data="<?php echo $temp['data']; ?>">修改</button>
+                        <button class="btn btn-info edit"  data-toggle="modal" href="#addItem" data-id="<?php echo $temp['id']; ?>" data-category_id="<?php echo $temp['category_id']; ?>" data-data="<?php echo $temp['data']; ?>">修改</button>
                     </td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>

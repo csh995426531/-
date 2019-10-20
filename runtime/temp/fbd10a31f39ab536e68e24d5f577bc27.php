@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:74:"/data/www/y5g/public/../application/index/view/setting/income_channel.html";i:1571075699;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:74:"/data/www/y5g/public/../application/index/view/setting/income_channel.html";i:1571558853;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -138,9 +138,19 @@
             <!--<button class="btn btn-info">Action</button>-->
 
             <!--<button class="btn btn-success">Action</button>-->
-
-            <button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>
-
+            <div class="col-lg-5 pull-left">
+                <form class="form-inline" method="get">
+                    <select class="span2" name="type">
+                        <option value=""> - 渠道类型 - </option>
+                        <option value="1" <?php echo \think\Request::instance()->get('channel_id')==1?'selected' :''; ?>>进货渠道</option>
+                        <option value="2" <?php echo \think\Request::instance()->get('channel_id')==2?'selected' :''; ?>>出货渠道</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">搜索</button>
+                </form>
+            </div>
+            <div class="col-lg-5 pull-right">
+                <button class=" btn btn-primary" id='add' data-toggle="modal" href="#addItem" >录入</button>
+            </div>
         </div>
 
         <div class="span12">
@@ -226,6 +236,7 @@
                         <?php else: ?>
                         <a class="btn btn-small btn-success del-item" data-id="<?php echo $temp['id']; ?>" data-href="<?php echo url('openChannel'); ?>">启用</a>
                         <?php endif; ?>
+                        <button class="btn btn-info edit"  data-toggle="modal" href="#addItem" data-id="<?php echo $temp['id']; ?>" data-type="<?php echo $temp['type']; ?>" data-data="<?php echo $temp['data']; ?>">修改</button>
                     </td>
                 </tr>
                 <?php endforeach; endif; else: echo "" ;endif; ?>
@@ -244,13 +255,14 @@
         </div>
         <form class="form-horizontal" method="post" id="form" data-action="<?php echo url('addChannel'); ?>">
             <fieldset>
-                <input type="hidden" name="type" value="1">
+                <input type="hidden" name="id" id="id"/>
+                <input type="hidden" name="type" id="type" value="1">
                 <div class="modal-body control-group">
                     <label class="control-label" for="data">类型：</label>
                     <div class="controls">
-                        <select name="type">
-                            <option value="1">进货类型</option>
-                            <option value="2">出货类型</option>
+                        <select name="type" id="select-type">
+                            <option value="1">进货渠道</option>
+                            <option value="2">出货渠道</option>
                         </select>
                     </div>
                 </div>
@@ -314,6 +326,27 @@
                 alert(res.data);
                 window.location.replace("<?php echo url('incomeChannel');?>");
             })
+        })
+        $(".edit").click(function(){
+            var id = $(this).data('id');
+            var type = $(this).data('type');
+            var data = $(this).data('data');
+            $("#id").val(id);
+            $('#data').val(data);
+            $('#select-type option').each(function(k, v) {
+                if ($(v).val() == type) {
+                    $(v).prop('selected', true)
+                }
+            });
+            $('#select-type').prop('disabled', true)
+        });
+        $("#add").click(function(){
+            $("#id").val('');
+            $('#data').val('');
+            $('#select-type').prop('disabled', false)
+            $('#select-type option').each(function(k, v) {
+                $(v).prop('selected', false)
+            });
         })
     })
 </script>
