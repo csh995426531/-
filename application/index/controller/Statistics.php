@@ -16,6 +16,88 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class Statistics extends BaseController
 {
+    public function index()
+    {
+        $breadcrumb = '首页';
+
+        $start_time = strtotime('-30 day', strtotime(date("Y-m-d"),time()));
+        $result = [];
+        for ($time = $start_time; $time < time(); $time+=86400) {
+            $result[date('Y-m-d', $time)] = [
+                'date' => date('Y-m-d', $time),
+                'income_amount' => 0,
+                'income_num' => 0,
+                'outgo_amount' => 0,
+                'outgo_num' => 0,
+                'return_amount' => 0,
+                'return_num' => 0,
+            ];
+        }
+
+        $income_date = \app\index\model\ItemIncomeHistory::alias('t')
+            ->join('item i', 'i.id= t.item_id')
+            ->where([
+                't.status' => ['=', ItemIncomeHistory::STATUS_SUCCESS],
+                't.type' => ['=', ItemIncomeHistory::TYPE_INCOME],
+                't.create_time' => ['>=', $start_time]
+            ])
+            ->group('date')
+            ->field('FROM_UNIXTIME(t.create_time, "%Y-%m-%d" ) as date, sum(i.price) as all_price, count(*) as all_num')
+            ->order('date asc')
+            ->select();
+
+        foreach ($income_date as $temp) {
+            $result[$temp['date']]['income_amount'] = number_format($temp['all_price'], 2, '.', '');
+            $result[$temp['date']]['income_num'] = $temp['all_num'];
+        }
+
+        $outgo_date = \app\index\model\ItemOutgoHistory::where([
+                'status' => ['in', [
+                    ItemOutgoHistory::STATUS_SUCCESS,
+                    ItemOutgoHistory::STATUS_RETURN_WAIT,
+                    ItemOutgoHistory::STATUS_RETURN
+                ]],
+                'create_time' => ['>=', $start_time]
+            ])
+            ->field('sum(price) as all_price, count(*) as all_num, FROM_UNIXTIME(create_time, "%Y-%m-%d" ) as date')
+            ->group('date')
+            ->order('date asc')
+            ->select();
+
+        foreach ($outgo_date as $temp) {
+            $result[$temp['date']]['outgo_amount'] = number_format($temp['all_price'], 2, '.', '');
+            $result[$temp['date']]['outgo_num'] = $temp['all_num'];
+        }
+
+        $return_date = \app\index\model\ItemIncomeHistory::alias('t')
+            ->join('item i', 'i.id= t.item_id')
+            ->where([
+                't.status' => ['=', ItemIncomeHistory::STATUS_SUCCESS],
+                't.type' => ['=', ItemIncomeHistory::TYPE_RETURN_INCOME],
+                't.create_time' => ['>=', $start_time]
+            ])
+            ->field('sum(i.price) as all_price, count(*) as all_num, FROM_UNIXTIME(t.create_time, "%Y-%m-%d" ) as date')
+            ->group('date')
+            ->order('date asc')
+            ->select();
+
+        foreach ($return_date as $temp) {
+            $result[$temp['date']]['return_amount'] = number_format($temp['all_price'], 2, '.', '');
+            $result[$temp['date']]['return_num'] = $temp['all_num'];
+        }
+
+        return $this->fetch('index', [
+            'breadcrumb' => $breadcrumb,
+            'date' => array_column($result, 'date'),
+            'income_amount' => array_column($result, 'income_amount'),
+            'income_num' => array_column($result, 'income_num'),
+            'outgo_amount' => array_column($result, 'outgo_amount'),
+            'outgo_num' => array_column($result, 'outgo_num'),
+            'return_amount' => array_column($result, 'return_amount'),
+            'return_num' => array_column($result, 'return_num')
+        ]);
+    }
+
     //进货统计
     public function income()
     {

@@ -6,7 +6,7 @@
                     <tbody>
     
                     {volist name='lists' id='temp'}
-                    <div style="margin: 20px 30px;font-size: 1.2em">
+                    <div style="margin: 30px;font-size: 1.2em">
                         <?php 
                             echo $temp->create_time . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;【' . $temp->eventName . '】&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                             if (in_array($temp->event, [1,2])) {

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:69:"/data/www/y5g/public/../application/index/view/statistics/profit.html";i:1570202082;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:69:"/data/www/y5g/public/../application/index/view/statistics/profit.html";i:1570202082;s:48:"/data/www/y5g/application/index/view/layout.html";i:1572276218;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -30,9 +30,7 @@
             <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
                 <h1><i class="icon-large"></i> <img src="/bg.png"></h1>
                 <ul class="side-nav">
-                    <li class="active">
-                        <a href="index.html"><i class="icon-home"></i> Dashboard</a>
-                    </li>
+                    <li><a href="<?php echo url('/index/statistics/index'); ?>"><i class="icon-home"></i>数据统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-dropdown" href="#"><i class="icon-th"></i> 库存查询 <b class="caret"></b></a>
                         <ul id="item-dropdown" class="collapse">
