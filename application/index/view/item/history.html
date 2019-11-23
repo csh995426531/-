@@ -8,40 +8,51 @@
                     {volist name='lists' id='temp'}
                     <div style="margin: 30px;font-size: 1.2em">
                         <?php 
+                        
                             echo $temp->create_time . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;【' . $temp->eventName . '】&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                             if (in_array($temp->event, [1,2])) {
                                 echo '入库价格: ' . number_format($temp->item->price, 2) . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                                 if ($temp->event == 1) { //入库
                                     echo '入库人:';
-                                    echo $temp->incomeHistory->createUser ? $temp->incomeHistory->createUser->username : '' . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                                    echo $temp->incomeHistory->createUser ? $temp->incomeHistory->createUser->username : '' ;
+                                    echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
                                 } else { //入库审核
                                     echo '审核人:';
-                                    echo $temp->incomeHistory->updateUser ? $temp->incomeHistory->updateUser->username : '' . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . '结果:' .$temp->resultName . '&nbsp;&nbsp;&nbsp;';
+                                    echo $temp->incomeHistory->updateUser ? $temp->incomeHistory->updateUser->username : '' ;
+                                    echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . '结果:' .$temp->resultName . '&nbsp;&nbsp;&nbsp;';
                                 }
                             } elseif (in_array($temp->event, [4,6])) {
                                 echo '审核人:';
                                 if ($temp->event == 4) { //销售出库审核
-                                    echo $temp->outgoHistory->updateUser ? $temp->outgoHistory->updateUser->username : '' . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                                    echo $temp->outgoHistory->updateUser ? $temp->outgoHistory->updateUser->username : '' ;
+                                    echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
                                 } else { //退货入库审核
-                                    echo $temp->incomeHistory->updateUser ? $temp->incomeHistory->createUser->username : '' . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                                    echo $temp->incomeHistory->updateUser ? $temp->incomeHistory->createUser->username : '' ;
+                                    echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
                                 }
                                 echo '结果:' .$temp->resultName . '&nbsp;&nbsp;&nbsp;';
                             } elseif ($temp->event == 3) { //销售出库
                                 echo '出库人:';
-                                echo $temp->outgoHistory->createUser ? $temp->outgoHistory->createUser->username : '' . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                                echo $temp->outgoHistory->createUser ? $temp->outgoHistory->createUser->username : '' ;
+                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
                                 echo '销售渠道:';
-                                echo $temp->outgoHistory ? $temp->outgoHistory->itemChannel->data : '' . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                                echo $temp->outgoHistory->itemChannel ? $temp->outgoHistory->itemChannel->data : '' ;
+                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
                                 echo '销售订单号:';
-                                echo $temp->order_no ? $temp->outgoHistory->order_no : '' . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                                echo $temp->outgoHistory ? $temp->outgoHistory->order_no : '' ;
+                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
                                 echo '销售价格:';
-                                echo $temp->order_no ? number_format($temp->outgoHistory->price, 2) : '' . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                                echo $temp->outgoHistory ? number_format($temp->outgoHistory->price, 2) : '' ;
+                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
                                 echo '营销成本:';
-                                echo $temp->order_no ? number_format($temp->outgoHistory->cost, 2) : '' . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                                echo $temp->outgoHistory ? number_format($temp->outgoHistory->cost, 2) : '' ;
+                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
                                 echo '买家昵称:';
-                                echo $temp->order_no ? $temp->outgoHistory->consignee_nickname : '' . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
-                            } elseif ($temp->event == 5) {//退货入库
+                                echo $temp->outgoHistory ? $temp->outgoHistory->consignee_nickname : '' ;
+                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                            } elseif ($temp->event == 5) { //退货入库
                                 echo '入库人:';
-                                echo $temp->incomeHistory->createUser ? $temp->incomeHistory->createUser->username : '' . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                                echo $temp->incomeHistory->createUser ? $temp->incomeHistory->createUser->username : '' ;
                             }
                         ?>
                     </div>

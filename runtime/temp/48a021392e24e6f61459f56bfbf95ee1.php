@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1571567076;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1571567076;s:48:"/data/www/y5g/application/index/view/layout.html";i:1574525159;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -30,9 +30,7 @@
             <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
                 <h1><i class="icon-large"></i> <img src="/bg.png"></h1>
                 <ul class="side-nav">
-                    <li class="active">
-                        <a href="index.html"><i class="icon-home"></i> Dashboard</a>
-                    </li>
+                    <li><a href="<?php echo url('/index/statistics/index'); ?>"><i class="icon-home"></i>数据统计</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-dropdown" href="#"><i class="icon-th"></i> 库存查询 <b class="caret"></b></a>
                         <ul id="item-dropdown" class="collapse">
@@ -438,39 +436,39 @@
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/bootstrap.js"></script>
 <script src="/static/js/excanvas.min.js"></script>
-<script src="/static/js/jquery.flot.min.js"></script>
-<script src="/static/js/jquery.flot.resize.js"></script>
+<!-- <script src="/static/js/jquery.flot.min.js"></script> -->
+<!-- <script src="/static/js/jquery.flot.resize.js"></script> -->
 <script src="/static/js/jquery-192custom.min.js"></script>
 <script type="text/javascript">
-    $(function () {
-        var d1 = [];
-        d1.push([0, 32]);
-        d1.push([1, 30]);
-        d1.push([2, 24]);
-        d1.push([3, 17]);
-        d1.push([4, 11]);
-        d1.push([5, 25]);
-        d1.push([6, 28]);
-        d1.push([7, 36]);
-        d1.push([8, 44]);
-        d1.push([9, 52]);
-        d1.push([10, 53]);
-        d1.push([11, 50]);
-        d1.push([12, 45]);
-        d1.push([13, 42]);
-        d1.push([14, 40]);
-        d1.push([15, 36]);
-        d1.push([16, 34]);
-        d1.push([17, 24]);
-        d1.push([18, 17]);
-        d1.push([19, 17]);
-        d1.push([20, 20]);
-        d1.push([21, 28]);
-        d1.push([22, 36]);
-        d1.push([23, 38]);
+    // $(function () {
+    //     var d1 = [];
+    //     d1.push([0, 32]);
+    //     d1.push([1, 30]);
+    //     d1.push([2, 24]);
+    //     d1.push([3, 17]);
+    //     d1.push([4, 11]);
+    //     d1.push([5, 25]);
+    //     d1.push([6, 28]);
+    //     d1.push([7, 36]);
+    //     d1.push([8, 44]);
+    //     d1.push([9, 52]);
+    //     d1.push([10, 53]);
+    //     d1.push([11, 50]);
+    //     d1.push([12, 45]);
+    //     d1.push([13, 42]);
+    //     d1.push([14, 40]);
+    //     d1.push([15, 36]);
+    //     d1.push([16, 34]);
+    //     d1.push([17, 24]);
+    //     d1.push([18, 17]);
+    //     d1.push([19, 17]);
+    //     d1.push([20, 20]);
+    //     d1.push([21, 28]);
+    //     d1.push([22, 36]);
+    //     d1.push([23, 38]);
 
-        $.plot($("#placeholder"), [ d1 ], { grid: { backgroundColor: 'white', color: '#999', borderWidth: 1, borderColor: '#DDD' }, colors: ["#FC6B0A"], series: { lines: { show: true, fill: true, fillColor: "rgba(253,108,11,0.4)" } } });
-    });
+    //     // $.plot($("#placeholder"), [ d1 ], { grid: { backgroundColor: 'white', color: '#999', borderWidth: 1, borderColor: '#DDD' }, colors: ["#FC6B0A"], series: { lines: { show: true, fill: true, fillColor: "rgba(253,108,11,0.4)" } } });
+    // });
 </script>
 
 

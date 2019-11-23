@@ -56,16 +56,15 @@ class Item extends BaseController
         $sql = ItemIncomeHistory::alias('t')
             ->field('t.*')
             ->join('item i', 'i.id=t.item_id')
-            ->where([
-                "t.status" => ['in', [
+            ->where(function ($query) {
+                $query->where('t.status', 'in', [
                     ItemIncomeHistory::STATUS_WAIT, 
                     ItemIncomeHistory::STATUS_FAIL
-                ]],
-                "t.type" => ['=', ItemIncomeHistory::TYPE_INCOME]
-            ])->whereOr([
-                "t.status" => ['=', ItemIncomeHistory::STATUS_WAIT],
-                "t.type" => ['=', ItemIncomeHistory::TYPE_RETURN_INCOME]
-            ]);
+                ])->where('t.type', ItemIncomeHistory::TYPE_INCOME);
+            })->whereOr(function ($query) {
+                $query->where('t.status', ItemIncomeHistory::STATUS_WAIT)
+                ->where('t.type', ItemIncomeHistory::TYPE_RETURN_INCOME);
+            });
 
         $user_id = $this->request->get('user_id');
 
@@ -94,7 +93,7 @@ class Item extends BaseController
             $sql = $sql->where('i.channel_id', $channel_id);
         }
 
-        $lists = $sql->paginate(10, false, ['query'=>request()->param() ]);
+        $lists = $sql->order('update_time', 'desc')->paginate(10, false, ['query'=>request()->param() ]);
     
         $breadcrumb = '入库记录处理';
 
