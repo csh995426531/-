@@ -24,7 +24,7 @@ class BaseController extends Controller
 
         $uri = $this->request->module() .'/'. $this->request->controller() .'/'. $this->request->action();
 
-        if (!in_array(strtolower($uri), ["login", "index/index/logout", 'index/statistics/index'])) {
+        if (!in_array(strtolower($uri), ["login", "index/index/login", "index/index/logout", 'index/statistics/index'])) {
 
             $userId = Session::get("user_id");
 
@@ -42,7 +42,7 @@ class BaseController extends Controller
             ->where("status", UserAccess::STATUS_ACTIVE)
             ->select();
 
-        $nodes = ['login','index/index/logout','index/index/index', 'index/statistics/index', 'index/item/changename', 'index/item/changecategory'];
+        $nodes = ['login', "index/index/login", 'index/index/logout','index/index/index', 'index/statistics/index', 'index/item/changename', 'index/item/changecategory'];
         if (!empty($userNodes)) {
             $userNodesTemp = collection($userNodes)->toArray();
 

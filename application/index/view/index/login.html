@@ -12,14 +12,21 @@
 <div class="login">
     <form action="" method="post" id="form">
         <div class="logo"><h1>库存管理系统</h1></div>
-        <div class="login_form">
-            <div class="user">
-                <input class="text_value" value="" name="account" type="text" id="account" placeholder="账号">
-                <input class="text_value" value="" name="pwd" type="password" id="pwd" placeholder="密码">
+        <div style="padding-left: 160px;">
+            <div class="user-login">
+                <input style="height: 40px;width: 300px;" class="text_value" value="" name="account" type="text" id="account" placeholder="账号" required="">
             </div>
-            <button class="button" id="submit" type="submit">登录</button>
+            <div class="user-login" style="margin-top: 10px;">
+                <input style="height: 40px;width: 300px;" class="text_value" value="" name="pwd" type="password" id="pwd" placeholder="密码" required="">
+            </div>
+            <div class="user-login" style="position: relative;">
+                <input style="height: 40px;width: 300px;" type="text" name="captcha" placeholder="请输入验证码" required="">
+                <img src="{:captcha_src()}" style="position: relative;top: 15px;" width="95" height="40" onclick="this.src='{:captcha_src()}'">
+            </div>
+            <div class="user-login" style="margin-top: 10px;">
+                <button style="height: 40px;width: 300px;" class="button" id="submit" type="submit">登录</button>
+            </div>
         </div>
-
         <div id="tip"></div>
         <div class="foot">
         </div>

@@ -18,6 +18,7 @@ class Index extends BaseController
 
             $account = $this->request->post("account");
             $pwd = $this->request->post("pwd");
+            $captcha = $_REQUEST['captcha'];
 
             try {
 
@@ -25,6 +26,10 @@ class Index extends BaseController
 
                     throw new \Exception("账号和密码不能为空");
                 }
+
+                if(!captcha_check($captcha)){
+                    throw new \Exception('验证码输入错误');
+                };
 
                 $user = User::where("username", $account)
                     ->where("status", User::STATUS_ACTIVE)
