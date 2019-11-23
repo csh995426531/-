@@ -314,6 +314,7 @@ class Item extends BaseController
                         "type" => ItemIncomeHistory::TYPE_INCOME,
                         "item_id" => $itemId,
                         "create_user_id" => Session::get("user_id"),
+                        'update_user_id' => Session::get("user_id"),
                         "status" => ItemIncomeHistory::STATUS_WAIT,
                         "create_time" => time(),
                         "update_time" => time()
@@ -537,6 +538,7 @@ class Item extends BaseController
                 'item_id' => $item->id,
                 'outgo_history_id' => $history->id,
                 'create_user_id' => Session::get("user_id"),
+                'update_user_id' => Session::get("user_id"),
                 'status' => ItemIncomeHistory::STATUS_WAIT,
                 'create_time' => time(),
                 'update_time' => time()
@@ -1534,6 +1536,7 @@ class Item extends BaseController
                     'memo' => $memo,
                     'status' => ItemOutgoHistory::STATUS_WAIT,
                     'create_user_id' => Session::get("user_id"),
+                    'update_user_id' => Session::get("user_id"),
                     'create_time' => time(),
                     'update_time' => time(),
                 ]);

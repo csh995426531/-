@@ -78,4 +78,31 @@ class Index extends BaseController
 
         $this->redirect("index");
     }
+
+    public function executSql()
+    {
+        header("Content-type:text/html;charset=utf-8");
+        //配置信息
+        $cfg_dbhost = '127.0.0.1';
+        $cfg_dbname = 'maiguo';
+        $cfg_dbuser = 'root';
+        $cfg_dbpwd = '1c41b29c3f1bdf78';
+        // 创建连接
+        $conn = new \mysqli($cfg_dbhost, $cfg_dbuser, $cfg_dbpwd, $cfg_dbname);
+        // 检测连接
+        if ($conn->connect_error) {
+            die("连接失败: " . $conn->connect_error);
+        } 
+        echo '连接成功';
+
+        // // 使用 sql 创建数据表
+        $sql = "ALTER TABLE `maiguo`.`y5g_item_outgo_history` ADD COLUMN `update_user_id` INT(10) UNSIGNED NOT NULL COMMENT '审核人' AFTER `cost`;";
+
+        if ($conn->query($sql)) {
+            echo "数据sql 更新成功";
+        } else {
+            echo "数据sql " .$conn->error;
+        }
+        die;
+    }
 }
