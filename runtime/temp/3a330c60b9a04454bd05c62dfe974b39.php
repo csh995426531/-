@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:63:"/data/www/y5g/public/../application/index/view/index/login.html";i:1574521983;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:63:"/data/www/y5g/public/../application/index/view/index/login.html";i:1585842086;}*/ ?>
 <!--<div><img src="<?php echo captcha_src(); ?>" alt="captcha" onclick="this.src='<?php echo captcha_src(); ?>'" /></div>-->
 <!DOCTYPE html>
 <html>
@@ -21,13 +21,19 @@
                 <input style="height: 40px;width: 300px;" class="text_value" value="" name="pwd" type="password" id="pwd" placeholder="密码" required="">
             </div>
             <div class="user-login" style="position: relative;">
-                <input style="height: 40px;width: 300px;" type="text" name="captcha" placeholder="请输入验证码" required="">
-                <img src="<?php echo captcha_src(); ?>" style="position: relative;top: 15px;" width="95" height="40" onclick="this.src='<?php echo captcha_src(); ?>'">
+                <input style="height: 40px;width: 195px;" type="text" name="captcha" placeholder="请输入验证码" required="">
+                <img src="<?php echo captcha_src(); ?>" style="position: relative;top: 17px;" width="95" height="43" onclick="this.src='<?php echo captcha_src(); ?>'">
             </div>
+            
+          
             <div class="user-login" style="margin-top: 10px;">
                 <button style="height: 40px;width: 300px;" class="button" id="submit" type="submit">登录</button>
             </div>
+             <div>
+          <a href="http://www.miibeian.gov.cn/">粤ICP备15051608号-2 </a>
+             </div>
         </div>
+        
         <div id="tip"></div>
         <div class="foot">
         </div>

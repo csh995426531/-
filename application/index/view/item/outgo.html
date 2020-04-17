@@ -82,17 +82,19 @@
                         <th>ID</th>
                         <th>入库时间</th>
                         <th>型号</th>
-                        <th>分类</th>
-                        <th>名称</th>
+                        <!--<th>分类</th>-->
+                        <th>商品名称</th>
                         <th>网络模式</th>
                         <th>配置</th>
                         <th>外观</th>
-                        <th>序列号</th>
-                        <th>固件版本</th>
-                        <th>备注</th>
+                        <th>—唯一序列号—</th>
+                        <th>版本</th>
+                	    <th>进货渠道</th>
                         <th>进货价格</th>
-                        <th>进货渠道</th>
-                        <th>状态</th>
+                        <th>商品备注</th>
+                        
+
+                        <th>状态[全]</th>
                         <th class="actions">操作</th>
                     </tr>
                     </thead>
@@ -145,17 +147,19 @@
                         <td><span>{$temp.id}</span></td>
                         <th><span>{$temp.date}</span></th>
                         <th><span>{$temp.itemType.data}</span></th>
-                        <th><span>{$temp.itemCategory.data}</span></th>
+                        <!--<th><span>{$temp.itemCategory.data}</span></th>-->
                         <th><span>{$temp.itemName.data}</span></th>
                         <th><span>{$temp.itemNetwork.data}</span></th>
                         <th><span>{$temp.itemFeature.data}</span></th>
                         <th><span>{$temp.itemAppearance.data}</span></th>
-                        <th><span>{$temp.number}</span></th>
+                        
+ 						<th>串号:<a href="https://checkcoverage.apple.com/cn/zh/?sn={$temp.number}" target="_blank"><span>{$temp.number}</span></a></th>
+                      
                         <th><span>{$temp.itemEdition.data}</span></th>
-                        <th title="{$temp.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 10 ? mb_substr($temp->memo, 0, 10).'…' : $temp->memo; ?></span></th>
-                        <th><span>{$temp.price}</span></th>
                         <th><span>{$temp.itemChannel.data}</span></th>
-                        <th title="{$temp.prepare}" style="cursor: pointer"><span>{$temp.statusName}</span></th>
+                         <th><span>{$temp.price*1}</span></th>
+                        <th title="{$temp.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 8 ? mb_substr($temp->memo, 0, 8).'…' : $temp->memo; ?></span></th>
+                        <th title="{$temp.prepare}" style="cursor: pointer"><a href="{:url('item/history',['item_id'=>$temp.id])}" target="_blank"><span>{$temp.statusName}</span></a></th>
                         <td class="actions">
                             <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
                             <?php if(in_array($temp->status, [2,8])){?>

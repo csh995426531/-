@@ -14,7 +14,7 @@ return [
     'type'            => 'mysql',
     // 服务器地址
     //  'hostname'        => '127.0.0.1',//本地
-   'hostname'      => '172.18.0.3', //公司docker mysql地址
+   'hostname'      => '172.26.0.3', //公司docker mysql地址
     // 数据库名
     'database'        => 'maiguo2',
     // 用户名

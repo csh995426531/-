@@ -231,10 +231,11 @@ class Item extends BaseController
                         \app\index\model\Item::STATUS_NORMAL,
                         \app\index\model\Item::STATUS_OUTGO_WAIT,
                         \app\index\model\Item::STATUS_PREPARE,
+                        \app\index\model\Item::STATUS_LOSE,
                         ])
                     ->find();
 
-                if (!empty($item) && !$history ) {
+                if (!empty($item) && empty($history)) {
                     throw new \Exception("序列号重复");
                 } elseif (!empty($item) && !empty($history) && $item->id != $history->item->id) {
                     throw new \Exception("序列号重复");
@@ -1281,11 +1282,11 @@ class Item extends BaseController
 
         $status = [
             \app\index\model\Item::STATUS_NORMAL => '在库',
-            \app\index\model\Item::STATUS_OUTGO_WAIT => '出库待核'
+            \app\index\model\Item::STATUS_LOSE => '盘库外'
         ];
 
         $breadcrumb = '盘点丢失';
-
+   
         return $this->fetch('special_outgo2', [
             'breadcrumb' => $breadcrumb,
             'channels' => $channels,
@@ -1773,7 +1774,7 @@ class Item extends BaseController
 
         $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
 
-        foreach ($lists as $list) {
+        foreach ($lists as &$list) {
             $list->statusName = $list->getStatusName();
         }
 
@@ -1898,101 +1899,102 @@ class Item extends BaseController
 
     //综合查询
     public function search(){
-        $lists = \app\index\model\Item::where('id', '>', '0');
+        // $lists = \app\index\model\Item::where('id', '>', '0');
 
-        $typeId = $this->request->get("type_id");
+        // $typeId = $this->request->get("type_id");
 
-        if (!empty($typeId)) {
-            $typeArr = ItemType::where("data", $typeId)
-                ->column('id');
-            $lists = $lists->where("type_id",  'in', $typeArr);
-        }
+        // if (!empty($typeId)) {
+        //     $typeArr = ItemType::where("data", $typeId)
+        //         ->column('id');
+        //     $lists = $lists->where("type_id",  'in', $typeArr);
+        // }
 
-        $nameId = $this->request->get("name_id");
+        // $nameId = $this->request->get("name_id");
 
-        if (!empty($nameId)) {
-            $nameArr = ItemName::where("data", $nameId)
-            ->column('id');
-            $lists = $lists->where("name_id",  'in', $nameArr);
-        }
+        // if (!empty($nameId)) {
+        //     $nameArr = ItemName::where("data", $nameId)
+        //     ->column('id');
+        //     $lists = $lists->where("name_id",  'in', $nameArr);
+        // }
 
-        $featureId = $this->request->get("feature_id");
+        // $featureId = $this->request->get("feature_id");
 
-        if (!empty($featureId)) {
-            $featureArr = ItemFeature::where("data", $featureId)
-            ->column('id');
+        // if (!empty($featureId)) {
+        //     $featureArr = ItemFeature::where("data", $featureId)
+        //     ->column('id');
             
-            $lists = $lists->where("feature_id",  'in',  $featureArr);
-        }
+        //     $lists = $lists->where("feature_id",  'in',  $featureArr);
+        // }
 
-        $networkId = $this->request->get("network_id");
+        // $networkId = $this->request->get("network_id");
 
-        if (!empty($networkId)) {
+        // if (!empty($networkId)) {
 
-            $networkArr = ItemNetwork::where("data", $networkId)
-            ->column('id');
+        //     $networkArr = ItemNetwork::where("data", $networkId)
+        //     ->column('id');
 
-            $typeArr2 = ItemType::where("network_id" ,  'in',  $networkArr)->field("id")->select();
-            $lists = $lists->where("type_id", 'in',  array_column($typeArr2, 'id'));
-        }
+        //     $typeArr2 = ItemType::where("network_id" ,  'in',  $networkArr)->field("id")->select();
+        //     $lists = $lists->where("type_id", 'in',  array_column($typeArr2, 'id'));
+        // }
 
-        $appearanceId = $this->request->get("appearance_id");
+        // $appearanceId = $this->request->get("appearance_id");
 
-        if (!empty($appearanceId)) {
+        // if (!empty($appearanceId)) {
 
-            $appearanceArr = ItemAppearance::where("data", $appearanceId)
-            ->column('id');
-            $lists = $lists->where("appearance_id",  'in', $appearanceArr);
-        }
+        //     $appearanceArr = ItemAppearance::where("data", $appearanceId)
+        //     ->column('id');
+        //     $lists = $lists->where("appearance_id",  'in', $appearanceArr);
+        // }
 
-        $categoryId = $this->request->get("category_id");
+        // $categoryId = $this->request->get("category_id");
 
-        if (!empty($categoryId)) {
-            $categoryArr = ItemCategory::where("data", $categoryId)
-            ->column('id');
-            $lists = $lists->where("category_id",  'in', $categoryArr);
-        }
+        // if (!empty($categoryId)) {
+        //     $categoryArr = ItemCategory::where("data", $categoryId)
+        //     ->column('id');
+        //     $lists = $lists->where("category_id",  'in', $categoryArr);
+        // }
 
-        $editionId = $this->request->get("edition_id");
+        // $editionId = $this->request->get("edition_id");
 
-        if (!empty($editionId)) {
-            $editionArr = ItemEdition::where("data", $editionId)
-            ->column('id');
-            $lists = $lists->where("edition_id",  'in', $editionArr);
-        }
+        // if (!empty($editionId)) {
+        //     $editionArr = ItemEdition::where("data", $editionId)
+        //     ->column('id');
+        //     $lists = $lists->where("edition_id",  'in', $editionArr);
+        // }
 
-        $channelId = $this->request->get("channel_id");
+        // $channelId = $this->request->get("channel_id");
 
-        if (!empty($channelId)) {
-            $channelArr = ItemChannel::where("data", $channelId)
-            ->column('id');
-            $lists = $lists->where("channel_id",  'in', $channelArr);
-        }
+        // if (!empty($channelId)) {
+        //     $channelArr = ItemChannel::where("data", $channelId)
+        //     ->column('id');
+        //     $lists = $lists->where("channel_id",  'in', $channelArr);
+        // }
 
-        $date = $this->request->get("date");
+        // $date = $this->request->get("date");
 
-        if (!empty($date) && $date > 0) {
-            $lists = $lists->where("date", $date);
-        }
+        // if (!empty($date) && $date > 0) {
+        //     $lists = $lists->where("date", $date);
+        // }
 
-        $status = $this->request->get("status");
+        // $status = $this->request->get("status");
 
-        if (!empty($status) && $status > 0) {
-            $lists = $lists->where("status", $status);
-        }
+        // if (!empty($status) && $status > 0) {
+        //     $lists = $lists->where("status", $status);
+        // }
 
-        $keyword = $this->request->get("keyword");
+        // $keyword = $this->request->get("keyword");
 
-        if (!empty($keyword)) {
-            $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
-        }
+        // if (!empty($keyword)) {
+        //     $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
+        // }
 
-        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
+        // $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
 
-        foreach ($lists as $list) {
-            $list->statusName = $list->getStatusName();
-            $list->lastOutNo = $list->getLastOutgoNo();
-        }
+        // foreach ($lists as $list) {
+        //     $list->statusName = $list->getStatusName();
+        //     $list->lastOutNo = $list->getLastOutgoNo();
+        // }
+        $lists = (new ItemService)->getList($this->request->param(false));
 
         $types = ItemType::where("status", ItemType::STATUS_ACTIVE)->distinct(true)->field('data')->select();
 
@@ -2010,7 +2012,7 @@ class Item extends BaseController
 
         $channels = ItemChannel::where("status",  ItemChannel::STATUS_ACTIVE)->distinct(true)->field('data')->select();
       
-      
+            
         $dates = Db::table('y5g_item')->distinct(true)->field("date")->select();
 
         $dates = array_column($dates, 'date');

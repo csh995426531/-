@@ -37,6 +37,12 @@
             <option value="{$appearance.data}" {$Think.get.appearance_id==$appearance.data ? 'selected' :''}>{$appearance.data}</option>
         {/foreach}
     </select>
+    <select class="span2" name="edition_id" id='edition_id'>
+        <option value=""> - 固件版本 - </option>
+        {foreach $editions as $edition}
+        <option value="{$edition.data}" {$Think.get.edition_id==$edition.data ? 'selected' :''}>{$edition.data}</option>
+        {/foreach}
+    </select>
     <input type="text" class="input-large" name="keyword" placeholder="序列号" value="{$Think.get.keyword}">
 <button type="submit" class="btn btn-primary">搜索</button>
 </form>
@@ -47,7 +53,7 @@
         <div class="span12 listing-buttons">
         </div>
         <div class="span12">
-            <h4 class="span12">总条数：{$lists->total()}</h4>
+         
             <table class="orders-table table">
                 <thead>
                 <tr>
@@ -60,7 +66,7 @@
                     <th>外观</th>
                     <th>版本</th>
                      <th>序列号</th>
-                                <th>进货价格</th>  
+                                <th>参考售价</th>  
                                  <th>备注</th> 
                     <th>状态</th>
                     <th>库龄</th>
@@ -78,10 +84,11 @@
                     <th><span>{$temp.itemFeature.data}</span></th>
                     <th><span>{$temp.itemAppearance.data}</span></th>
                     <th><span>{$temp.itemEdition.data}</span></th>
-                    <th><a href="https://checkcoverage.apple.com/cn/zh/?sn={$temp.number}" target="_blank"><span>{$temp.number}</span></a></th>
+         
+                    <th><a href="{:url('search')}?keyword={$temp.number}" target="_blank"><span>{$temp.number}</span></a></th>
 
-                  <th><span>{$temp.price}</span></th>
-                  <th title="{$temp.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 10 ? mb_substr($temp->memo, 0, 10).'…' : $temp->memo; ?></span></th>
+                  <th><span>>{$temp.price*1.1+120}</span></th>
+                  <th title="{$temp.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 6 ? mb_substr($temp->memo, 0, 6).'…' : $temp->memo; ?></span></th>
                   
                   
                     <th title="{$temp.prepare}" style="cursor: pointer"><span>{$temp.statusName}</span></th>
@@ -95,11 +102,13 @@
                         <a class="btn btn-small btn-danger cancelPrepare-item" data-id="{$temp.id}" data-value="0" data-href="{:url('cancelPrepare')}">取消</a>
                         <?php }?>
                     </td>
+                  
                 </tr>
                 {/volist}
                 </tbody>
             </table>
         </div>
+    <h4 class="span12">总条数：{$lists->total()}</h4>
         <div class="pull-right">
             {$lists->render()}
         </div>

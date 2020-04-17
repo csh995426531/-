@@ -76,7 +76,7 @@
                 <!--</div>-->
                 <!--<h2>Listings</h2>-->
                 <!--</div>-->
-                <h4 class="span12">总条数：{$lists->total()}</h4>
+                 <!-- <h4 class="span12">总条数：{$lists->total()}</h4>-->
                 <table class="orders-table table">
                     <thead>
                     <tr>
@@ -87,6 +87,7 @@
                         <th>分类</th>
                         <th>名称</th>
                         <th>配置</th>
+                        <th>网络模式</th>
                         <th>外观</th>
                         <th>序列号</th>
                         <th>固件版本</th>
@@ -150,10 +151,12 @@
                         <th><span>{$temp.itemCategory.data}</span></th>
                         <th><span>{$temp.itemName.data}</span></th>
                         <th><span>{$temp.itemFeature.data}</span></th>
+                       <th><span>{$temp.itemNetwork.data}</span></th>
                         <th><span>{$temp.itemAppearance.data}</span></th>
                         <th><span>{$temp.number}</span></th>
                         <th><span>{$temp.itemEdition.data}</span></th>
-                        <th><span>{$temp.memo}</span></th>
+                          <!--<th><span>{$temp.memo}</span></th>-->
+                         <th title="{$temp.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 6 ? mb_substr($temp->memo, 0, 6).'…' : $temp->memo; ?></span></th>
                         <th><span>{$temp.price}</span></th>
                         <th><span>{$temp.itemChannel.data}</span></th>
                         <th><span>{$temp.statusName}</span></th>
@@ -170,7 +173,7 @@
                     {/volist}
                         <tr>
                             <td><label style="cursor: pointer"><input type="checkbox" id="checkbox-all"  />全选</label> </td>
-                          
+                            <td colspan="14">共{$lists->total()}记录 </td>
                         </tr>
                         <tr>
                             <td colspan="15">

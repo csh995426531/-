@@ -14,8 +14,8 @@ class Item extends Model
     const STATUS_INCOME_WAIT = 1;//入库待核
     const STATUS_NORMAL = 2;//在库
     const STATUS_SOLD = 3;//已售
-    const STATUS_REPAIR = 4;//维修
-    const STATUS_LOSE = 5;//丢失
+    const STATUS_REPAIR = 4;//维修中
+    const STATUS_LOSE = 5;//盘库外
     const STATUS_FAIL = 6;//入库审核失败
     const STATUS_OUTGO_WAIT = 7;//出库待核
     const STATUS_PREPARE = 8; // 预售
@@ -70,13 +70,13 @@ class Item extends Model
 
     public function getStatusOptions(){
         return [
-            self::STATUS_INCOME_WAIT => '入库待核',
+            self::STATUS_INCOME_WAIT => '入待核',
             self::STATUS_NORMAL=> '在库',
-            self::STATUS_SOLD => '已售',
-            self::STATUS_REPAIR => '维修',
-            self::STATUS_LOSE => '丢失',
+            self::STATUS_SOLD => '已出售',
+            self::STATUS_REPAIR => '维修中',
+            self::STATUS_LOSE => '盘库外',
             self::STATUS_FAIL => '入库失败',
-            self::STATUS_OUTGO_WAIT => '出库待核',
+            self::STATUS_OUTGO_WAIT => '出待核',
             self::STATUS_PREPARE => '预售'
         ];
     }

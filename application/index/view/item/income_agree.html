@@ -33,8 +33,8 @@
             <table class="orders-table table">
                 <thead>
                 <tr>
-                    <th>选择</th>
-                    <th>ID</th>
+                    <th>⊙</th>
+                    <th>编号</th>
                     <th>入库类型</th>
                     <th>型号</th>
                     <th>名称</th>
@@ -43,6 +43,7 @@
                     <th>外观</th>
                     <th>序列号</th>
                     <th>固件版本</th>
+                    <th>备注</th>
                     <th>进货价格</th>
                     <th>进货渠道</th>
                     <th>入库人</th>
@@ -55,16 +56,18 @@
                 {volist name='lists' id='temp'}
                 <tr>
                     <td><input type="checkbox" class="checkbox-checked" data-id="{$temp.id}"  /></td>
-                    <td><span>{$temp.id}</span></td>
+                     <th title="商品ID:{$temp.item.id}" ><span>{$temp.id}</span></th>
                     <td><span>{$temp.typeName}</span></td>
                     <th><span>{$temp.item.itemType.data}</span></th>
                     <th><span>{$temp.item.itemName.data}</span></th>
                     <th><span>{$temp.item.itemNetwork.data}</span></th>
                     <th><span>{$temp.item.itemFeature.data}</span></th>
                     <th><span>{$temp.item.itemAppearance.data}</span></th>
-                    <th><span>{$temp.item.number}</span></th>
+                  
+                   <th><a href="https://checkcoverage.apple.com/cn/zh/?sn={$temp.item.number}" target="_blank"><span>{$temp.item.number}</span></a></th>
                     <th><span>{$temp.item.itemEdition.data}</span></th>
-                    <!-- <th><span>{$temp.item.memo}</span></th> -->
+                   <!--<th><span>{$temp.item.memo}</span></th>-->
+                   <th title="{$temp.item.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->item->memo) > 6 ? mb_substr($temp->item->memo, 0, 6).'…' : $temp->item->memo; ?></span></th>
                     <th><span>{$temp.item.price}</span></th>
                     <th><span>{$temp.item.itemChannel.data}</span></th>
                     <td><span>{$temp.createUser.username}</span></td>
@@ -77,7 +80,8 @@
                 </tr>
                 {/volist}
                 <tr>
-                    <td><label style="cursor: pointer"><input type="checkbox" id="checkbox-all"  />全选</label> </td>
+                   
+                  　<td colspan="2"><label style="cursor: pointer"><input type="checkbox" id="checkbox-all"  />　全选</label> </td>
                     <td colspan="14">共{$count}记录 ， 共{$total}金额</td>
                 </tr>
                 <tr>
@@ -95,7 +99,6 @@
     </div>
 </div>
 <script src="/static/js/jquery.min.js"></script>
-<div id="flot-placeholder" style=" width:350px;height:300px;"></div>
 <script>
     $(function(){
 

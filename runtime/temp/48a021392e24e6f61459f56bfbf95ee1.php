@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1571567076;s:48:"/data/www/y5g/application/index/view/layout.html";i:1574525159;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1575553202;s:48:"/data/www/y5g/application/index/view/layout.html";i:1577343457;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -30,7 +30,7 @@
             <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
                 <h1><i class="icon-large"></i> <img src="/bg.png"></h1>
                 <ul class="side-nav">
-                    <li><a href="<?php echo url('/index/statistics/index'); ?>"><i class="icon-home"></i>数据统计</a></li>
+                    <li><a href="<?php echo url('/index/statistics/index'); ?>"><i class="icon-home"></i>库存主页</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-dropdown" href="#"><i class="icon-th"></i> 库存查询 <b class="caret"></b></a>
                         <ul id="item-dropdown" class="collapse">
@@ -42,8 +42,9 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/addIncome'); ?>">进货入库</a></li>
-                           <li><a href="<?php echo url('item/income'); ?>">入库待核</a></li>
+                            <li><a href="<?php echo url('item/addIncome'); ?>">采购入库</a></li>
+                            <li><a href="<?php echo url('item/addIncome2'); ?>">批量入库</a></li>
+                            <li><a href="<?php echo url('item/income'); ?>">入库待核</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
@@ -51,8 +52,8 @@
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
                         <ul id="item-outgo-dropdown" class="collapse">
                             <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
-                            <li><a href="<?php echo url('item/specialOutgo'); ?>">维修返库</a></li>
-                            <li><a href="<?php echo url('item/specialOutgo2'); ?>">盘点丢失</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">维修登记</a></li>
+                           <!--  <li><a href="<?php echo url('item/specialOutgo2'); ?>">仓库盘点</a></li>!-->
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -69,7 +70,15 @@
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
                     </li> -->
-                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>数据统计</a></li>
+               <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
+                        <ul id="statistics-dropdown" class="collapse">
+                            <li><a href="<?php echo url('/index/statistics/index'); ?>">30天统计</a></li>                                                                         
+                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">数据统计</a></li>
+                             </ul>
+                    </li>
+
+                               <li><a href="<?php echo url('item/specialOutgo2'); ?>"><i class="icon-check"></i>仓库盘点</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
@@ -82,6 +91,7 @@
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">渠道录入</a></li>
                             <!-- <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li> -->
                             <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
+                            <li><a href="<?php echo url('setting/special'); ?>">特殊修改</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -233,20 +243,21 @@
                         <th>ID</th>
                         <th>进货日期</th>
                          <!--<th>型号</th>-->
-                        <th>分类</th>
-                        <th>名称</th>
+                        <th>商品分类</th>
+                        <th>商品名称</th>
                         <th>网络模式</th>
                         <th>配置</th>
                         <th>外观</th>
                         <th>序列号</th>
-                        <th>订单号</th>
-                        <th>固件版本</th>
-                        <th>备注</th>
-                        <th>进货价格</th>
+                        <th>版本</th>
                         <th>进货渠道</th>
-                        <th>状态</th>
+                        <th>商品备注</th>
+                        <th>进价</th>
+                        
+      					 <th>最近订单号</th>
+                          <th>状态[历史]</th>
                  
-                        <th class="actions">操作</th>
+                           <!--<th class="actions">轨迹</th>-->
                     </tr>
                     </thead>
                     <tbody>
@@ -305,15 +316,20 @@
                         <th><span><?php echo $temp['itemAppearance']['data']; ?></span></th>
                            <!--<th><span><?php echo $temp['number']; ?></span></th>-->
                         <th><a href="https://checkcoverage.apple.com/cn/zh/?sn=<?php echo $temp['number']; ?>" target="_blank"><span><?php echo $temp['number']; ?></span></a></th>
-                        <th><span><?php echo $temp['lastOutNo']; ?></span></th>
-                        <th><span><?php echo $temp['itemEdition']['data']; ?></span></th>
-                        <th title="<?php echo $temp['memo']; ?>" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 10 ? mb_substr($temp->memo, 0, 10).'…' : $temp->memo; ?></span></th>
-                        <th><span><?php echo $temp['price']; ?></span></th>
-                        <th><span><?php echo $temp['itemChannel']['data']; ?></span></th>
-                        <th><span><?php echo $temp['statusName']; ?></span></th>
 
+                        <th><span><?php echo $temp['itemEdition']['data']; ?></span></th>
+                         <th><span><?php echo $temp['itemChannel']['data']; ?></span></th>
+                        <th title="<?php echo $temp['memo']; ?>" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 6 ? mb_substr($temp->memo, 0, 6).'…' : $temp->memo; ?></span></th>
+                        <th><span><?php echo $temp['price']*1; ?></span></th>
+                       
+                           <th><span><?php echo $temp['lastOutNo']; ?></span></th>
+                        <!--<th><span><?php echo $temp['statusName']; ?></span></th>-->
+                     	 <td class="actions">
+                            <a class="btn btn-small btn-info" href="<?php echo url('item/history',['item_id'=>$temp['id']]); ?>"><?php echo $temp['statusName']; ?></a>
+                                         
+                      
                         <td class="actions">
-                            <a class="btn btn-small btn-info" href="<?php echo url('item/history',['item_id'=>$temp['id']]); ?>">商品历史</a>
+                             <!--<a class="btn btn-small btn-info" href="<?php echo url('item/history',['item_id'=>$temp['id']]); ?>">历史</a>-->
                             <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
                             <!--<a class="btn btn-small btn-success allow-item" data-id="<?php echo $temp['id']; ?>" data-value="1" data-href="<?php echo url('allowAgree'); ?>">通过</a>-->
                             <!--<a class="btn btn-small btn-danger reject-item" data-id="<?php echo $temp['id']; ?>" data-value="0" data-href="<?php echo url('rejectAgree'); ?>">拒绝</a>-->

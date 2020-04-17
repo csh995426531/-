@@ -20,11 +20,11 @@
 header("Content-type:text/html;charset=utf-8");
 //配置信息
 $cfg_dbhost = '127.0.0.1';
-$cfg_dbname = 'maiguo';
-$cfg_dbuser = 'maiguo';
-$cfg_dbpwd = 'B6je4LcsY5MApHnr';
+$cfg_dbname = 'coken';
+$cfg_dbuser = 'coken';
+$cfg_dbpwd = 'HB3NmFLjhWZBGDSi';
 $cfg_db_language = 'utf8';
-$to_file_name = "/www/wwwroot/maig/runtime/databases_backup.txt";
+$to_file_name = "/www/wwwroot/coken/runtime/databases_backup.txt";
 //END 配置
 
 // 创建连接

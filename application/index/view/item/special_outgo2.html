@@ -76,7 +76,7 @@
                     <!--</div>-->
                     <!--<h2>Listings</h2>-->
                     <!--</div>-->
-                    <h4 class="span12">总条数：{$lists->total()}</h4>
+                    <!--<h4 class="span12">总条数：{$lists->total()}</h4>-->
                     <table class="orders-table table">
                         <thead>
                         <tr>
@@ -87,6 +87,7 @@
                             <th>分类</th>
                             <th>名称</th>
                             <th>配置</th>
+                            <th>网络模式</th>
                             <th>外观</th>
                             <th>序列号</th>
                             <th>固件版本</th>
@@ -150,10 +151,13 @@
                             <th><span>{$temp.itemCategory.data}</span></th>
                             <th><span>{$temp.itemName.data}</span></th>
                             <th><span>{$temp.itemFeature.data}</span></th>
-                            <th><span>{$temp.itemAppearance.data}</span></th>
+                                  
+                           <th><span>{$temp.itemNetwork.data}</span></th>
+                            <th><span>{$temp.itemAppearance.data}</span></th>                     
                             <th><span>{$temp.number}</span></th>
                             <th><span>{$temp.itemEdition.data}</span></th>
-                            <th><span>{$temp.memo}</span></th>
+                          <!--<th><span>{$temp.memo}</span></th>-->
+                         <th title="{$temp.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 6 ? mb_substr($temp->memo, 0, 6).'…' : $temp->memo; ?></span></th>
                             <th><span>{$temp.price}</span></th>
                             <th><span>{$temp.itemChannel.data}</span></th>
                             <th><span>{$temp.statusName}</span></th>
@@ -161,7 +165,7 @@
                                 <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
                                 
                                 <?php if ($temp->status == 2) {?>
-                                    <a class="btn btn-small btn-danger add-outgo" data-toggle="modal"  data-href="{:url('addSpecialOutgo')}" data-id="{$temp.id}" data-type="5">丢失</a>
+                                    <a class="btn btn-small btn-danger add-outgo" data-toggle="modal"  data-href="{:url('addSpecialOutgo')}" data-id="{$temp.id}" data-type="5">盘出</a>
                                 <!--<a class="btn btn-small btn-danger reject-item" data-id="{$temp.id}" data-value="0" data-href="{:url('rejectAgree')}">拒绝</a>-->
                                 <?php } else {?>
                                     <a class="btn btn-small btn-success add-outgo" data-toggle="modal" data-href="{:url('cancelSpecialOutgo')}" data-id="{$temp.id}" data-type="5">返库</a>
@@ -171,11 +175,12 @@
                         {/volist}
                             <tr>
                                 <td><label style="cursor: pointer"><input type="checkbox" id="checkbox-all"  />全选</label> </td>
-                              
+                               <td colspan="14"><h4>共{$lists->total()}条记录 ， 共？？金额</h4></td>
+                                
                             </tr>
-                            <tr>
+                  <tr>
                                 <td colspan="15">
-                                        <a class="btn btn-small btn-danger" id="reject-all" data-href="{:url('addSpecialOutgo')}" data-type="5">批量丢失</a>
+                                        <a class="btn btn-small btn-danger" id="reject-all" data-href="{:url('addSpecialOutgo')}" data-type="5">批量盘出</a>
                                         <a class="btn btn-small btn-success" id="reject-all-2" data-href="{:url('cancelSpecialOutgo')}" data-type="5">批量返库</a>
                                 </td>
                             </tr>
