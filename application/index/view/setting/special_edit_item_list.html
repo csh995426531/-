@@ -71,9 +71,7 @@
                 
                     <td class="actions">
                         <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
-                        {if $temp.create_user_id == $userId}
-                        <a class="btn btn-small btn-success update-item" data-id="{$temp.id}" data-value="1" data-href="{:url('addIncome')}">修改</a>
-                        {/if}
+                        <a class="btn btn-small btn-success update-item" data-id="{$temp.id}" data-value="1" data-href="{:url('specialEditItem')}">修改</a>
                         <!--<a class="btn btn-small btn-danger delete-item" data-id="{$temp.id}" data-value="0" data-href="{:url('deleteAgree')}">删除</a>-->
                     </td>
                 </tr>

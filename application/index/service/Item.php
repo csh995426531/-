@@ -104,12 +104,16 @@ class Item
             $lists = $lists->where("date",  '=', $params['date']);
         }
 
-        if (!empty($params['status']) && $params['status'] > 0) {
-            $lists = $lists->where("status",  '=', $params['status']);
+        if (!empty($params['status'])) {
+            if (\is_numeric($params['status']) && $params['status'] > 0) {
+                $lists = $lists->where("status",  '=', $params['status']);
+            } elseif (is_array($params['status'])) {
+                $lists = $lists->where("status",  'in', $params['status']);
+            }
         }
 
         if (!empty($params['keyword'])) {
-            $lists = $lists->where("number",  'LIKE', "%". $params['keyword'] . "%");
+            $lists = $lists->where("number",  'LIKE', "%". trim($params['keyword']) . "%");
         }
 
         $data = $lists->paginate(10, false, ['query'=> $params]);

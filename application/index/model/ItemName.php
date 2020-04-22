@@ -39,4 +39,9 @@ class ItemName extends Model
         return $this->hasMany('ItemAppearance','name_id', 'id');
     }
 
+    public function itemType()
+    {
+        return $this->hasMany('ItemType','name_id', 'id');
+    }
+
 }

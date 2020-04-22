@@ -16,7 +16,14 @@ use app\index\model\ItemFeature;
 use app\index\model\ItemName;
 use app\index\model\ItemType;
 use app\index\model\ItemNetwork;
+use app\index\model\ItemIntelligence;
+use app\index\model\ItemHistory;
+use app\index\model\ItemIncomeHistory;
+use app\index\model\ItemOutgoHistory;
+use app\index\service\Item as ItemService;
+use app\index\model\User;
 use think\Session;
+use think\Db;
 
 class Setting extends BaseController
 {
@@ -146,9 +153,6 @@ class Setting extends BaseController
         if (!$category->save()) {
             $result = SetResult(500, '启用失败');
         }
-
-        AddLog(\app\index\model\Log::ACTION_SETTING_CATEGORY_DEL, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
 
         return $result;
     }
@@ -297,9 +301,6 @@ class Setting extends BaseController
         if (!$name->save()) {
             $result = SetResult(500, '启用失败');
         }
-
-        AddLog(\app\index\model\Log::ACTION_SETTING_NAME_DEL, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
 
         return $result;
     }
@@ -471,9 +472,6 @@ class Setting extends BaseController
             $result = SetResult(500, '启用失败');
         }
 
-        AddLog(\app\index\model\Log::ACTION_SETTING_FEATURE_DEL, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
-
         return $result;
     }
 
@@ -638,9 +636,6 @@ class Setting extends BaseController
         if (!$appearance->save()) {
             $result = SetResult(500, '启用失败');
         }
-
-        AddLog(\app\index\model\Log::ACTION_SETTING_APPEARANCE_DEL, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
 
         return $result;
     }
@@ -809,9 +804,6 @@ class Setting extends BaseController
             $result = SetResult(500, '启用失败');
         }
 
-        AddLog(\app\index\model\Log::ACTION_SETTING_EDITION_DEL, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
-
         return $result;
     }
 
@@ -943,7 +935,7 @@ class Setting extends BaseController
 
             AddLog(\app\index\model\Log::ACTION_SETTING_TYPE_ADD, json_encode($this->request->param())
                 , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
-        }catch (\Exception $e) {return 2;
+        }catch (\Exception $e) {
             $result = SetResult(500, $e->getMessage());
             AddLog(\app\index\model\Log::ACTION_SETTING_TYPE_ADD, json_encode($this->request->param())
                 , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
@@ -1002,9 +994,6 @@ class Setting extends BaseController
         if (!$edition->save()) {
             $result = SetResult(500, '启用失败');
         }
-
-        AddLog(\app\index\model\Log::ACTION_SETTING_TYPE_DEL, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
         return $result;
     }
 
@@ -1164,9 +1153,6 @@ class Setting extends BaseController
             $result = SetResult(500, '启用失败');
         }
 
-        AddLog(\app\index\model\Log::ACTION_SETTING_CHANNEL_DEL, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
-
         return $result;
     }    
 
@@ -1316,9 +1302,486 @@ class Setting extends BaseController
             $result = SetResult(500, '启用失败');
         }
 
-        AddLog(\app\index\model\Log::ACTION_SETTING_NAME_DEL, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+        return $result;
+    }
+
+    /**
+     * 特殊修改列表
+     *
+     * @return void
+     * @author CSH <1114313879@qq.com>
+     */
+    public function specialEditItemList()
+    {
+        $userIds = ItemIncomeHistory::distinct(true)->field('create_user_id')->select();
+
+        $users = User::where('id', 'in', array_column($userIds, 'create_user_id'))->select();
+
+        $nameIds = Db::name('item_income_history')
+            ->alias('t')
+            ->join('item i', 'i.id = t.item_id')
+            ->distinct(true)
+            ->field('i.name_id')
+            ->select();
+
+        $names = ItemName::where('id', 'in', array_column($nameIds, 'name_id'))->select();
+
+        $channelIds = Db::name('item_income_history')
+        ->alias('t')
+        ->join('item i', 'i.id = t.item_id')
+        ->distinct(true)
+        ->field('i.channel_id')
+        ->select();
+
+        $channels = ItemChannel::where("id", 'in', array_column($channelIds, 'channel_id'))->select();
+
+
+        $sql = ItemIncomeHistory::alias('t')
+            ->field('t.*')
+            ->join('item i', 'i.id=t.item_id')
+            ->where(function ($query) {
+                $query->where('t.status', 'in', [
+                    ItemIncomeHistory::STATUS_WAIT, 
+                    ItemIncomeHistory::STATUS_FAIL
+                ])->where('t.type', ItemIncomeHistory::TYPE_INCOME);
+            })->whereOr(function ($query) {
+                $query->where('t.status', ItemIncomeHistory::STATUS_WAIT)
+                ->where('t.type', ItemIncomeHistory::TYPE_RETURN_INCOME);
+            });
+
+        $user_id = $this->request->get('user_id');
+
+        if (!empty($user_id) && $user_id > 0) {
+            $sql = $sql->where('t.create_user_id', $user_id);
+        }
+
+        $date = $this->request->get('date');
+
+        if (!empty($date)) {
+
+            $start_time = strtotime($date. '00:00:00');
+            $end_time = strtotime($date. '23:59:59');
+            $sql = $sql->where('t.create_time',  '>=', $start_time)->where('t.create_time', '<=', $end_time);
+        }
+
+        $name_id = $this->request->get('name_id');
+
+        if (!empty($name_id) && $name_id > 0) {
+            $sql = $sql->where('i.name_id', $name_id);
+        }
+
+        $channel_id = $this->request->get('channel_id');
+
+        if (!empty($channel_id) && $channel_id > 0) {
+            $sql = $sql->where('i.channel_id', $channel_id);
+        }
+
+        $lists = $sql->order('update_time', 'desc')->paginate(10, false, ['query'=>request()->param() ]);
+    
+        $breadcrumb = '特殊修改';
+
+        return $this->fetch('special_edit_item_list', [
+            'users' => $users,
+            'userId' => Session::get("user_id"),
+            'names' => $names,
+            'channels' => $channels,
+            'lists' => $lists,
+            'breadcrumb' => $breadcrumb,
+        ]);
+    }
+
+    //特殊修改编辑保存
+    public function specialEditItem(){
+        $id = $this->request->get('id');
+        if ($id) {
+            $history = ItemIncomeHistory::where('id', $id)->find();
+        }
+
+        if ($this->request->isPost()) {
+
+            $date = $this->request->post("date");
+            $typeId = $this->request->post("type_id");
+            $categoryTd = $this->request->post("category_id");
+            $nameId = $this->request->post("name_id");
+            $featureId = $this->request->post("feature_id");
+
+            $appearanceId = $this->request->post("appearance_id");
+            $number = $this->request->post("number");
+            $editionId = $this->request->post("edition_id");
+            $memo = $this->request->post("memo");
+            $price = $this->request->post("price");
+            $channelId = $this->request->post("channel_id");
+            $networkId = $this->request->post("network_id", 0);
+
+            Db::startTrans();
+            try {
+
+                if (empty($date)) {
+                    throw new \Exception("日期错误");
+                }
+
+                if (empty($typeId)) {
+                    throw new \Exception("型号不能为空");
+                }
+
+                $type = ItemType::where("data", $typeId)->find();
+
+                if (empty($type) || $type->status != ItemType::STATUS_ACTIVE) {
+                    throw new \Exception("型号无效");
+                }
+
+                if (empty($categoryTd)) {
+                    throw new \Exception("分类不能为空");
+                }
+
+                $category = ItemCategory::where("id", $categoryTd)->find();
+
+                if (empty($category) || $category->status != ItemCategory::STATUS_ACTIVE) {
+                    throw new \Exception("分类无效");
+                }
+
+                if (empty($nameId)) {
+                    throw new \Exception("名称不能为空");
+                }
+
+                $name = ItemName::where("id", $nameId)->find();
+
+                if (empty($name) || $name->status != ItemName::STATUS_ACTIVE) {
+                    throw new \Exception("名称无效");
+                }
+
+                if (empty($featureId)) {
+                    throw new \Exception("配置不能为空");
+                }
+
+                $feature = ItemFeature::where("id", $featureId)->find();
+
+                if (empty($feature) || $feature->status != ItemFeature::STATUS_ACTIVE) {
+                    throw new \Exception("配置无效");
+                }
+
+                if (empty($appearanceId)) {
+                    throw new \Exception("外观不能为空");
+                }
+
+                $appearance = ItemAppearance::where("id", $appearanceId)->find();
+
+                if (empty($appearance) || $appearance->status != ItemAppearance::STATUS_ACTIVE) {
+                    throw new \Exception("外观无效");
+                }
+
+                if (empty($editionId)) {
+                    throw new \Exception("固件版本不能为空");
+                }
+
+                $edition = ItemEdition::where("id", $editionId)->find();
+
+                if (empty($edition) || $edition->status != ItemEdition::STATUS_ACTIVE) {
+                    throw new \Exception("固件版本无效");
+                }
+
+                if (empty($channelId)) {
+                    throw new \Exception("渠道不能为空");
+                }
+
+                $channel = ItemChannel::where("id", $channelId)->find();
+
+                if (empty($channel) || $channel->status != ItemChannel::STATUS_ACTIVE) {
+                    throw new \Exception("渠道无效");
+                }
+
+                if (empty($number)) {
+                    throw new \Exception("序列号不能为空");
+                }
+
+                $number = strtoupper($number);
+
+                if (empty($price)) {
+                    throw new \Exception("价格不能为空");
+                }
+
+                $price = floatval($price);
+
+                if ((!is_int($price) && !is_float($price)) || $price > 1000000 || $price < 0) {
+                    throw new \Exception("价格错误");
+                }
+
+                $item = \app\index\model\Item::where("number", $number)
+                    ->where("status", "in", [
+                        \app\index\model\Item::STATUS_INCOME_WAIT,
+                        \app\index\model\Item::STATUS_NORMAL,
+                        \app\index\model\Item::STATUS_OUTGO_WAIT,
+                        \app\index\model\Item::STATUS_PREPARE,
+                        \app\index\model\Item::STATUS_LOSE,
+                        ])
+                    ->find();
+
+                if (!empty($item) && empty($history)) {
+                    throw new \Exception("序列号重复");
+                } elseif (!empty($item) && !empty($history) && $item->id != $history->item->id) {
+                    throw new \Exception("序列号重复");
+                }
+              
+                if (!empty($typeId) && $typeId !== 0) {
+                    $type = ItemType::where("status", ItemType::STATUS_ACTIVE)
+                    ->where("data", $typeId)
+                    ->find();
+                    
+                    $typeId = $type->id;
+                }
+                
+                
+                $model = new \app\index\model\Item;
+                $updated = $model->save([
+                    "category_id" => $categoryTd,
+                    "name_id" => $nameId,
+                    "feature_id" => $featureId,
+                    "appearance_id" => $appearanceId,
+                    "edition_id" => $editionId,
+                    "type_id" => $typeId,
+                    "date" => $date,
+                    "number" => $number,
+                    "memo" => $memo,
+                    "price" => $price,
+                    "network_id" => $networkId,
+                    "channel_id" => $channelId,
+                    "update_time" => time()
+                ], ['id' => $history->item->id]);
+
+                if (!$updated) {
+                    throw new \Exception("库存更新失败");
+                }
+
+                $history = ItemIncomeHistory::where('id', $id)->find();
+
+                Db::commit();
+                $message = Message('', true);
+                ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_SPECIAL_EDIT, $history->id, 1);
+            } catch (\Exception $e) {
+                Db::rollback();
+                $message = Message($e->getMessage(), false);
+            }
+
+        } else {
+
+            $message = '';
+        }
+
+        $names = ItemName::where("status", ItemName::STATUS_ACTIVE)->select();
+        
+        foreach ($names as $name) {
+            $name->itemNetwork = ItemNetwork::where([
+                "name_id" => $name->id,
+                "status" => ItemNetwork::STATUS_ACTIVE
+            ])->select();
+
+            $name->itemAppearance = ItemAppearance::where([
+                "name_id" => $name->id,
+                "status" => ItemAppearance::STATUS_ACTIVE
+            ])->select();
+
+            $name->itemFeature = ItemFeature::where([
+                "name_id" => $name->id,
+                "status" => ItemFeature::STATUS_ACTIVE
+            ])->select();
+
+            $name->itemEdition = ItemEdition::where([
+                "category_id" => $name->category_id,
+                "status" => ItemEdition::STATUS_ACTIVE
+            ])->select();
+        }
+
+        // var_dump($names);die;
+        $channels = ItemChannel::where("type", ItemChannel::TYPE_INCOME)
+            ->where("status", ItemChannel::STATUS_ACTIVE)
+            ->select();
+        
+        $breadcrumb = '特殊修改';
+
+        return $this->fetch('special_edit_item', [
+            'message' => $message,
+            'breadcrumb' => $breadcrumb,
+            'names' => $names,
+            'channels' => $channels,
+            'history' => $history,
+        ]);
+    }
+
+    // 智能识别码
+    public function intelligence($message=''){
+
+        if (!empty($message)) {
+            $message = urldecode($message);
+        }
+
+        $nameData = ItemName::where('status', ItemName::STATUS_ACTIVE)->select();
+
+        $names = [];
+
+        foreach ($nameData as $nameTemp) {
+
+            if (!isset($names[$nameTemp->category_id])) {
+                $names[$nameTemp->category_id]['category'] = $nameTemp->category;
+            }
+
+            // $nameTemp['itemFeature'] = $nameTem->itemFeature;
+
+            $names[$nameTemp->category_id]['lists'][] = $nameTemp;
+        }
+
+        $lists = ItemIntelligence::paginate(10, false, ['query'=>request()->param() ]);
+
+        $breadcrumb = '智能识别码录入';
+
+        return $this->fetch("intelligence", [
+            'message' => $message,
+            'lists' => $lists,
+            'names' => $names,
+            'breadcrumb' => $breadcrumb,
+        ]);
+    }
+
+    //增加智能标识码
+    public function addIntelligence(){
+
+        $result = SetResult(200, '保存成功');
+        $typeId = $this->request->param('type_id');
+        $featureId = $this->request->param('feature_id');
+        $appearanceId = $this->request->param('appearance_id');
+        $data = $this->request->param('data');
+
+        try {
+
+            if ( empty($typeId)) {
+                throw new \Exception("型号不能为空");
+            }
+            if ( empty($featureId)) {
+                throw new \Exception("配置不能为空");
+            }
+            if ( empty($appearanceId)) {
+                throw new \Exception("外观不能为空");
+            }
+            if ( empty($data)) {
+                throw new \Exception("标识码不能为空");
+            }
+
+            $type = ItemType::where("id", $typeId)->find();
+            if (empty($type) || $type->status != ItemType::STATUS_ACTIVE) {
+                throw new \Exception("型号无效");
+            }
+            $feature = ItemFeature::where("id", $featureId)->find();
+            if (empty($feature) || $feature->status != ItemFeature::STATUS_ACTIVE) {
+                throw new \Exception("配置无效");
+            }
+            $appearance = ItemAppearance::where("id", $appearanceId)->find();
+            if (empty($appearance) || $appearance->status != ItemAppearance::STATUS_ACTIVE) {
+                throw new \Exception("外观无效");
+            }
+
+            $id = $this->request->param('id', 0);
+
+            $type = ItemType::where([
+                "data" => ['=', $data],
+                "id" => ['<>', $id],
+            ])->find();
+
+            if (!empty($type)) {
+                throw new \Exception("该标识码已存在");
+            }
+
+            $model = new ItemIntelligence;
+            
+            if (!empty($id)) {
+    
+                if (!$model->update([
+                    'id' => $id,
+                    'type_id' => $typeId,
+                    'feature_id' => $featureId,
+                    'appearance_id' => $appearanceId,
+                    'data' => $data,
+                    'update_time' => time()
+                ])) {
+                    throw new \Exception("保存错误");
+                }
+            } else {
+                $model->data([
+                    'type_id' => $typeId,
+                    'feature_id' => $featureId,
+                    'appearance_id' => $appearanceId,
+                    'data' => $data,
+                    'status' => ItemType::STATUS_ACTIVE,
+                    'create_time' => time(),
+                    'update_time' => time()
+                ]);
+    
+                if (!$model->save()) {
+                    throw new \Exception("保存错误");
+                }
+            }
+
+            AddLog(\app\index\model\Log::ACTION_SETTING_INTELLIGENCE_ADD, json_encode($this->request->param())
+                , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+        }catch (\Exception $e) {
+            $result = SetResult(500, $e->getMessage());
+            AddLog(\app\index\model\Log::ACTION_SETTING_INTELLIGENCE_ADD, json_encode($this->request->param())
+                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+        }
 
         return $result;
     }
+
+    //停用智能标识码
+    public function delIntelligence() {
+
+        $result = SetResult(200, '停用成功');
+
+        $id = $this->request->param("id");
+        if (empty($id)) {
+            $result = SetResult(500, 'id不能为空');
+        }
+
+        $intelligence = ItemIntelligence::where("id", $id)->find();
+
+        if ($intelligence->status != ItemIntelligence::STATUS_ACTIVE) {
+            $result = SetResult(500, '不可重复停用');
+        }
+
+        $intelligence->status = ItemIntelligence::STATUS_INVALID;
+        $intelligence->update_time = time();
+
+        if (!$intelligence->save()) {
+            $result = SetResult(500, '停用失败');
+        }
+
+        AddLog(\app\index\model\Log::ACTION_SETTING_INTELLIGENCE_DEL, json_encode($this->request->param())
+            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+        return $result;
+    }
+
+    //启用智能标识码
+    public function openIntelligence() {
+
+        $result = SetResult(200, '启用成功');
+
+        $id = $this->request->param("id");
+        if (empty($id)) {
+            $result = SetResult(500, 'id不能为空');
+        }
+
+        $intelligence = ItemIntelligence::where("id", $id)->find();
+
+        if ($intelligence->status != ItemIntelligence::STATUS_INVALID) {
+            $result = SetResult(500, '不可重复启用');
+        }
+
+        $intelligence->status = ItemIntelligence::STATUS_ACTIVE;
+        $intelligence->update_time = time();
+
+        if (!$intelligence->save()) {
+            $result = SetResult(500, '启用失败');
+        }
+
+        return $result;
+    }
+    
 }

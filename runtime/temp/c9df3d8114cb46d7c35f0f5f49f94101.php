@@ -1,10 +1,10 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:73:"/data/www/y5g/public/../application/index/view/members/update_access.html";i:1562607972;s:48:"/data/www/y5g/application/index/view/layout.html";i:1562801030;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:73:"/data/www/y5g/public/../application/index/view/members/update_access.html";i:1574522255;s:48:"/data/www/y5g/application/index/view/layout.html";i:1587549442;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
 
     <meta charset="utf-8">
-    <title>库存管理系统</title>
+    <title>库存管理</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -28,22 +28,23 @@
     <div class="row" style="height:100%">
         <div class="span2" style="width: 9.3%;background: #484646;height:100%">
             <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
-                <h1><i class="icon-large"></i> 库存管理系统</h1>
+                <h1><i class="icon-large"></i> <img src="/bg.png"></h1>
                 <ul class="side-nav">
-                    <li class="active">
-                        <a href="index.html"><i class="icon-home"></i> Dashboard</a>
-                    </li>
+                    <li><a href="<?php echo url('/index/statistics/index'); ?>"><i class="icon-home"></i>库存主页</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-dropdown" href="#"><i class="icon-th"></i> 库存查询 <b class="caret"></b></a>
                         <ul id="item-dropdown" class="collapse">
                             <li><a href="<?php echo url('item/inventory'); ?>">在库查询</a></li>
+                           
                             <li><a href="<?php echo url('item/search'); ?>">综合查询</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/income'); ?>">进货入库</a></li>
+                            <li><a href="<?php echo url('item/addIncome'); ?>">采购入库</a></li>
+                            <li><a href="<?php echo url('item/addIncome2'); ?>">批量入库</a></li>
+                            <li><a href="<?php echo url('item/income'); ?>">入库待核</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
@@ -51,7 +52,8 @@
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
                         <ul id="item-outgo-dropdown" class="collapse">
                             <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
-                            <li><a href="<?php echo url('item/specialoutgo'); ?>">特殊出库</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">维修登记</a></li>
+                           <!--  <li><a href="<?php echo url('item/specialOutgo2'); ?>">仓库盘点</a></li>!-->
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -61,25 +63,36 @@
                             <li><a href="<?php echo url('item/outgoAgree'); ?>">出库审核</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <!-- <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
                         <ul id="statistics-dropdown" class="collapse">
                             <li><a href="<?php echo url('/index/statistics/income'); ?>">进货统计</a></li>
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
+                    </li> -->
+               <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
+                        <ul id="statistics-dropdown" class="collapse">
+                            <li><a href="<?php echo url('/index/statistics/index'); ?>">30天统计</a></li>                                                                         
+                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">数据统计</a></li>
+                             </ul>
                     </li>
+
+                               <li><a href="<?php echo url('item/specialOutgo2'); ?>"><i class="icon-check"></i>仓库盘点</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
-                            <li><a href="<?php echo url('setting/category'); ?>">类别录入</a></li>
-                            <li><a href="<?php echo url('setting/name'); ?>">名称录入</a></li>
-                            <li><a href="<?php echo url('setting/feature'); ?>">配置录入</a></li>
-                            <li><a href="<?php echo url('setting/appearance'); ?>">外观录入</a></li>
-                            <li><a href="<?php echo url('setting/edition'); ?>">固件版本录入</a></li>
-                            <li><a href="<?php echo url('setting/type'); ?>">型号录入</a></li>
-                            <li><a href="<?php echo url('setting/incomeChannel'); ?>">进货渠道录入</a></li>
-                            <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径录入</a></li>
-                            <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li>
+                            <li><a href="<?php echo url('setting/category'); ?>">产品类别</a></li>
+                            <li><a href="<?php echo url('setting/name'); ?>">产品名称</a></li>
+                           <li><a href="<?php echo url('setting/type'); ?>">网络型号</a></li>
+                            <li><a href="<?php echo url('setting/feature'); ?>">产品配置</a></li>
+                            <li><a href="<?php echo url('setting/appearance'); ?>">产品外观</a></li>
+                            <li><a href="<?php echo url('setting/edition'); ?>">产品版本</a></li>
+                            <li><a href="<?php echo url('setting/incomeChannel'); ?>">渠道录入</a></li>
+                            <!-- <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li> -->
+                            <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
+                            <li><a href="<?php echo url('setting/intelligence'); ?>">智能录入</a></li>
+                            <li><a href="<?php echo url('setting/specialEditItemList'); ?>">特殊修改</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -90,7 +103,7 @@
                             <li><a href="<?php echo url('members/updateAccess'); ?>">权限修改</a></li>
                         </ul>
                     </li>
-                    <li><a href="<?php echo url('/index/log/index'); ?>"><i class="icon-book"></i> 日志 </a></li>
+                    <li><a href="<?php echo url('/index/log/index'); ?>"><i class="icon-book"></i> 系统日志 </a></li>
                 </ul>
 
             </div> <!-- end main-left-col -->
@@ -199,39 +212,39 @@
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/bootstrap.js"></script>
 <script src="/static/js/excanvas.min.js"></script>
-<script src="/static/js/jquery.flot.min.js"></script>
-<script src="/static/js/jquery.flot.resize.js"></script>
+<!-- <script src="/static/js/jquery.flot.min.js"></script> -->
+<!-- <script src="/static/js/jquery.flot.resize.js"></script> -->
 <script src="/static/js/jquery-192custom.min.js"></script>
 <script type="text/javascript">
-    $(function () {
-        var d1 = [];
-        d1.push([0, 32]);
-        d1.push([1, 30]);
-        d1.push([2, 24]);
-        d1.push([3, 17]);
-        d1.push([4, 11]);
-        d1.push([5, 25]);
-        d1.push([6, 28]);
-        d1.push([7, 36]);
-        d1.push([8, 44]);
-        d1.push([9, 52]);
-        d1.push([10, 53]);
-        d1.push([11, 50]);
-        d1.push([12, 45]);
-        d1.push([13, 42]);
-        d1.push([14, 40]);
-        d1.push([15, 36]);
-        d1.push([16, 34]);
-        d1.push([17, 24]);
-        d1.push([18, 17]);
-        d1.push([19, 17]);
-        d1.push([20, 20]);
-        d1.push([21, 28]);
-        d1.push([22, 36]);
-        d1.push([23, 38]);
+    // $(function () {
+    //     var d1 = [];
+    //     d1.push([0, 32]);
+    //     d1.push([1, 30]);
+    //     d1.push([2, 24]);
+    //     d1.push([3, 17]);
+    //     d1.push([4, 11]);
+    //     d1.push([5, 25]);
+    //     d1.push([6, 28]);
+    //     d1.push([7, 36]);
+    //     d1.push([8, 44]);
+    //     d1.push([9, 52]);
+    //     d1.push([10, 53]);
+    //     d1.push([11, 50]);
+    //     d1.push([12, 45]);
+    //     d1.push([13, 42]);
+    //     d1.push([14, 40]);
+    //     d1.push([15, 36]);
+    //     d1.push([16, 34]);
+    //     d1.push([17, 24]);
+    //     d1.push([18, 17]);
+    //     d1.push([19, 17]);
+    //     d1.push([20, 20]);
+    //     d1.push([21, 28]);
+    //     d1.push([22, 36]);
+    //     d1.push([23, 38]);
 
-        $.plot($("#placeholder"), [ d1 ], { grid: { backgroundColor: 'white', color: '#999', borderWidth: 1, borderColor: '#DDD' }, colors: ["#FC6B0A"], series: { lines: { show: true, fill: true, fillColor: "rgba(253,108,11,0.4)" } } });
-    });
+    //     // $.plot($("#placeholder"), [ d1 ], { grid: { backgroundColor: 'white', color: '#999', borderWidth: 1, borderColor: '#DDD' }, colors: ["#FC6B0A"], series: { lines: { show: true, fill: true, fillColor: "rgba(253,108,11,0.4)" } } });
+    // });
 </script>
 
 

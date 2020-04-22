@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/setting/appearance.html";i:1571555845;s:48:"/data/www/y5g/application/index/view/layout.html";i:1571074441;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/setting/appearance.html";i:1574522252;s:48:"/data/www/y5g/application/index/view/layout.html";i:1587551009;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -30,9 +30,7 @@
             <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
                 <h1><i class="icon-large"></i> <img src="/bg.png"></h1>
                 <ul class="side-nav">
-                    <li class="active">
-                        <a href="index.html"><i class="icon-home"></i> Dashboard</a>
-                    </li>
+                    <li><a href="<?php echo url('/index/statistics/index'); ?>"><i class="icon-home"></i>库存主页</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-dropdown" href="#"><i class="icon-th"></i> 库存查询 <b class="caret"></b></a>
                         <ul id="item-dropdown" class="collapse">
@@ -44,8 +42,9 @@
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/addIncome'); ?>">进货入库</a></li>
-                           <li><a href="<?php echo url('item/income'); ?>">入库待核</a></li>
+                            <li><a href="<?php echo url('item/addIncome'); ?>">采购入库</a></li>
+                            <li><a href="<?php echo url('item/addIncome2'); ?>">批量入库</a></li>
+                            <li><a href="<?php echo url('item/income'); ?>">入库待核</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
                     </li>
@@ -53,8 +52,8 @@
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
                         <ul id="item-outgo-dropdown" class="collapse">
                             <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
-                            <li><a href="<?php echo url('item/specialOutgo'); ?>">维修返库</a></li>
-                            <li><a href="<?php echo url('item/specialOutgo2'); ?>">盘点丢失</a></li>
+                            <li><a href="<?php echo url('item/specialOutgo'); ?>">维修登记</a></li>
+                           <!--  <li><a href="<?php echo url('item/specialOutgo2'); ?>">仓库盘点</a></li>!-->
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -71,7 +70,15 @@
                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
                         </ul>
                     </li> -->
-                    <li><a href="<?php echo url('/index/statistics/profit'); ?>"><i class="icon-bar-chart"></i>数据统计</a></li>
+               <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
+                        <ul id="statistics-dropdown" class="collapse">
+                            <li><a href="<?php echo url('/index/statistics/index'); ?>">30天统计</a></li>                                                                         
+                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">数据统计</a></li>
+                             </ul>
+                    </li>
+
+                               <li><a href="<?php echo url('item/specialOutgo2'); ?>"><i class="icon-check"></i>仓库盘点</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
                         <ul id="settings-dropdown" class="collapse">
@@ -84,6 +91,8 @@
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">渠道录入</a></li>
                             <!-- <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li> -->
                             <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
+                            <li><a href="<?php echo url('setting/intelligence'); ?>">智能识别码录入</a></li>
+                            <li><a href="<?php echo url('setting/specialEditItemList'); ?>">特殊修改</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -163,7 +172,7 @@
 
             <!--<button class="btn btn-success">Action</button>-->
 
-            <button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>
+            <button class="btn btn-primary" id='add' data-toggle="modal" href="#addItem" >录入</button>
 
         </div>
 
@@ -385,39 +394,39 @@
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/bootstrap.js"></script>
 <script src="/static/js/excanvas.min.js"></script>
-<script src="/static/js/jquery.flot.min.js"></script>
-<script src="/static/js/jquery.flot.resize.js"></script>
+<!-- <script src="/static/js/jquery.flot.min.js"></script> -->
+<!-- <script src="/static/js/jquery.flot.resize.js"></script> -->
 <script src="/static/js/jquery-192custom.min.js"></script>
 <script type="text/javascript">
-    $(function () {
-        var d1 = [];
-        d1.push([0, 32]);
-        d1.push([1, 30]);
-        d1.push([2, 24]);
-        d1.push([3, 17]);
-        d1.push([4, 11]);
-        d1.push([5, 25]);
-        d1.push([6, 28]);
-        d1.push([7, 36]);
-        d1.push([8, 44]);
-        d1.push([9, 52]);
-        d1.push([10, 53]);
-        d1.push([11, 50]);
-        d1.push([12, 45]);
-        d1.push([13, 42]);
-        d1.push([14, 40]);
-        d1.push([15, 36]);
-        d1.push([16, 34]);
-        d1.push([17, 24]);
-        d1.push([18, 17]);
-        d1.push([19, 17]);
-        d1.push([20, 20]);
-        d1.push([21, 28]);
-        d1.push([22, 36]);
-        d1.push([23, 38]);
+    // $(function () {
+    //     var d1 = [];
+    //     d1.push([0, 32]);
+    //     d1.push([1, 30]);
+    //     d1.push([2, 24]);
+    //     d1.push([3, 17]);
+    //     d1.push([4, 11]);
+    //     d1.push([5, 25]);
+    //     d1.push([6, 28]);
+    //     d1.push([7, 36]);
+    //     d1.push([8, 44]);
+    //     d1.push([9, 52]);
+    //     d1.push([10, 53]);
+    //     d1.push([11, 50]);
+    //     d1.push([12, 45]);
+    //     d1.push([13, 42]);
+    //     d1.push([14, 40]);
+    //     d1.push([15, 36]);
+    //     d1.push([16, 34]);
+    //     d1.push([17, 24]);
+    //     d1.push([18, 17]);
+    //     d1.push([19, 17]);
+    //     d1.push([20, 20]);
+    //     d1.push([21, 28]);
+    //     d1.push([22, 36]);
+    //     d1.push([23, 38]);
 
-        $.plot($("#placeholder"), [ d1 ], { grid: { backgroundColor: 'white', color: '#999', borderWidth: 1, borderColor: '#DDD' }, colors: ["#FC6B0A"], series: { lines: { show: true, fill: true, fillColor: "rgba(253,108,11,0.4)" } } });
-    });
+    //     // $.plot($("#placeholder"), [ d1 ], { grid: { backgroundColor: 'white', color: '#999', borderWidth: 1, borderColor: '#DDD' }, colors: ["#FC6B0A"], series: { lines: { show: true, fill: true, fillColor: "rgba(253,108,11,0.4)" } } });
+    // });
 </script>
 
 

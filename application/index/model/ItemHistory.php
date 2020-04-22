@@ -11,6 +11,7 @@ class ItemHistory extends Model
     const EVENT_OUTGO_AGREE = 4;//销售出库审核
     const EVENT_RETURN = 5; //退货入库
     const EVENT_RETURN_AGREE = 6;//退货入库审核
+    const EVENT_SPECIAL_EDIT = 7;//特殊修改
 
     public $eventName;
     public $resultName;
@@ -32,6 +33,7 @@ class ItemHistory extends Model
             self::EVENT_OUTGO_AGREE => '销售出库审核',
             self::EVENT_RETURN => '退货入库',
             self::EVENT_RETURN_AGREE => '退货入库审核',
+            self::EVENT_SPECIAL_EDIT => '特殊修改',
         ];
     }
 

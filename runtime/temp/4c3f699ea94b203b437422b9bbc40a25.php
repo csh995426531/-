@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"/data/www/y5g/public/../application/index/view/item/inventory.html";i:1586851928;s:48:"/data/www/y5g/application/index/view/layout.html";i:1577343457;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"/data/www/y5g/public/../application/index/view/item/inventory.html";i:1587348626;s:48:"/data/www/y5g/application/index/view/layout.html";i:1587551009;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -91,7 +91,8 @@
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">渠道录入</a></li>
                             <!-- <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li> -->
                             <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
-                            <li><a href="<?php echo url('setting/special'); ?>">特殊修改</a></li>
+                            <li><a href="<?php echo url('setting/intelligence'); ?>">智能识别码录入</a></li>
+                            <li><a href="<?php echo url('setting/specialEditItemList'); ?>">特殊修改</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">

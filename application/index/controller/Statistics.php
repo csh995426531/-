@@ -191,8 +191,8 @@ class Statistics extends BaseController
 
         $breadcrumb = '进货统计';
 
-        AddLog(\app\index\model\Log::ACTION_STATISTICS_INCOME, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+        // AddLog(\app\index\model\Log::ACTION_STATISTICS_INCOME, json_encode($this->request->param())
+        //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
 
         return $this->fetch('income', [
             'breadcrumb' => $breadcrumb,
@@ -391,8 +391,8 @@ class Statistics extends BaseController
 
         $breadcrumb = '统计';
 
-        AddLog(\app\index\model\Log::ACTION_STATISTICS_PROFIT, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+        // AddLog(\app\index\model\Log::ACTION_STATISTICS_PROFIT, json_encode($this->request->param())
+        //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
 
         return $this->fetch('profit', [
             'breadcrumb' => $breadcrumb,

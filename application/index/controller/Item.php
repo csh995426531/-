@@ -19,6 +19,7 @@ use app\index\model\ItemName;
 use app\index\model\ItemOutgoHistory;
 use app\index\model\ItemType;
 use app\index\model\ItemNetwork;
+use app\index\model\ItemIntelligence;
 use think\Db;
 use think\Session;
 use app\index\model\User;
@@ -99,6 +100,7 @@ class Item extends BaseController
 
         return $this->fetch('income', [
             'users' => $users,
+            'userId' => Session::get("user_id"),
             'names' => $names,
             'channels' => $channels,
             'lists' => $lists,
@@ -329,13 +331,13 @@ class Item extends BaseController
 
                 Db::commit();
                 $message = Message('', true);
-                AddLog(\app\index\model\Log::ACTION_ITEM_INCOME, json_encode($this->request->param())
-                    , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+                // AddLog(\app\index\model\Log::ACTION_ITEM_INCOME, json_encode($this->request->param())
+                //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
             } catch (\Exception $e) {
                 Db::rollback();
                 $message = Message($e->getMessage(), false);
-                AddLog(\app\index\model\Log::ACTION_ITEM_INCOME, json_encode($this->request->param())
-                    , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+                // AddLog(\app\index\model\Log::ACTION_ITEM_INCOME, json_encode($this->request->param())
+                //     , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
             }
 
         } else {
@@ -383,6 +385,11 @@ class Item extends BaseController
         ]);
     }
 
+    //批量入库
+    public function addIncome2(){
+
+    }
+
     public function changeType(){
 
         $type = $this->request->get('type');
@@ -422,6 +429,7 @@ class Item extends BaseController
         }
     }
 
+    // 校验序列号
     public function checkNumber(){
 
         $result = SetResult(200, 'SUCCESS');
@@ -447,6 +455,19 @@ class Item extends BaseController
             if (!empty($item) && $item->id != $itemId){
                 $result = SetResult(500, '序列号重复');
             }
+
+            $str = substr((string)$number, -3);
+            $intelligence = ItemIntelligence::where("status", ItemIntelligence::STATUS_ACTIVE)->where('data', $str)->find();
+    
+            if ($intelligence) {
+                $result = SetResult(222,[
+                    'name_id' => $intelligence->itemType->itemName->id,
+                    'network_id' => $intelligence->itemType->id,
+                    'feature_id' => $intelligence->feature_id,
+                    'appearance_id' => $intelligence->appearance_id,
+                    'type' => $intelligence->itemType->data,
+                ]);
+            }
         }
 
         return $result;
@@ -455,7 +476,7 @@ class Item extends BaseController
     //退货入库
     public function returnIncome(){
 
-        $keyword = $this->request->get('keyword');
+        $keyword = $this->request->get('keyword', '', 'trim');
         $lists = ItemOutgoHistory::alias("t")
             ->join("item i", 't.item_id=i.id')
             ->where("t.status", ItemOutgoHistory::STATUS_SUCCESS);
@@ -551,14 +572,14 @@ class Item extends BaseController
             ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_RETURN, $model->id, 1);
 
             Db::commit();
-            AddLog(\app\index\model\Log::ACTION_ITEM_RETURN_INCOME, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+            // AddLog(\app\index\model\Log::ACTION_ITEM_RETURN_INCOME, json_encode($this->request->param())
+            //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
         } catch (\Exception $e) {
 
             Db::rollback();
             $result = SetResult(500, $e->getMessage());
-            AddLog(\app\index\model\Log::ACTION_ITEM_RETURN_INCOME, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+            // AddLog(\app\index\model\Log::ACTION_ITEM_RETURN_INCOME, json_encode($this->request->param())
+            //     , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
         }
 
         return $result;
@@ -629,6 +650,7 @@ class Item extends BaseController
        
         foreach ($lists as $list) {
 
+            $list->createTime = date('m-d H:i', strtotime($list->create_time));
             $list->typeName = $list->getTypeName();
             if ($list->item->network_id == 0 )  {
                 $list->item->network_id = $list->item->itemNetwork->data;
@@ -752,13 +774,13 @@ class Item extends BaseController
             }
 
             Db::commit();
-            AddLog(\app\index\model\Log::ACTION_ITEM_INCOME_AGREE_SUCCESS, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+            // AddLog(\app\index\model\Log::ACTION_ITEM_INCOME_AGREE_SUCCESS, json_encode($this->request->param())
+            //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
         }catch (\Exception $e) {
             Db::rollback();
             $result = SetResult(500, $e->getMessage());
-            AddLog(\app\index\model\Log::ACTION_ITEM_INCOME_AGREE_SUCCESS, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+            // AddLog(\app\index\model\Log::ACTION_ITEM_INCOME_AGREE_SUCCESS, json_encode($this->request->param())
+            //     , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
         }
 
         return $result;
@@ -882,13 +904,13 @@ class Item extends BaseController
             }
 
             Db::commit();
-            AddLog(\app\index\model\Log::ACTION_ITEM_INCOME_AGREE_REJECT, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+            // AddLog(\app\index\model\Log::ACTION_ITEM_INCOME_AGREE_REJECT, json_encode($this->request->param())
+            //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
         }catch (\Exception $e) {
             Db::rollback();
             $result = SetResult(500, $e->getMessage());
-            AddLog(\app\index\model\Log::ACTION_ITEM_INCOME_AGREE_REJECT, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+            // AddLog(\app\index\model\Log::ACTION_ITEM_INCOME_AGREE_REJECT, json_encode($this->request->param())
+            //     , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
         }
 
         return $result;
@@ -947,7 +969,7 @@ class Item extends BaseController
             $lists = $lists->where("appearance_id",  'in', $appearanceArr);
         }
 
-        $keyword = $this->request->get("keyword");
+        $keyword = $this->request->get("keyword", '', 'trim');
         if (!empty($keyword)) {
             $lists = $lists->where("number", 'LIKE', '%'.$keyword.'%');
         }
@@ -1085,7 +1107,7 @@ class Item extends BaseController
             $lists = $lists->where("appearance_id",  'in', $appearanceArr);
         }
 
-        $keyword = $this->request->get("keyword");
+        $keyword = $this->request->get("keyword", '', 'trim');
 
         if (!empty($keyword)) {
             $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
@@ -1225,7 +1247,7 @@ class Item extends BaseController
             $lists = $lists->where("appearance_id",  'in', $appearanceArr);
         }
 
-        $keyword = $this->request->get("keyword");
+        $keyword = $this->request->get("keyword", '', 'trim');
 
         if (!empty($keyword)) {
             $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
@@ -1342,12 +1364,12 @@ class Item extends BaseController
                     }
                 }
                 
-                AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+                // AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
+                // , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
             } catch (\Exception $e) {
                 $result = SetResult(500, $e->getMessage());
-                AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+                // AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
+                // , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
             }
         }
 
@@ -1419,12 +1441,12 @@ class Item extends BaseController
                     }
                 }
                 
-                AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+                // AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
+                // , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
             } catch (\Exception $e) {
                 $result = SetResult(500, $e->getMessage());
-                AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+                // AddLog(\app\index\model\Log::ACTION_ITEM_SPECIAL_OUTGO, json_encode($this->request->param())
+                // , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
             }
         }
 
@@ -1548,14 +1570,14 @@ class Item extends BaseController
                 ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_OUTGO, $model->id, 1);
 
                 Db::commit();
-                AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO, json_encode($this->request->param())
-                    , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+                // AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO, json_encode($this->request->param())
+                //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
             } catch (\Exception $e) {
 
                 DB::rollback();
                 $result = SetResult(500, $e->getMessage());
-                AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO, json_encode($this->request->param())
-                    , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+                // AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO, json_encode($this->request->param())
+                //     , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
             }
 
         } else {
@@ -1609,7 +1631,7 @@ class Item extends BaseController
             $sql = $sql->where('i.channel_id', $channel_id);
         }
 
-        $keyword = $this->request->get('keyword');
+        $keyword = $this->request->get('keyword', '', 'trim');
         
         if (!empty($keyword)) {
             $lists = $sql->where(function($sql) use($keyword) {
@@ -1623,6 +1645,10 @@ class Item extends BaseController
 
         $lists = $sql->field('t.*')
         ->paginate(10, false, ['query'=>request()->param() ]);
+
+        foreach ($lists as $list) {
+            $list->createTime = date('m-d H:i', strtotime($list->create_time));
+        }
 
         $breadcrumb = '出库审核';
 
@@ -1716,113 +1742,143 @@ class Item extends BaseController
     //在库查询
     public function inventory(){
 
-        $lists = \app\index\model\Item::where("status", "in", [
+        $this->request->post(['status'=>[
             \app\index\model\Item::STATUS_NORMAL,
             \app\index\model\Item::STATUS_INCOME_WAIT,
             \app\index\model\Item::STATUS_PREPARE
-        ]);
+        ]]);
 
-        $typeId = $this->request->get("type_id");
+        $lists = (new ItemService)->getList(array_merge($this->request->get(false), $this->request->post(false)));
 
-        if (!empty($typeId)) {
-            $typeArr = ItemType::where("data", $typeId)
-            ->column('id');
-            $lists = $lists->where("type_id", 'in', $typeArr);
-        }
+        $types = ItemType::where("status", ItemType::STATUS_ACTIVE)->distinct(true)->field('data')->select();
 
-        $nameId = $this->request->get("name_id");
+        $names = ItemName::where("status", ItemName::STATUS_ACTIVE)->distinct(true)->field('data')->select();
 
-        if (!empty($nameId)) {
-            $nameArr = ItemName::where("data", $nameId)
-            ->column('id');
-            $lists = $lists->where("name_id",  'in', $nameArr);
-        }
+        $features = ItemFeature::where("status", ItemFeature::STATUS_ACTIVE)->distinct(true)->field('data')->select();
 
-        $featureId = $this->request->get("feature_id");
+        $appearances = ItemAppearance::where("status", ItemAppearance::STATUS_ACTIVE)->distinct(true)->field('data')->select();
 
-        if (!empty($featureId)) {
-            $featureArr = ItemFeature::where("data", $featureId)
-            ->column('id');
-            $lists = $lists->where("feature_id",  'in', $featureArr);
-        }
+        $networks = itemNetwork::where("status", ItemNetwork::STATUS_ACTIVE)->distinct(true)->field('data')->select();
+
+        $categories = ItemCategory::where("status",  ItemCategory::STATUS_ACTIVE)->distinct(true)->field('data')->select();
+
+        $editions = ItemEdition::where("status",  ItemEdition::STATUS_ACTIVE)->distinct(true)->field('data')->select();
+
+        $channels = ItemChannel::where("status",  ItemChannel::STATUS_ACTIVE)->distinct(true)->field('data')->select();
+      
+            
+        $dates = Db::table('y5g_item')->distinct(true)->field("date")->select();
+
+        $dates = array_column($dates, 'date');
+
+        $model = new \app\index\model\Item;
+
+        $statuses = $model->getStatusOptions();
+
+        // $lists = \app\index\model\Item::where("status", "in", [
+        //     \app\index\model\Item::STATUS_NORMAL,
+        //     \app\index\model\Item::STATUS_INCOME_WAIT,
+        //     \app\index\model\Item::STATUS_PREPARE
+        // ]);
+
+        // $typeId = $this->request->get("type_id");
+
+        // if (!empty($typeId)) {
+        //     $typeArr = ItemType::where("data", $typeId)
+        //     ->column('id');
+        //     $lists = $lists->where("type_id", 'in', $typeArr);
+        // }
+
+        // $nameId = $this->request->get("name_id");
+
+        // if (!empty($nameId)) {
+        //     $nameArr = ItemName::where("data", $nameId)
+        //     ->column('id');
+        //     $lists = $lists->where("name_id",  'in', $nameArr);
+        // }
+
+        // $featureId = $this->request->get("feature_id");
+
+        // if (!empty($featureId)) {
+        //     $featureArr = ItemFeature::where("data", $featureId)
+        //     ->column('id');
+        //     $lists = $lists->where("feature_id",  'in', $featureArr);
+        // }
         
-        $networkId = $this->request->get("network_id");
+        // $networkId = $this->request->get("network_id");
 
-        if (!empty($networkId)) {
+        // if (!empty($networkId)) {
 
-            $networkArr = ItemNetwork::where("data", $networkId)
-            ->column('id');
+        //     $networkArr = ItemNetwork::where("data", $networkId)
+        //     ->column('id');
 
-            $lists = $lists->where("network_id", 'in',  $networkArr);
-        }
+        //     $lists = $lists->where("network_id", 'in',  $networkArr);
+        // }
 
-        $appearanceId = $this->request->get("appearance_id");
+        // $appearanceId = $this->request->get("appearance_id");
 
-        if (!empty($appearanceId)) {
+        // if (!empty($appearanceId)) {
 
-            $appearanceArr = ItemAppearance::where("data", $appearanceId)
-            ->column('id');
+        //     $appearanceArr = ItemAppearance::where("data", $appearanceId)
+        //     ->column('id');
 
-            $lists = $lists->where("appearance_id",  'in', $appearanceArr);
-        }
+        //     $lists = $lists->where("appearance_id",  'in', $appearanceArr);
+        // }
 
-        $keyword = $this->request->get("keyword");
+        // $keyword = $this->request->get("keyword");
 
-        if (!empty($keyword)) {
-            $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
-        }
+        // if (!empty($keyword)) {
+        //     $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
+        // }
 
-        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
+        // $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
 
-        foreach ($lists as &$list) {
-            $list->statusName = $list->getStatusName();
-        }
+        // foreach ($lists as &$list) {
+        //     $list->statusName = $list->getStatusName();
+        // }
 
-        $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
+        // $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
 
-        if (!empty($typeIds)) {
-            $types = ItemType::where("id", 'in', array_column($typeIds, 'type_id'))->distinct(true)->field('data')->select();
-        } else {
-            $types = [];
-        }
+        // if (!empty($typeIds)) {
+        //     $types = ItemType::where("id", 'in', array_column($typeIds, 'type_id'))->distinct(true)->field('data')->select();
+        // } else {
+        //     $types = [];
+        // }
 
-        $nameIds = Db::table('y5g_item')->distinct(true)->field("name_id")->select();
+        // $nameIds = Db::table('y5g_item')->distinct(true)->field("name_id")->select();
     
-        if (!empty($nameIds)) {
-            $names = ItemName::where("id", 'in', array_column($nameIds, 'name_id'))->distinct(true)->field('data')->select();
-        } else {
-            $names = [];
-        }
+        // if (!empty($nameIds)) {
+        //     $names = ItemName::where("id", 'in', array_column($nameIds, 'name_id'))->distinct(true)->field('data')->select();
+        // } else {
+        //     $names = [];
+        // }
 
-        $featureIds = Db::table('y5g_item')->distinct(true)->field("feature_id")->select();
+        // $featureIds = Db::table('y5g_item')->distinct(true)->field("feature_id")->select();
 
-        if (!empty($featureIds)) {
-            $features = ItemFeature::where("id", 'in', array_column($featureIds, 'feature_id'))->distinct(true)->field('data')->select();
+        // if (!empty($featureIds)) {
+        //     $features = ItemFeature::where("id", 'in', array_column($featureIds, 'feature_id'))->distinct(true)->field('data')->select();
   
-        } else {
-            $features = [];
-        }
+        // } else {
+        //     $features = [];
+        // }
 
-        $networkIds = Db::table('y5g_item')->distinct(true)->field("network_id")->select();
-        if (!empty($networkIds)) {
+        // $networkIds = Db::table('y5g_item')->distinct(true)->field("network_id")->select();
+        // if (!empty($networkIds)) {
 
-            $networks = itemNetwork::where("id", 'in', array_column($networkIds, 'network_id'))->distinct(true)->field('data')->select();
-        } else {
-            $networks = [];
-        }
+        //     $networks = itemNetwork::where("id", 'in', array_column($networkIds, 'network_id'))->distinct(true)->field('data')->select();
+        // } else {
+        //     $networks = [];
+        // }
 
-        $appearanceIds = Db::table('y5g_item')->distinct(true)->field("appearance_id")->select();
+        // $appearanceIds = Db::table('y5g_item')->distinct(true)->field("appearance_id")->select();
 
-        if (!empty($appearanceIds)) {
-            $appearances = ItemAppearance::where("id", 'in', array_column($appearanceIds, 'appearance_id'))->distinct(true)->field('data')->select();
-        } else {
-            $appearances = [];
-        }
+        // if (!empty($appearanceIds)) {
+        //     $appearances = ItemAppearance::where("id", 'in', array_column($appearanceIds, 'appearance_id'))->distinct(true)->field('data')->select();
+        // } else {
+        //     $appearances = [];
+        // }
 
         $breadcrumb = '在库查询';
-
-        AddLog(\app\index\model\Log::ACTION_ITEM_INVENTORY, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
 
         return $this->fetch('inventory', [
             'lists' => $lists,
@@ -1832,6 +1888,7 @@ class Item extends BaseController
             'features' => $features,
             'networks' => $networks,
             'appearances' => $appearances,
+            'editions' => $editions,
             'data' =>  [
                 'features' => $features,
                 'networks' => $networks,
@@ -2023,8 +2080,8 @@ class Item extends BaseController
 
         $breadcrumb = '综合查询';
 
-        AddLog(\app\index\model\Log::ACTION_ITEM_SEARCH, json_encode($this->request->param())
-            , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+        // AddLog(\app\index\model\Log::ACTION_ITEM_SEARCH, json_encode($this->request->param())
+        //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
 
         return $this->fetch('search', [
             'lists' => $lists,
@@ -2135,13 +2192,13 @@ class Item extends BaseController
             ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_OUTGO_AGREE, $history->id, 1);
 
             Db::commit();
-            AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO_AGREE_SUCCESS, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+            // AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO_AGREE_SUCCESS, json_encode($this->request->param())
+            //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
         }catch (\Exception $e) {
             Db::rollback();
             $result = SetResult(500, $e->getMessage());
-            AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO_AGREE_SUCCESS, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+            // AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO_AGREE_SUCCESS, json_encode($this->request->param())
+            //     , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
         }
 
         return $result;
@@ -2232,18 +2289,19 @@ class Item extends BaseController
             ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_OUTGO_AGREE, $history->id, 2);
 
             Db::commit();
-            AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO_AGREE_REJECT, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+            // AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO_AGREE_REJECT, json_encode($this->request->param())
+            //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
         }catch (\Exception $e) {
             Db::rollback();
             $result = SetResult(500, $e->getMessage());
-            AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO_AGREE_REJECT, json_encode($this->request->param())
-                , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+            // AddLog(\app\index\model\Log::ACTION_ITEM_OUTGO_AGREE_REJECT, json_encode($this->request->param())
+            //     , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
         }
 
         return $result;
     }
 
+    //商品历史
     public function history($itemId){
 
         $lists = ItemHistory::where('item_id', $itemId)->order('id desc')->paginate(10, false, ['query'=>request()->param() ]);

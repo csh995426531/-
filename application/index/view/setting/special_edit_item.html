@@ -41,7 +41,7 @@
         <div class="">
             <div class="page-header">
                 <h2>{$breadcrumb}
-                        <a href="{:url('income')}" class="btn btn-info pull-right">入库记录处理</a>                   
+                        <a href="{:url('specialEditItemList')}" class="btn btn-info pull-right">特殊修改</a>                   
                   
                 </h2>
             </div>
@@ -51,13 +51,6 @@
                         <label class="control-label" for="date">进货日期</label>
                         <div class="controls">
                             <input type="text" class="input-xlarge" id="date"  name="date" value="" autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="number">序列号</label>
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="number" name="number" value="<?php if($history ){echo $history->item->number;}?>"  data-href="{:url('checkNumber')}" placeholder="序列号不能为空" data-href2="{:url('checkIntelligence')}"><span id="number_message" style="color: red"></span>
-                            <input type="hidden" id="number_status" value="0"/>
                         </div>
                     </div>
                     <div class="control-group">
@@ -118,7 +111,13 @@
                             </select>
                         </div>
                     </div>
-
+                    <div class="control-group">
+                        <label class="control-label" for="number">序列号</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="number" name="number" value="<?php if($history ){echo $history->item->number;}?>"  data-href="{:url('item/checkNumber')}" placeholder="序列号不能为空"><span id="number_message" style="color: red"></span>
+                            <input type="hidden" id="number_status" value="0"/>
+                        </div>
+                    </div>
                     <div class="control-group">
                         <label class="control-label" for="edition_id">固件版本</label>
                         <div class="controls">
@@ -273,35 +272,6 @@
 
                 if (res.code == 200) {
                     $("#number_status").val(1);
-                } else if (res.code == 222) {
-                    
-                    $("#type_id").val(res.data.type);
-                    $("#type_message").html('');
-                    $("#type_status").val(1);
-                    $('#name_id option').each(function(k, v) {
-                        if ($(v).val() == res.data.name_id) {
-                            $(v).prop('selected', true)
-                        }
-                    });
-                    
-                    changeNameSelected();
-            
-                    $('#network_id option').each(function(k, v) { console.log($(v).val())
-                        if ($(v).val() == res.data.network_id) {
-                            $(v).prop('selected', true)
-                        }
-                    });
-                    $('#feature_id option').each(function(k, v) { console.log(12)
-                        if ($(v).val() == res.data.feature_id) {
-                            $(v).prop('selected', true)
-                        }
-                    });
-                    $('#appearance_id option').each(function(k, v) { console.log(12)
-                        if ($(v).val() == res.data.appearance_id) {
-                            $(v).prop('selected', true)
-                        }
-                    });
-                    
                 } else {
                     $("#number_status").val(0);
                     // $("#number").prop('placeholder', res.data);
@@ -314,6 +284,7 @@
 
     $(function () {
 
+        
         $("#name_id").change(function () {
             changeNameSelected();
         });
