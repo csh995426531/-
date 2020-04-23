@@ -386,8 +386,48 @@ class Item extends BaseController
     }
 
     //批量入库
-    public function addIncome2(){
+    public function batchAddIncome(){
 
+
+        $message = '';
+
+        $names = ItemName::where("status", ItemName::STATUS_ACTIVE)->select();
+        
+        foreach ($names as $name) {
+            $name->itemNetwork = ItemNetwork::where([
+                "name_id" => $name->id,
+                "status" => ItemNetwork::STATUS_ACTIVE
+            ])->select();
+
+            $name->itemAppearance = ItemAppearance::where([
+                "name_id" => $name->id,
+                "status" => ItemAppearance::STATUS_ACTIVE
+            ])->select();
+
+            $name->itemFeature = ItemFeature::where([
+                "name_id" => $name->id,
+                "status" => ItemFeature::STATUS_ACTIVE
+            ])->select();
+
+            $name->itemEdition = ItemEdition::where([
+                "category_id" => $name->category_id,
+                "status" => ItemEdition::STATUS_ACTIVE
+            ])->select();
+        }
+
+        // var_dump($names);die;
+        $channels = ItemChannel::where("type", ItemChannel::TYPE_INCOME)
+            ->where("status", ItemChannel::STATUS_ACTIVE)
+            ->select();
+        
+        $breadcrumb = '批量入库';
+
+        return $this->fetch('batch_add_income', [
+            'message' => $message,
+            'breadcrumb' => $breadcrumb,
+            'names' => $names,
+            'channels' => $channels
+        ]);
     }
 
     public function changeType(){

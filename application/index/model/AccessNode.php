@@ -31,7 +31,7 @@ class AccessNode extends Model
                 'index/item/search','index/item/history',
             ],
             'index/item/income' => [
-                'index/item/income', 'index/item/changetype', 'index/item/checknumber', 'index/item/checkintelligence', 'index/item/addincome', 'index/item/addincome2', 'index/item/deleteagree'
+                'index/item/income', 'index/item/changetype', 'index/item/checknumber', 'index/item/checkintelligence', 'index/item/addincome', 'index/item/batchaddincome', 'index/item/deleteagree'
             ],
             'index/item/returnincome' => [
                 'index/item/returnincome', 'index/item/addreturnincome',
