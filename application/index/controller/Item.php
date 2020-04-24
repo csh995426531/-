@@ -388,9 +388,6 @@ class Item extends BaseController
     //批量入库
     public function batchAddIncome(){
 
-
-        $message = '';
-
         $names = ItemName::where("status", ItemName::STATUS_ACTIVE)->select();
         
         foreach ($names as $name) {
@@ -423,10 +420,58 @@ class Item extends BaseController
         $breadcrumb = '批量入库';
 
         return $this->fetch('batch_add_income', [
-            'message' => $message,
             'breadcrumb' => $breadcrumb,
             'names' => $names,
             'channels' => $channels
+        ]);
+    }
+
+    //批量入库保存
+    public function batchAddIncomeSave()
+    {
+        $params = [
+            'date' => $date = $this->request->post("date"),
+            'type_id' => $date = $this->request->post("type_id"),
+            'category_id' => $date = $this->request->post("category_id"),
+            'name_id' => $date = $this->request->post("name_id"),
+            'feature_id' => $date = $this->request->post("feature_id"),
+            'appearance_id' => $date = $this->request->post("appearance_id"),
+            'edition_id' => $date = $this->request->post("edition_id"),
+            'channel_id' => $date = $this->request->post("channel_id"),
+            'network_id' => $date = $this->request->post("network_id", 0),
+        ];
+
+        $number = $this->request->post("number/a");
+        $price = $this->request->post("price/a");
+        $memo = $this->request->post("memo/a");
+        
+        // if (count($number) != count($price)) {
+        //     return SetResult(500, '价格不能为空');
+        // }
+        
+        $success = [];
+        $field = [];
+
+        for ($i=1; $i<=count($number); $i++) {
+            $params['number'] = $number[$i];
+            $params['price'] = $price[$i];
+            $params['memo'] = $memo[$i];
+
+            $result = (new ItemService)->addIncome($params);
+
+            if ($result === true) {
+                $success[] = $i;
+            } else {
+                $field[] = [
+                    'index' => $i,
+                    'msg' => $result
+                ];
+            }
+        }
+
+        return SetResult(200, [
+            'success' => $success,
+            'field' => $field
         ]);
     }
 
@@ -476,6 +521,7 @@ class Item extends BaseController
 
         $number = $this->request->get("number");
         $itemId = $this->request->get('id');
+        $auto_type = $this->request->get('auto_type', 1); //是否智能匹配型号 {1：是 0：否}
 
         if (empty($number)) {
             $result = SetResult(500, '序列号不能为空');
@@ -496,17 +542,19 @@ class Item extends BaseController
                 $result = SetResult(500, '序列号重复');
             }
 
-            $str = substr((string)$number, -3);
-            $intelligence = ItemIntelligence::where("status", ItemIntelligence::STATUS_ACTIVE)->where('data', $str)->find();
-    
-            if ($intelligence) {
-                $result = SetResult(222,[
-                    'name_id' => $intelligence->itemType->itemName->id,
-                    'network_id' => $intelligence->itemType->id,
-                    'feature_id' => $intelligence->feature_id,
-                    'appearance_id' => $intelligence->appearance_id,
-                    'type' => $intelligence->itemType->data,
-                ]);
+            if ($auto_type) {
+                $str = substr((string)$number, -3);
+                $intelligence = ItemIntelligence::where("status", ItemIntelligence::STATUS_ACTIVE)->where('data', $str)->find();
+        
+                if ($intelligence) {
+                    $result = SetResult(222,[
+                        'name_id' => $intelligence->itemType->itemName->id,
+                        'network_id' => $intelligence->itemType->id,
+                        'feature_id' => $intelligence->feature_id,
+                        'appearance_id' => $intelligence->appearance_id,
+                        'type' => $intelligence->itemType->data,
+                    ]);
+                }
             }
         }
 

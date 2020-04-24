@@ -12,6 +12,8 @@ use app\index\model\ItemName;
 use app\index\model\ItemOutgoHistory;
 use app\index\model\ItemType;
 use app\index\model\ItemNetwork;
+use think\Session;
+use think\Db;
 
 /**
  * 商品服务层
@@ -125,5 +127,173 @@ class Item
         }
 
         return $data;
+    }
+
+
+    public function addIncome($params)
+    {
+        Db::startTrans();
+        try {
+
+            if (empty($params['date'])) {
+                throw new \Exception("日期错误");
+            }
+
+            if (empty($params['type_id'])) {
+                throw new \Exception("型号不能为空");
+            }
+
+            $type = ItemType::where("data", $params['type_id'])->find();
+
+            if (empty($type) || $type->status != ItemType::STATUS_ACTIVE) {
+                throw new \Exception("型号无效");
+            }
+
+            if (empty($params['category_id'])) {
+                throw new \Exception("分类不能为空");
+            }
+
+            $category = ItemCategory::where("id", $params['category_id'])->find();
+
+            if (empty($category) || $category->status != ItemCategory::STATUS_ACTIVE) {
+                throw new \Exception("分类无效");
+            }
+
+            if (empty($params['name_id'])) {
+                throw new \Exception("名称不能为空");
+            }
+
+            $name = ItemName::where("id", $params['name_id'])->find();
+
+            if (empty($name) || $name->status != ItemName::STATUS_ACTIVE) {
+                throw new \Exception("名称无效");
+            }
+
+            if (empty($params['feature_id'])) {
+                throw new \Exception("配置不能为空");
+            }
+
+            $feature = ItemFeature::where("id", $params['feature_id'])->find();
+
+            if (empty($feature) || $feature->status != ItemFeature::STATUS_ACTIVE) {
+                throw new \Exception("配置无效");
+            }
+
+            if (empty($params['appearance_id'])) {
+                throw new \Exception("外观不能为空");
+            }
+
+            $appearance = ItemAppearance::where("id", $params['appearance_id'])->find();
+
+            if (empty($appearance) || $appearance->status != ItemAppearance::STATUS_ACTIVE) {
+                throw new \Exception("外观无效");
+            }
+
+            if (empty($params['edition_id'])) {
+                throw new \Exception("固件版本不能为空");
+            }
+
+            $edition = ItemEdition::where("id", $params['edition_id'])->find();
+
+            if (empty($edition) || $edition->status != ItemEdition::STATUS_ACTIVE) {
+                throw new \Exception("固件版本无效");
+            }
+
+            if (empty($params['channel_id'])) {
+                throw new \Exception("渠道不能为空");
+            }
+
+            $channel = ItemChannel::where("id", $params['channel_id'])->find();
+
+            if (empty($channel) || $channel->status != ItemChannel::STATUS_ACTIVE) {
+                throw new \Exception("渠道无效");
+            }
+
+            if (empty($params['number'])) {
+                throw new \Exception("序列号不能为空");
+            }
+
+            $number = strtoupper($params['number']);
+
+            if (empty($params['price'])) {
+                throw new \Exception("价格不能为空");
+            }
+
+            $price = floatval($params['price']);
+
+            if ((!is_int($price) && !is_float($price)) || $price > 1000000 || $price < 0) {
+                throw new \Exception("价格错误");
+            }
+
+            $item = \app\index\model\Item::where("number", $number)
+                ->where("status", "in", [
+                    \app\index\model\Item::STATUS_INCOME_WAIT,
+                    \app\index\model\Item::STATUS_NORMAL,
+                    \app\index\model\Item::STATUS_OUTGO_WAIT,
+                    \app\index\model\Item::STATUS_PREPARE,
+                    \app\index\model\Item::STATUS_LOSE,
+                    ])
+                ->find();
+
+            if (!empty($item)) {
+                throw new \Exception("序列号重复");
+            }
+          
+            if (!empty($params['type_id']) && $params['type_id'] !== 0) {
+                $type = ItemType::where("status", ItemType::STATUS_ACTIVE)
+                    ->where("data", $params['type_id'])
+                    ->find();
+                
+                $params['type_id'] = $type->id;
+            }
+            
+
+            $model = new \app\index\model\Item;
+            $model->data([
+                "category_id" => $params['category_id'],
+                "name_id" => $params['name_id'],
+                "feature_id" => $params['feature_id'],
+                "appearance_id" => $params['appearance_id'],
+                "edition_id" => $params['edition_id'],
+                "type_id" => $params['type_id'],
+                "date" => $params['date'],
+                "number" => $params['number'],
+                "memo" => $params['memo'],
+                "price" => $params['price'],
+                "network_id" => $params['network_id'],
+                "channel_id" => $params['channel_id'],
+                "status" => \app\index\model\Item::STATUS_INCOME_WAIT,
+                "create_time" => time(),
+                "update_time" => time()
+            ]);
+
+            if (!$model->save()) {
+                throw new \Exception("库存保存失败");
+            }
+
+            $itemId = $model->id;
+
+            $model = new ItemIncomeHistory;
+            $model->data([
+                "type" => ItemIncomeHistory::TYPE_INCOME,
+                "item_id" => $itemId,
+                "create_user_id" => Session::get("user_id"),
+                'update_user_id' => Session::get("user_id"),
+                "status" => ItemIncomeHistory::STATUS_WAIT,
+                "create_time" => time(),
+                "update_time" => time()
+            ]);
+
+            if (!$model->save()) {
+                throw new \Exception("入库记录保存失败");
+            }
+            $this->createHistory($itemId, ItemHistory::EVENT_INCOME, $model->id, 1);
+            Db::commit();
+            return true;
+        } catch (\Exception $e) {
+            Db::rollback();
+            return $e->getMessage();
+        }
+        return $message;
     }
 }

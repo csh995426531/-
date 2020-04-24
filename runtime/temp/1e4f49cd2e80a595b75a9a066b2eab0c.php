@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/index/index.html";i:1574520878;s:48:"/data/www/y5g/application/index/view/layout.html";i:1587546952;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/index/index.html";i:1574520878;s:48:"/data/www/y5g/application/index/view/layout.html";i:1587719872;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>
@@ -43,7 +43,7 @@
                         <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
                         <ul id="item-income-dropdown" class="collapse">
                             <li><a href="<?php echo url('item/addIncome'); ?>">采购入库</a></li>
-                            <li><a href="<?php echo url('item/addIncome2'); ?>">批量入库</a></li>
+                            <li><a href="<?php echo url('item/batchAddIncome'); ?>">批量入库</a></li>
                             <li><a href="<?php echo url('item/income'); ?>">入库待核</a></li>
                             <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
                         </ul>
@@ -91,7 +91,8 @@
                             <li><a href="<?php echo url('setting/incomeChannel'); ?>">渠道录入</a></li>
                             <!-- <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li> -->
                             <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
-                            <li><a href="<?php echo url('setting/editItemList'); ?>">特殊修改</a></li>
+                            <li><a href="<?php echo url('setting/intelligence'); ?>">智能识别码录入</a></li>
+                            <li><a href="<?php echo url('setting/specialEditItemList'); ?>">特殊修改</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
