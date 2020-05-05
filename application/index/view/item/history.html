@@ -53,6 +53,9 @@
                             } elseif ($temp->event == 5) { //退货入库
                                 echo '入库人:';
                                 echo $temp->incomeHistory->createUser ? $temp->incomeHistory->createUser->username : '' ;
+                            } elseif ($temp->event == 7) { //特殊修改
+                                echo '修改人:';
+                                echo $temp->createUser ? $temp->createUser->username : '' ;
                             }
                         ?>
                     </div>

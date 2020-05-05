@@ -48,4 +48,8 @@ class ItemHistory extends Model
     public function outgoHistory(){
         return $this->hasOne("item_outgo_history", "id", "event_id");
     }
+
+    public function createUser(){
+        return $this->hasOne("user", "id", "create_user_id");
+    }
 }

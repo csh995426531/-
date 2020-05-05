@@ -35,7 +35,7 @@ class Item
     /**
      * 创建商品历史
      */
-    public function createHistory($itemId, $event, $eventId, $result=1) {
+    public function createHistory($itemId, $event, $eventId, $result=1, $user_id=0) {
         
         $model = new ItemHistory;
         $model->data([
@@ -43,7 +43,8 @@ class Item
             'event' => $event,
             'event_id' => $eventId,
             'result' => $result,
-            'create_time' => time()
+            'create_time' => time(),
+            'create_user_id' => $user_id,
         ]);
         if (!$model->save()) {
             throw new \Exception("保存错误");

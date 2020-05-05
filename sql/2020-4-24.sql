@@ -11,3 +11,7 @@ CREATE TABLE `y5g_item_intelligence` (
   `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8 COMMENT='智能识别码表';
+
+
+
+ALTER TABLE y5g_item_history ADD `create_user_id` int(10) unsigned DEFAULT NULL COMMENT '创建人id';

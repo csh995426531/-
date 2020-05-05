@@ -367,6 +367,7 @@ class Setting extends BaseController
 
             $feature = ItemFeature::where([
                 "data" => ['=', $data],
+                'name_id' => ['=', $nameId],
                 "id" => ['<>', $id],
             ])->find();
 
@@ -1336,48 +1337,60 @@ class Setting extends BaseController
         $channels = ItemChannel::where("id", 'in', array_column($channelIds, 'channel_id'))->select();
 
 
-        $sql = ItemIncomeHistory::alias('t')
-            ->field('t.*')
-            ->join('item i', 'i.id=t.item_id')
-            ->where(function ($query) {
-                $query->where('t.status', 'in', [
-                    ItemIncomeHistory::STATUS_WAIT, 
-                    ItemIncomeHistory::STATUS_FAIL
-                ])->where('t.type', ItemIncomeHistory::TYPE_INCOME);
-            })->whereOr(function ($query) {
-                $query->where('t.status', ItemIncomeHistory::STATUS_WAIT)
-                ->where('t.type', ItemIncomeHistory::TYPE_RETURN_INCOME);
-            });
+        // $sql = ItemIncomeHistory::alias('t')
+        //     ->field('t.*')
+        //     ->join('item i', 'i.id=t.item_id')
+        //     ->where(function($query) {
+        //         $query->where(function ($query) {
+        //             $query->where('t.status', 'in', [
+        //                 ItemIncomeHistory::STATUS_WAIT, 
+        //                 ItemIncomeHistory::STATUS_FAIL
+        //             ])->where('t.type', ItemIncomeHistory::TYPE_INCOME);
+        //         })->whereOr(function ($query) {
+        //             $query->where('t.status', ItemIncomeHistory::STATUS_WAIT)
+        //             ->where('t.type', ItemIncomeHistory::TYPE_RETURN_INCOME);
+        //         });
+        //     });
 
-        $user_id = $this->request->get('user_id');
+        // $user_id = $this->request->get('user_id');
 
-        if (!empty($user_id) && $user_id > 0) {
-            $sql = $sql->where('t.create_user_id', $user_id);
-        }
+        // if (!empty($user_id) && $user_id > 0) {
+        //     $sql = $sql->where('t.create_user_id', $user_id);
+        // }
 
-        $date = $this->request->get('date');
+        // $date = $this->request->get('date');
 
-        if (!empty($date)) {
+        // if (!empty($date)) {
 
-            $start_time = strtotime($date. '00:00:00');
-            $end_time = strtotime($date. '23:59:59');
-            $sql = $sql->where('t.create_time',  '>=', $start_time)->where('t.create_time', '<=', $end_time);
-        }
+        //     $start_time = strtotime($date. '00:00:00');
+        //     $end_time = strtotime($date. '23:59:59');
+        //     $sql = $sql->where('t.create_time',  '>=', $start_time)->where('t.create_time', '<=', $end_time);
+        // }
 
-        $name_id = $this->request->get('name_id');
+        // $name_id = $this->request->get('name_id');
 
-        if (!empty($name_id) && $name_id > 0) {
-            $sql = $sql->where('i.name_id', $name_id);
-        }
+        // if (!empty($name_id) && $name_id > 0) {
+        //     $sql = $sql->where('i.name_id', $name_id);
+        // }
 
-        $channel_id = $this->request->get('channel_id');
+        // $channel_id = $this->request->get('channel_id');
 
-        if (!empty($channel_id) && $channel_id > 0) {
-            $sql = $sql->where('i.channel_id', $channel_id);
-        }
+        // if (!empty($channel_id) && $channel_id > 0) {
+        //     $sql = $sql->where('i.channel_id', $channel_id);
+        // }
+       
+        // $keyword = $this->request->get("keyword", '', 'trim'); 
+        // if (!empty($keyword)) {
+        //     $sql = $sql->where("i.number", 'LIKE', '%'.$keyword.'%');
+        // }
 
-        $lists = $sql->order('update_time', 'desc')->paginate(10, false, ['query'=>request()->param() ]);
-    
+        // $lists = $sql->order('update_time', 'desc')->paginate(10, false, ['query'=>request()->param() ]);
+        $this->request->get(['status'=>[
+            \app\index\model\Item::STATUS_NORMAL,
+            \app\index\model\Item::STATUS_OUTGO_WAIT
+        ]]);
+        $lists = (new ItemService)->getList(array_merge($this->request->get(false), $this->request->get(false)));
+
         $breadcrumb = '特殊修改';
 
         return $this->fetch('special_edit_item_list', [
@@ -1530,7 +1543,6 @@ class Setting extends BaseController
                     $typeId = $type->id;
                 }
                 
-                
                 $model = new \app\index\model\Item;
                 $updated = $model->save([
                     "category_id" => $categoryTd,
@@ -1556,7 +1568,7 @@ class Setting extends BaseController
 
                 Db::commit();
                 $message = Message('', true);
-                ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_SPECIAL_EDIT, $history->id, 1);
+                ItemService::getInstance()->createHistory($item->id, ItemHistory::EVENT_SPECIAL_EDIT, $history->id, 1, Session::get('user_id'));
             } catch (\Exception $e) {
                 Db::rollback();
                 $message = Message($e->getMessage(), false);

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"/data/www/y5g/public/../application/index/view/item/inventory.html";i:1587348626;s:48:"/data/www/y5g/application/index/view/layout.html";i:1587635318;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"/data/www/y5g/public/../application/index/view/item/inventory.html";i:1587348626;s:48:"/data/www/y5g/application/index/view/layout.html";i:1587719872;}*/ ?>
 <!DOCTYPE html>
 <html lang="en" style="height:100%">
 <head>

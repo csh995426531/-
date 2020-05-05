@@ -5,26 +5,27 @@
         <div class="span12">
 
             <form class="form-inline" method="get">
-            <select class="span2" name="user_id">
+            <!-- <select class="span2" name="user_id">
                 <option value=""> - 入库人 - </option>
                 {foreach $users as $user}
                 <option value="{$user.id}" {$Think.get.user_id==$user.id ? 'selected' :''}>{$user.username}</opion>
                 {/foreach}
-            </select>
+            </select> -->
             <label class="control-label" for="date">进货日期</label>
             <input type="text" class="input-xlarge span2" id="date"  name="date" value="" data-val="{$Think.get.date}" autocomplete="off">
             <select class="span2" name="name_id">
                 <option value=""> - 名称 - </option>
                 {foreach $names as $name}
-                <option value="{$name.id}" {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
+                <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
                 {/foreach}
             </select>
             <select class="span2" name="channel_id">
                 <option value=""> - 进货渠道 - </option>
                 {foreach $channels as $channel}
-                <option value="{$channel.id}" {$Think.get.channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
+                <option value="{$channel.data}" {$Think.get.channel_id==$channel.data ? 'selected' :''}>{$channel.data}</option>
                 {/foreach}
             </select>
+            <input type="text" class="input-large" name="keyword" placeholder="序列号" value="{$Think.get.keyword}">
             <button type="submit" class="btn btn-primary">搜索</button>
         </form>
     </div>
@@ -43,7 +44,6 @@
                     <th>固件版本</th>
                     <th>进货价格</th>
                     <th>进货渠道</th>
-                    <th>入库人</th>
                     <th>入库时间</th>
                   
                     <th class="actions">操作</th>
@@ -55,18 +55,17 @@
                 <tr>
                     <td><span>{$temp.id}</span></td>
                     <td><span>{$temp->getStatusName()}</span></td>
-                      <!-- <th><span>{$temp.item.itemType.data}</span></th>-->
-                    <th><span>{$temp.item.itemName.data}</span></th>
-                    <th><span>{$temp.item.itemNetwork.data}</span></th>
-                    <th><span>{$temp.item.itemFeature.data}</span></th>
-                    <th><span>{$temp.item.itemAppearance.data}</span></th>
+                      <!-- <th><span>{$temp.itemType.data}</span></th>-->
+                    <th><span>{$temp.itemName.data}</span></th>
+                    <th><span>{$temp.itemNetwork.data}</span></th>
+                    <th><span>{$temp.itemFeature.data}</span></th>
+                    <th><span>{$temp.itemAppearance.data}</span></th>
                    
-                    <th><a href="https://checkcoverage.apple.com/cn/zh/?sn={$temp.item.number}" target="_blank"><span>{$temp.item.number}</span></a></th>
-                    <th><span>{$temp.item.itemEdition.data}</span></th>
-                    <!-- <th><span>{$temp.item.memo}</span></th> -->
-                    <th><span>{$temp.item.price}</span></th>
-                    <th><span>{$temp.item.itemChannel.data}</span></th>
-                    <td><span>{$temp.createUser.username}</span></td>
+                    <th><a href="https://checkcoverage.apple.com/cn/zh/?sn={$temp.number}" target="_blank"><span>{$temp.number}</span></a></th>
+                    <th><span>{$temp.itemEdition.data}</span></th>
+                    <!-- <th><span>{$temp.memo}</span></th> -->
+                    <th><span>{$temp.price}</span></th>
+                    <th><span>{$temp.itemChannel.data}</span></th>
                     <td><span>{$temp.create_time}</span></td>
                 
                     <td class="actions">

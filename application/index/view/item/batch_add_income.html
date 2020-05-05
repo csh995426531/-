@@ -317,9 +317,19 @@
             })
 
             //判断数据库是否重复
-            $.get(url, {number: val, id: 0, auto_type: 0}, function(res){
+            $.get(url, {number: val, id: 0}, function(res){
                 if (res.code != 200 && res.code != 222) {
                     err_msg += res.data + ';'; 
+                }else if (res.code == 222) {
+                    var type_id = $("#type_id").val();
+                    var name_id = $("#name_id option:selected").val();
+                    var network_id = $("#network_id option:selected").val();
+                    var feature_id = $("#feature_id option:selected").val();
+                    var appearance_id = $("#appearance_id option:selected").val();
+                    // console.log(type_id,name_id,network_id,feature_id,appearance_id);
+                    if (res.data.type != type_id || res.data.name_id != name_id || res.data.network_id != network_id || res.data.feature_id != feature_id || res.data.appearance_id != appearance_id) {
+                        err_msg += '产品属性可能错误';
+                    }
                 }
 
                 if (err_msg != '') {

@@ -54,19 +54,32 @@ class Item extends BaseController
         $channels = ItemChannel::where("id", 'in', array_column($channelIds, 'channel_id'))->select();
 
 
+        // $sql = ItemIncomeHistory::alias('t')
+        //     ->field('t.*')
+        //     ->join('item i', 'i.id=t.item_id')
+        //     ->where(function ($query) {
+        //         $query->where('t.status', 'in', [
+        //             ItemIncomeHistory::STATUS_WAIT, 
+        //             ItemIncomeHistory::STATUS_FAIL
+        //         ])->where('t.type', ItemIncomeHistory::TYPE_INCOME);
+        //     })->whereOr(function ($query) {
+        //         $query->where('t.status', ItemIncomeHistory::STATUS_WAIT)
+        //         ->where('t.type', ItemIncomeHistory::TYPE_RETURN_INCOME);
+        //     });
         $sql = ItemIncomeHistory::alias('t')
             ->field('t.*')
             ->join('item i', 'i.id=t.item_id')
-            ->where(function ($query) {
-                $query->where('t.status', 'in', [
-                    ItemIncomeHistory::STATUS_WAIT, 
-                    ItemIncomeHistory::STATUS_FAIL
-                ])->where('t.type', ItemIncomeHistory::TYPE_INCOME);
-            })->whereOr(function ($query) {
-                $query->where('t.status', ItemIncomeHistory::STATUS_WAIT)
-                ->where('t.type', ItemIncomeHistory::TYPE_RETURN_INCOME);
+            ->where(function($query) {
+                $query->where(function ($query) {
+                    $query->where('t.status', 'in', [
+                        ItemIncomeHistory::STATUS_WAIT, 
+                        ItemIncomeHistory::STATUS_FAIL
+                    ])->where('t.type', ItemIncomeHistory::TYPE_INCOME);
+                })->whereOr(function ($query) {
+                    $query->where('t.status', ItemIncomeHistory::STATUS_WAIT)
+                    ->where('t.type', ItemIncomeHistory::TYPE_RETURN_INCOME);
+                });
             });
-
         $user_id = $this->request->get('user_id');
 
         if (!empty($user_id) && $user_id > 0) {
@@ -1252,7 +1265,7 @@ class Item extends BaseController
 
         $status = [
             \app\index\model\Item::STATUS_NORMAL => '在库',
-            \app\index\model\Item::STATUS_OUTGO_WAIT => '出库待核'
+            \app\index\model\Item::STATUS_REPAIR => '维修中'
         ];
 
         $breadcrumb = '维修返库';
