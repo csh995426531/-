@@ -1,0 +1,210 @@
+
+<div class="row">
+
+<div class="span12">
+
+<div class="">
+
+<form class="form-inline" method="get">
+    <select class="span2" name="type_id">
+        <option value=""> - 型号 - </option>
+        {foreach $types as $type}
+        <option value="{$type.data}" {$Think.get.type_id==$type.data ? 'selected' :''}>{$type.data}</opion>
+        {/foreach}
+    </select>
+    <span id="data-all" style="display:none">{$data|json_encode}</span>
+    <select class="span2" id="name_id" name="name_id"  data-href="{:url('changeName')}">
+        <option value=""> - 名称 - </option>
+        {foreach $names as $name}
+        <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
+        {/foreach}
+    </select>
+    <select class="span2" id="network_id" name="network_id">
+        <option value=""> - 网络模式 - </option>
+        {foreach $networks as $network}
+        <option value="{$network.data}" {$Think.get.network_id==$network.data ? 'selected' :''}>{$network.data}</option>
+        {/foreach}
+    </select>
+    <select class="span2"  id="feature_id"name="feature_id" >
+        <option value=""> - 配置 - </option>
+        {foreach $features as $feature}
+            <option value="{$feature.data}" {$Think.get.feature_id==$feature.data ? 'selected' :''}>{$feature.data}</option>
+        {/foreach}
+    </select>
+    <select class="span2" id="appearance_id" name="appearance_id">
+        <option value=""> - 外观 - </option>
+        {foreach $appearances as $appearance}
+            <option value="{$appearance.data}" {$Think.get.appearance_id==$appearance.data ? 'selected' :''}>{$appearance.data}</option>
+        {/foreach}
+    </select>
+    <select class="span2" name="edition_id" id='edition_id'>
+        <option value=""> - 固件版本 - </option>
+        {foreach $editions as $edition}
+        <option value="{$edition.data}" {$Think.get.edition_id==$edition.data ? 'selected' :''}>{$edition.data}</option>
+        {/foreach}
+    </select>
+    <input type="text" class="input-large" name="keyword" placeholder="序列号" value="{$Think.get.keyword}">
+<button type="submit" class="btn btn-primary">搜索</button>
+</form>
+
+<div class="row">
+
+    <div class="">
+        <div class="span12 listing-buttons">
+        </div>
+        <div class="span12">
+         
+            <table class="orders-table table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>型号</th>
+                    <th>分类</th>
+                    <th>名称</th>
+                    <th>网络模式</th>
+                    <th>配置</th>
+                    <th>外观</th>
+                    <th>版本</th>
+                     <th>序列号</th>
+                                <th>参考售价</th>  
+                                 <th>备注</th> 
+                    <th>状态</th>
+                    <th>库龄</th>
+                    <th class="actions">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name='lists' id='temp'}
+                <tr  <?php if ($temp->status == \app\index\model\Item::STATUS_PREPARE) {echo 'style="background-color:#DCDCDC"';} ?> >
+                    <td><span>{$temp.id}</span></td>
+                    <th><span>{$temp.itemType.data}</span></th>
+                    <th><span>{$temp.itemCategory.data}</span></th>
+                    <th title="{$temp.memo}" style="cursor: pointer"><span>{$temp.itemName.data}</span></th>
+                    <th><span>{$temp.itemNetwork.data}</span></th>
+                    <th><span>{$temp.itemFeature.data}</span></th>
+                    <th><span>{$temp.itemAppearance.data}</span></th>
+                    <th><span>{$temp.itemEdition.data}</span></th>
+         
+                    <th><a href="{:url('search')}?keyword={$temp.number}" target="_blank"><span>{$temp.number}</span></a></th>
+
+                  <th><span>>{$temp.price*1.1+120}</span></th>
+                  <th title="{$temp.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 6 ? mb_substr($temp->memo, 0, 6).'…' : $temp->memo; ?></span></th>
+                  
+                  
+                    <th title="{$temp.prepare}" style="cursor: pointer"><span>{$temp.statusName}</span></th>
+                    <th><span><?php echo floor((time() - strtotime($temp->date)) / 86400); ?>天</span></th>
+                    <td class="actions">
+                        <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
+                        <?php if ($temp->status == \app\index\model\Item::STATUS_NORMAL) {?>
+                        <a class="btn btn-small btn-success prepare-item" data-id="{$temp.id}" data-toggle="modal" href="#prepareItem">预售</a>
+                
+                        <?php }elseif($temp->status == \app\index\model\Item::STATUS_PREPARE){?>
+                        <a class="btn btn-small btn-danger cancelPrepare-item" data-id="{$temp.id}" data-value="0" data-href="{:url('cancelPrepare')}">取消</a>
+                        <?php }?>
+                    </td>
+                  
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+    <h4 class="span12">总条数：{$lists->total()}</h4>
+        <div class="pull-right">
+            {$lists->render()}
+        </div>
+    </div>
+</div>
+
+<div class="modal hide fade" id="prepareItem">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h3>出库</h3>
+    </div>
+    <form class="form-horizontal" method="post" id="form" data-action="{:url('prepare')}">
+        <fieldset>
+            <div class="modal-body">
+                <input type="hidden" name="id" id="prepare-id" value="" />
+                <div class="control-group">
+                    <label class="control-label" for="prepare">预售备注</label>
+                    <div class="controls">
+                        <textarea class="input-xlarge" name="prepare" id="prepare" rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">关闭</a>
+                <button class="btn btn-success" type="button" id="submit">确定</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script src="/static/js/jquery.min.js"></script>
+<script>
+    $(function(){
+        $(".cancelPrepare-item").click(function(){
+
+            var url = $(this).data('href');
+            var id = $(this).data('id');
+            $.post(url, {id:id}, function (res) {
+                alert(res.data);
+                window.location.reload();
+            })
+        })
+        $(".prepare-item").click(function(){
+            var id = $(this).data('id');
+            $("#prepare-id").val(id);
+        })
+
+
+        $("#name_id").change(function(){
+            var val = $(this).val();
+            var data;
+            if (val != '') {
+
+                var url = $(this).data('href');
+
+                var name = $(this).val();
+                $.get(url, {name:name}, function(res){
+                    data = res.data;
+                    reset(data);
+                })
+            } else {
+                data = jQuery.parseJSON($("#data-all").html());
+                reset(data);
+            }
+        }); 
+    })
+
+    function reset(data){
+        var features_str = '<option value=""> - 配置 - </option>';
+            $.each(data.features,function(k,v){
+                features_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            var networks_str = '<option value=""> - 网络模式 - </option>';
+            $.each(data.networks,function(k,v){
+                networks_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            var appearances_str = '<option value=""> - 外观 - </option>';
+            $.each(data.appearances,function(k,v){
+                appearances_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+            })
+
+            $('#feature_id').html(features_str);
+            $('#network_id').html(networks_str);
+            $('#appearance_id').html(appearances_str);
+    }
+
+    $("#submit").click(function(){
+        var url = $("#form").data('action');
+        var data = $('#form').serialize();
+        $.post(url, data, function (res) {
+            alert(res.data);
+            if (res.code == 200) {
+                window.location.reload();
+            }
+        })
+    });
+</script>

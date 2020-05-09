@@ -1,0 +1,58 @@
+
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <form class="layui-form" method="post" id="form" data-action="{:url('prepare')}">
+                <input type="hidden" name="id" id="prepare-id" value="{$id}" />
+                <div class="layui-form-item layui-form-text">
+                    <label for="desc" class="layui-form-label">预售备注</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入内容" id="prepare" name="prepare" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_repass" class="layui-form-label"></label>
+                    <button class="layui-btn" lay-filter="save" lay-submit="">确定</button></div>
+            </form>
+        </div>
+    </div>
+    <script>layui.use(['form', 'layer'],
+        function() {
+            $ = layui.jquery;
+            var form = layui.form,
+            layer = layui.layer;
+
+            //监听提交
+            form.on('submit(save)',
+            function(data) {
+                console.log(data);
+                //发异步，把数据提交给php
+                var url = $("#form").data('action');
+                var data = $('#form').serialize();
+                $.post(url, data, function (res) {
+
+                    if (res.code == 200) {
+                        layer.alert("修改成功", {
+                            icon: 6
+                        },
+                        function() {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                        });
+                        return false;
+                    }
+                })
+
+
+            });
+
+        });</script>
+    <!-- <script>var _hmt = _hmt || []; (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script> -->
+</body>

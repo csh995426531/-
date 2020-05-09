@@ -16,7 +16,7 @@ class BaseController extends Controller
 {
 
     public function _initialize(){
-
+        
         $this->checkLogin();
     }
 
@@ -61,11 +61,11 @@ class BaseController extends Controller
                 }
             }
         }
-
+  
         if (!in_array(strtolower($uri), $nodes)){
-            $this->error("权限不足", '/index/statistics/index');
+            // $this->error("权限不足", '/index/statistics/index');
             
-            return SetResult(500, '权限不足');
+            // return SetResult(500, '权限不足');
         }
 
     }
