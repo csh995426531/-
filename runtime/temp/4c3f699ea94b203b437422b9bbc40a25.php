@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"/data/www/y5g/public/../application/index/view/item/inventory.html";i:1589026824;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589022923;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"/data/www/y5g/public/../application/index/view/item/inventory.html";i:1589283264;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589022923;}*/ ?>
 <!doctype html>
 <html class="x-admin-sm">
     <head>
@@ -53,7 +53,7 @@
                                 </div>
                                 <span id="data-all" style="display:none"><?php echo json_encode($data); ?></span>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <select id="name_id" name="name_id"  data-href="<?php echo url('changeName'); ?>">
+                                    <select id="name_id" name="name_id" lay-filter="name_id" data-href="<?php echo url('/index/item/changeName'); ?>">
                                         <option value=""> - 名称 - </option>
                                         <?php foreach($names as $name): ?>
                                         <option value="<?php echo $name['data']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['data']?'selected' :''; ?>><?php echo $name['data']; ?></option>
@@ -69,7 +69,7 @@
                                     </select>
                                 </div>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <select  id="feature_id"name="feature_id" >
+                                    <select  id="feature_id"name="feature_id" lay-filter="feature_id" class="form-control">
                                         <option value=""> - 配置 - </option>
                                         <?php foreach($features as $feature): ?>
                                             <option value="<?php echo $feature['data']; ?>" <?php echo \think\Request::instance()->get('feature_id')==$feature['data']?'selected' :''; ?>><?php echo $feature['data']; ?></option>
@@ -148,7 +148,7 @@
                                             </button>
                                             <?php }elseif($temp->status == \app\index\model\Item::STATUS_PREPARE){?>
                                             <!-- <a class="btn btn-small btn-danger cancelPrepare-item" data-id="<?php echo $temp['id']; ?>" data-value="0" data-href="<?php echo url('cancelPrepare'); ?>">取消</a> -->
-                                            <a title="删除" onclick="member_del(this,<?php echo $temp['id']; ?>)" href="javascript:;">
+                                            <a title="取消预售" onclick="member_del(this,<?php echo $temp['id']; ?>)" href="javascript:;" data-href="<?php echo url('/index/item/cancelPrepare'); ?>">
                                                 <i class="layui-icon">&#xe640;</i>
                                             </a>
                                             <?php }?>
@@ -170,21 +170,9 @@
         </div> 
     </body>
     <script>
-      layui.use(['laydate','form'], function(){
+    layui.use(['laydate','form','jquery'], function(){
         var laydate = layui.laydate;
         var  form = layui.form;
-
-
-        // 监听全选
-        form.on('checkbox(checkall)', function(data){
-
-          if(data.elem.checked){
-            $('tbody input').prop('checked',true);
-          }else{
-            $('tbody input').prop('checked',false);
-          }
-          form.render('checkbox');
-        }); 
         
         //执行一个laydate实例
         laydate.render({
@@ -195,61 +183,71 @@
         laydate.render({
           elem: '#end' //指定元素
         });
-
-
-      });
-
-       /*用户-停用*/
-      function member_stop(obj,id){
-          layer.confirm('确认要停用吗？',function(index){
-
-              if($(obj).attr('title')=='启用'){
-
-                //发异步把用户状态进行更改
-                $(obj).attr('title','停用')
-                $(obj).find('i').html('&#xe62f;');
-
-                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
-                layer.msg('已停用!',{icon: 5,time:1000});
-
-              }else{
-                $(obj).attr('title','启用')
-                $(obj).find('i').html('&#xe601;');
-
-                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
-                layer.msg('已启用!',{icon: 5,time:1000});
-              }
-              
-          });
-      }
-
-      /*用户-删除*/
-      function member_del(obj,id){
-          layer.confirm('确认要删除吗？',function(index){
-              //发异步删除数据
-              $(obj).parents("tr").remove();
-              layer.msg('已删除!',{icon:1,time:1000});
-          });
-      }
-
-
-
-      function delAll (argument) {
-        var ids = [];
-
-        // 获取选中的id 
-        $('tbody input').each(function(index, el) {
-            if($(this).prop('checked')){
-               ids.push($(this).val())
+        
+        //监听选择名称
+        form.on('select(name_id)',
+            function(obj) {
+                var val = obj.value;
+                var data;
+                if (val != '') {
+                    var url = obj.elem.getAttribute('data-href');
+                    $.get(url, {name:val}, function(res){
+                        data = res.data;
+                        reset(data);
+                    })
+                } else {
+                    data = jQuery.parseJSON($("#data-all").html());
+                    reset(data);
+                }
             }
+        );
+    });
+
+    /*用户-取消预售*/
+    function member_del(obj,id){
+        layer.confirm('确认要取消预售吗？',function(index){
+            //发异步取消预售数据
+            var url = $(obj).data('href');
+            $.post(url, {id:id}, function (res) {
+                layer.msg("已取消预售!", {
+                    icon:1,
+                    time:1000
+                },function() {
+                    //关闭当前frame
+                    xadmin.close();
+                    // 可以对父窗口进行刷新 
+                    xadmin.father_reload();
+                })
+            });
+            return false;
         });
-  
-        layer.confirm('确认要删除吗？'+ids.toString(),function(index){
-            //捉到所有被选中的，发异步进行删除
-            layer.msg('删除成功', {icon: 1});
-            $(".layui-form-checked").not('.header').parents('tr').remove();
-        });
-      }
-    </script>
+    }
+
+
+    function reset(data){
+
+       
+        var features_str = '<option value=""> - 配置 - </option>';
+        // $("select[name=feature_id]").append(features_str);
+        $.each(data.features,function(k,v){
+            features_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+        })
+
+        var networks_str = '<option value=""> - 网络模式 - </option>';
+        $.each(data.networks,function(k,v){
+            networks_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+        })
+
+        var appearances_str = '<option value=""> - 外观 - </option>';
+        $.each(data.appearances,function(k,v){
+            appearances_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+        })
+
+        $('#feature_id').html(features_str);
+        $('#network_id').html(networks_str);
+        $('#appearance_id').html(appearances_str);
+        layui.form.render('select');
+    }
+</script>
 
 </div>

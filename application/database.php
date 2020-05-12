@@ -13,7 +13,7 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     //本地环境
-    'hostname'      => '172.26.0.3', //公司docker mysql地址
+    'hostname'      => '172.26.0.4', //公司docker mysql地址
     'database'        => 'maiguo2',//本地
     'username'        => 'root', //本地
     'password'        => '123456',//本地
