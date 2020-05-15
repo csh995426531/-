@@ -1,0 +1,381 @@
+<!--<div class="alert alert-info">-->
+<!--<a class="close" data-dismiss="alert" href="#">x</a>-->
+<!--<h4 class="alert-heading">Information</h4>-->
+<!--This template shows how forms can be laid out for editing content.-->
+<!--</div>-->
+
+<!--<div class="alert alert-error">-->
+<!--<a class="close" data-dismiss="alert" href="#">x</a>-->
+<!--<h4 class="alert-heading">Error</h4>-->
+<!--Example of an error message alert.-->
+<!--</div>-->
+
+<!--<div class="alert alert-success">-->
+<!--<a class="close" data-dismiss="alert" href="#">x</a>-->
+<!--<h4 class="alert-heading">Success</h4>-->
+<!--Example of an success message alert.-->
+<!--</div>-->
+
+<!--<div class="alert alert-warning">-->
+<!--<a class="close" data-dismiss="alert" href="#">x</a>-->
+<!--<h4 class="alert-heading">Warning</h4>-->
+<!--Example of an warning message alert.-->
+<!--</div>-->
+<style>
+    input::-webkit-input-placeholder{
+        color:red;
+    }
+    input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+        color:red;
+    }
+    input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+        color:red;
+    }
+    input:-ms-input-placeholder{  /* Internet Explorer 10-11 */
+        color:red;
+    }
+</style>
+{$message}
+<div class="row">
+    <div class="span12">
+        <div class="">
+            <div class="page-header">
+                <h2>{$breadcrumb}
+                        <a href="{:url('income')}" class="btn btn-info pull-right">入库记录处理</a>                   
+                  
+                </h2>
+            </div>
+            <form class="form-horizontal" method="post" id="form">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="date">进货日期</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="date"  name="date" value="" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="number">序列号</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="number" name="number" value="<?php if($history ){echo $history->item->number;}?>"  data-href="{:url('checkNumber')}" placeholder="序列号不能为空" data-href2="{:url('checkIntelligence')}"><span id="number_message" style="color: red"></span>
+                            <input type="hidden" id="number_status" value="0"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="type_id">型号</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="type_id" name="type_id" value="<?php if($history && $history->item->type_id > 0){echo $history->item->itemType->data;}?>" data-href="{:url('changeType')}" placeholder="型号不能为空"><span id="type_message" style="color: brown"></span>
+                            <input type="hidden"  id="type_status" value="1" />
+                        </div>
+                    </div>
+                    <input type="hidden" name="category_id" id="category_id">
+                    <div class="control-group">
+                        <label class="control-label" for="name_id">名称</label>
+                        <div class="controls">
+                            <select id="name_id" class="input-xlarge" name="name_id">
+                                {foreach $names as $name}
+                                    <option value="{$name.id}"  data-category-id="{$name.category_id}" data-appearance="
+                                    {foreach $name.itemAppearance as $appearance}
+                                        <?php if($history && $history->item->appearance_id == $appearance->id){echo 'selected';}?></option>
+                                        <option value='{$appearance.id}'>{$appearance.data}</option>
+                                    {/foreach}"  data-edition="
+                                    {foreach $name.itemEdition as $edition}
+                                         <?php if($history && $history->item->edition_id == $edition->id){echo 'selected';}?></option>
+                                        <option value='{$edition.id}'>{$edition.data}</option>
+                                    {/foreach}"  data-feature="
+                                    {foreach $name.itemFeature as $feature}
+                                        <?php if($history && $history->item->feature_id == $feature->id){echo 'selected';}?></option>
+                                        <option value='{$feature.id}'>{$feature.data}</option>
+                                    {/foreach}"
+                                    data-network="
+                                    {foreach $name.itemNetwork as $network}
+                                        <?php if($history && $history->item->network_id == $network->id){echo 'selected';}?></option>
+                                        <option value='{$network.id}'>{$network.data}</option>
+                                    {/foreach}"
+                                    <?php if($history && $history->item->name_id == $name->id){echo 'selected';}?>
+                                    >{$name.data}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="network_id">网络模式</label>
+                        <div class="controls">
+                            <select id="network_id" class="input-xlarge" name="network_id">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="feature_id">配置</label>
+                        <div class="controls">
+                            <select id="feature_id" class="input-xlarge" name="feature_id">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="appearance_id">外观</label>
+                        <div class="controls">
+                            <select id="appearance_id" class="input-xlarge" name="appearance_id">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="edition_id">固件版本</label>
+                        <div class="controls">
+                            <select id="edition_id" class="input-xlarge" name="edition_id">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="memo">商品备注</label>
+                        <div class="controls">
+                            <textarea class="input-xlarge" name="memo" id="memo" rows="3"><?php if($history ){echo $history->item->memo;}?></textarea>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="price">进货价格</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="price" name="price" value="<?php if($history ){echo $history->item->price;}?>">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="channel_id">进货渠道</label>
+                        <div class="controls">
+                            <select id="channel_id" class="input-xlarge" name="channel_id">
+                                {foreach $channels as $channel}
+                                    <option value="{$channel.id}" <?php if($history && $history->item->channel_id == $channel->id){echo 'selected="selected"';}?>>{$channel.data}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="submit"></label>
+                        <button class="btn btn-success" type="submit" id="submit">确定</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="data-all" style="display: none">
+    {foreach $names as $name}
+        <option value="{$name.id}" data-category-id="{$name.category_id}" data-appearance="
+        {foreach $name.itemAppearance as $appearance}
+            <option value='{$appearance.id}'>{$appearance.data}</option>
+        {/foreach}"  data-edition="
+        {foreach $name.itemEdition as $edition}
+            <option value='{$edition.id}'>{$edition.data}</option>
+        {/foreach}"  data-feature="
+        {foreach $name.itemFeature as $feature}
+            <option value='{$feature.id}'>{$feature.data}</option>
+        {/foreach}"
+        data-network="
+        {foreach $name.itemNetwork as $network}
+            <option value='{$network.id}'>{$network.data}</option>
+        {/foreach}"
+        >{$name.data}</option>
+    {/foreach}
+</div>
+<span id='item-id' style="display: none" data-id = "<?php if ($history) {echo $history->item->id;} ?>"></span>
+<script src="/static/js/jquery-1.8.3.js"></script>
+<script>
+
+    function changeNameSelected(){
+
+        var category_id = $("#name_id option:selected").data("category-id");
+        $("#category_id").val(category_id);
+
+        var appearance_str = $("#name_id option:selected").data("appearance");
+        $("#appearance_id").html(appearance_str)
+
+        var edition_str = $("#name_id option:selected").data("edition");
+        $("#edition_id").html(edition_str)
+
+        var feature_str = $("#name_id option:selected").data("feature");
+        $("#feature_id").html(feature_str)
+
+        var network_str = $("#name_id option:selected").data("network");
+        $("#network_id").html(network_str)
+    }
+
+    function changeTypeValue(){
+
+        var type = $("#type_id").val();
+        var url = $("#type_id").data('href');
+
+        if (type == '') {
+
+            var str = $("#data-all").html();
+            $("#name_id").html(str);
+            changeNameSelected();
+            $("#name_id").removeAttr("readonly");
+            $("#name_id").removeAttr("onmousedown");
+            $("#network_id").removeAttr("readonly");
+            $("#network_id").removeAttr("onmousedown");
+            $("#type_message").html('')
+            $("#type_status").val(1)
+        } else {
+            $.get(url, {type:type}, function(res) {
+           
+                if (res.code  == 500) {
+                    alert(res.data);
+                    $("#type_message").html(res.data)
+                    $("#type_status").val(0)
+                }  else {
+
+                    var str = '';
+                    $.each(res.data, function(k, v){
+
+                        str += '<option value="'+v.itemName.id+'" data-category-id="'+v.itemName.category_id+'" data-appearance="';
+                        $.each(v.itemName.itemAppearance, function (kk, vv){
+                            str += "<option value='"+vv.id+"'>"+vv.data+"</option>";
+                        })
+                        str += '" data-edition="';
+                        $.each(v.itemName.itemEdition, function (kk, vv){
+                            str += "<option value='"+vv.id+"'>"+vv.data+"</option>";
+                        })
+                        str += '" data-feature="';
+                        $.each(v.itemName.itemFeature, function (kk, vv){
+                            str += "<option value='"+vv.id+"'>"+vv.data+"</option>";
+                        })
+                        str += '" data-network="';
+                        str += "<option value='"+v.itemNetwork.id+"'>"+v.itemNetwork.data+"</option>";
+                        str += '">'+v.itemName.data+'</option>';
+                    });
+                        
+                    $("#name_id").html(str);
+                    changeNameSelected();
+                    $("#type_message").html('')
+                    $("#type_status").val(1)
+                }
+
+                $("#name_id").attr("readonly","readonly");
+                $("#name_id").attr("onmousedown","return false;");
+                $("#network_id").attr("readonly","readonly");
+                $("#network_id").attr("onmousedown","return false;");
+            })      
+        }
+        
+    }
+
+    function changeNumber(){
+        var val = $("#number").val();
+        var url = $("#number").data('href');
+        var id = $("#item-id").data('id');
+
+        if (val == '') {
+
+            $("#number_status").val(0);
+        } else {
+            
+            $.get(url, {number: val, id: id}, function(res){
+
+                if (res.code == 200) {
+                    $("#number_status").val(1);
+                } else if (res.code == 222) {
+                    
+                    $("#type_id").val(res.data.type);
+                    $("#type_message").html('');
+                    $("#type_status").val(1);
+                    $('#name_id option').each(function(k, v) {
+                        if ($(v).val() == res.data.name_id) {
+                            $(v).prop('selected', true)
+                        }
+                    });
+                    
+                    changeNameSelected();
+            
+                    $('#network_id option').each(function(k, v) { console.log($(v).val())
+                        if ($(v).val() == res.data.network_id) {
+                            $(v).prop('selected', true)
+                        }
+                    });
+                    $('#feature_id option').each(function(k, v) { console.log(12)
+                        if ($(v).val() == res.data.feature_id) {
+                            $(v).prop('selected', true)
+                        }
+                    });
+                    $('#appearance_id option').each(function(k, v) { console.log(12)
+                        if ($(v).val() == res.data.appearance_id) {
+                            $(v).prop('selected', true)
+                        }
+                    });
+                    
+                } else {
+                    $("#number_status").val(0);
+                    // $("#number").prop('placeholder', res.data);
+                    alert(res.data);
+                }
+            })
+        }
+    }
+
+
+    $(function () {
+
+        $("#name_id").change(function () {
+            changeNameSelected();
+        });
+
+        $("#type_id").change(function(){
+            changeTypeValue();
+        })
+
+        $("#number").change(function(){
+            changeNumber();
+        })
+
+        changeNameSelected();
+        changeNumber();
+        $.datepicker.regional['zh-CN'] = {
+            closeText: '关闭',
+            prevText: '<上月',
+            nextText: '下月>',
+            currentText: '今天',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                '七', '八', '九', '十', '十一', '十二'],
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            weekHeader: '周',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: true,
+            yearSuffix: '年'
+        };
+
+        $.datepicker.setDefaults( $.datepicker.regional[ "zh-CN" ] );
+
+        $("#date").datepicker({
+            dateFormat: "yy-mm-dd",
+            todayHighlight: false,
+            minDate: "-2D",
+            maxDate: "+0D"
+        });
+
+        $('#date').datepicker("setDate", '+0D');
+
+
+        $("#submit").click(function(){
+
+            changeNumber();
+            var number = $("#number").val();
+            if (number == '') {
+                // $("#number_message").html('序列号不能为空');
+            }
+            
+            var type_status = $("#type_status").val();
+            var number_status = $("#number_status").val();
+            
+            if (type_status == 1 && number_status == 1) {
+                $("#form").submit();
+            } else {
+                return false;
+            }
+        })
+    })
+</script>

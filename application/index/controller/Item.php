@@ -344,15 +344,17 @@ class Item extends BaseController
 
                 Db::commit();
                 $message = Message('', true);
+                $save_result = SetResult(200, 'success');
                 // AddLog(\app\index\model\Log::ACTION_ITEM_INCOME, json_encode($this->request->param())
                 //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
             } catch (\Exception $e) {
                 Db::rollback();
                 $message = Message($e->getMessage(), false);
+                $save_result = SetResult(500, $e->getMessage());
                 // AddLog(\app\index\model\Log::ACTION_ITEM_INCOME, json_encode($this->request->param())
                 //     , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
             }
-
+            return $save_result;
         } else {
 
             $message = '';
@@ -553,9 +555,7 @@ class Item extends BaseController
                 ->find();
             if (!empty($item) && $item->id != $itemId){
                 $result = SetResult(500, '序列号重复');
-            }
-
-            if ($auto_type) {
+            } elseif ($auto_type) {
                 $str = substr((string)$number, -3);
                 $intelligence = ItemIntelligence::where("status", ItemIntelligence::STATUS_ACTIVE)->where('data', $str)->find();
         

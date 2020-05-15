@@ -12,6 +12,11 @@ class Index extends BaseController
         return $this->fetch();
     }
 
+    public function welcome()
+    {
+       echo '桌面';
+    }
+
     public function login()
     {
         if ($this->request->isPost()) {

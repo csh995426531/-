@@ -1,151 +1,142 @@
+<body>
 
-    <body>
-        <div class="x-nav">
-          <span class="layui-breadcrumb">
-            <a href="">首页</a>
-            <a href="">演示</a>
-            <a>
-              <cite>导航元素</cite></a>
-          </span>
-          <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
-            <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
-        </div>
-        <div class="layui-fluid">
-            <div class="layui-row layui-col-space15">
-                <div class="layui-col-md12">
-                    <div class="layui-card">
-                        <div class="layui-card-body ">
-                            <form class="layui-form layui-col-space5" method="get">
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <select  name="type_id">
-                                        <option value=""> - 型号 - </option>
-                                        {foreach $types as $type}
-                                        <option value="{$type.data}" {$Think.get.type_id==$type.data ? 'selected' :''}>{$type.data}</opion>
-                                        {/foreach}
-                                    </select>
-                                </div>
-                                <span id="data-all" style="display:none">{$data|json_encode}</span>
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <select id="name_id" name="name_id" lay-filter="name_id" data-href="{:url('/index/item/changeName')}">
-                                        <option value=""> - 名称 - </option>
-                                        {foreach $names as $name}
-                                        <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
-                                        {/foreach}
-                                    </select>
-                                </div>
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <select id="network_id" name="network_id">
-                                        <option value=""> - 网络模式 - </option>
-                                        {foreach $networks as $network}
-                                        <option value="{$network.data}" {$Think.get.network_id==$network.data ? 'selected' :''}>{$network.data}</option>
-                                        {/foreach}
-                                    </select>
-                                </div>
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <select  id="feature_id"name="feature_id" lay-filter="feature_id" class="form-control">
-                                        <option value=""> - 配置 - </option>
-                                        {foreach $features as $feature}
-                                            <option value="{$feature.data}" {$Think.get.feature_id==$feature.data ? 'selected' :''}>{$feature.data}</option>
-                                        {/foreach}
-                                    </select>
-                                </div>
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <select id="appearance_id" name="appearance_id">
-                                        <option value=""> - 外观 - </option>
-                                        {foreach $appearances as $appearance}
-                                            <option value="{$appearance.data}" {$Think.get.appearance_id==$appearance.data ? 'selected' :''}>{$appearance.data}</option>
-                                        {/foreach}
-                                    </select>
-                                </div>
-                                <div class="layui-input-inline layui-show-xs-block">
-                                    <select name="edition_id" id='edition_id'>
-                                        <option value=""> - 固件版本 - </option>
-                                        {foreach $editions as $edition}
-                                        <option value="{$edition.data}" {$Think.get.edition_id==$edition.data ? 'selected' :''}>{$edition.data}</option>
-                                        {/foreach}
-                                    </select>
-                                </div>
-                                <div class="layui-inline layui-show-xs-block">
-                                    <input type="text" name="keyword"  placeholder="序列号" value="{$Think.get.keyword}" autocomplete="off" class="layui-input">
-                                </div>
-                                <div class="layui-inline layui-show-xs-block">
-                                    <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="layui-card-body layui-table-body layui-table-main">
-                            <table class="layui-table layui-form">
-                                <thead>
-                                  <tr>
-                                    <th>ID</th>
-                                    <th>型号</th>
-                                    <th>分类</th>
-                                    <th>名称</th>
-                                    <th>网络模式</th>
-                                    <th>配置</th>
-                                    <th>外观</th>
-                                    <th>版本</th>
-                                    <th>序列号</th>
-                                    <th>参考售价</th>  
-                                    <th>备注</th> 
-                                    <th>状态</th>
-                                    <th>库龄</th>
-                                    <th class="actions">操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    {volist name='lists' id='temp'} 
-                                    <tr  <?php if ($temp->status == \app\index\model\Item::STATUS_PREPARE) {echo 'style="background-color:#DCDCDC"';} ?> >
-                                        <td><span>{$temp.id}</span></td>
-                                        <th><span>{$temp.itemType.data}</span></th>
-                                        <th><span>{$temp.itemCategory.data}</span></th>
-                                        <th title="{$temp.memo}" style="cursor: pointer"><span>{$temp.itemName.data}</span></th>
-                                        <th><span>{$temp.itemNetwork.data}</span></th>
-                                        <th><span>{$temp.itemFeature.data}</span></th>
-                                        <th><span>{$temp.itemAppearance.data}</span></th>
-                                        <th><span>{$temp.itemEdition.data}</span></th>
-                             
-                                        <th><a onclick="xadmin.open('库存搜索','{:url(\'search\')}?keyword={$temp.number}','','',true)"><span style="color:coral;cursor: pointer;">{$temp.number}</span></a></th>
-                    
-                                      <th><span>>{$temp.price*1.1+120}</span></th>
-                                      <th title="{$temp.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 6 ? mb_substr($temp->memo, 0, 6).'…' : $temp->memo; ?></span></th>
-                                      
-                                      
-                                        <th title="{$temp.prepare}" style="cursor: pointer"><span>{$temp.statusName}</span></th>
-                                        <th><span><?php echo floor((time() - strtotime($temp->date)) / 86400); ?>天</span></th>
-                                        <td class="actions">
-                                            <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
-                                            <?php if ($temp->status == \app\index\model\Item::STATUS_NORMAL) {?>
-                                            <a class="layui-btn layui-btn-" onclick="xadmin.open('预售出库','{:url(\'/index/popup/prepareItem\')}?id={$temp.id}',600,300)" title="预售出库" href="javascript:;">
-                                                <i class="layui-icon"></i>预售
-                                            </button>
-                                            <?php }elseif($temp->status == \app\index\model\Item::STATUS_PREPARE){?>
-                                            <!-- <a class="btn btn-small btn-danger cancelPrepare-item" data-id="{$temp.id}" data-value="0" data-href="{:url('cancelPrepare')}">取消</a> -->
-                                            <a title="取消预售" onclick="member_del(this,{$temp.id})" href="javascript:;" data-href="{:url('/index/item/cancelPrepare')}">
-                                                <i class="layui-icon">&#xe640;</i>
-                                            </a>
-                                            <?php }?>
-                                        </td>
-                                      
-                                    </tr>
-                                    {/volist}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="layui-card-body ">
-                            <div class="page">
-                                {$lists->render()}
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                        <form class="layui-form layui-col-space5" method="get">
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <select  name="type_id">
+                                    <option value=""> - 型号 - </option>
+                                    {foreach $types as $type}
+                                    <option value="{$type.data}" {$Think.get.type_id==$type.data ? 'selected' :''}>{$type.data}</opion>
+                                    {/foreach}
+                                </select>
                             </div>
+                            <select  name="type_id">
+                                <option value=""> - 型号 - </option>
+                            </select>
+                            <span id="data-all" style="display:none">{$data|json_encode}</span>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <select id="name_id" name="name_id" lay-filter="name_id" data-href="{:url('/index/item/changeName')}">
+                                    <option value=""> - 名称 - </option>
+                                    {foreach $names as $name}
+                                    <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <select id="network_id" name="network_id">
+                                    <option value=""> - 网络模式 - </option>
+                                    {foreach $networks as $network}
+                                    <option value="{$network.data}" {$Think.get.network_id==$network.data ? 'selected' :''}>{$network.data}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <select  id="feature_id"name="feature_id" lay-filter="feature_id" class="form-control">
+                                    <option value=""> - 配置 - </option>
+                                    {foreach $features as $feature}
+                                        <option value="{$feature.data}" {$Think.get.feature_id==$feature.data ? 'selected' :''}>{$feature.data}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <select id="appearance_id" name="appearance_id">
+                                    <option value=""> - 外观 - </option>
+                                    {foreach $appearances as $appearance}
+                                        <option value="{$appearance.data}" {$Think.get.appearance_id==$appearance.data ? 'selected' :''}>{$appearance.data}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                            <div class="layui-input-inline layui-show-xs-block">
+                                <select name="edition_id" id='edition_id'>
+                                    <option value=""> - 固件版本 - </option>
+                                    {foreach $editions as $edition}
+                                    <option value="{$edition.data}" {$Think.get.edition_id==$edition.data ? 'selected' :''}>{$edition.data}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                            <div class="layui-inline layui-show-xs-block">
+                                <input type="text" name="keyword"  placeholder="序列号" value="{$Think.get.keyword}" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-inline layui-show-xs-block">
+                                <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="layui-card-body layui-table-body layui-table-main">
+                        <table class="layui-table layui-form">
+                            <thead>
+                              <tr>
+                                <th>ID</th>
+                                <th>型号</th>
+                                <th>分类</th>
+                                <th>名称</th>
+                                <th>网络模式</th>
+                                <th>配置</th>
+                                <th>外观</th>
+                                <th>版本</th>
+                                <th>序列号</th>
+                                <th>参考售价</th>  
+                                <th>备注</th> 
+                                <th>状态</th>
+                                <th>库龄</th>
+                                <th class="actions">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {volist name='lists' id='temp'} 
+                                <tr  <?php if ($temp->status == \app\index\model\Item::STATUS_PREPARE) {echo 'style="background-color:#DCDCDC"';} ?> >
+                                    <td><span>{$temp.id}</span></td>
+                                    <th><span>{$temp.itemType.data}</span></th>
+                                    <th><span>{$temp.itemCategory.data}</span></th>
+                                    <th title="{$temp.memo}" style="cursor: pointer"><span>{$temp.itemName.data}</span></th>
+                                    <th><span>{$temp.itemNetwork.data}</span></th>
+                                    <th><span>{$temp.itemFeature.data}</span></th>
+                                    <th><span>{$temp.itemAppearance.data}</span></th>
+                                    <th><span>{$temp.itemEdition.data}</span></th>
+                                    <!-- <th><a href="{:url(\'search\')}?keyword={$temp.number}"><span style="color:coral;cursor: pointer;">{$temp.number}</span></a></th> -->
+                                    <th><a onclick="xadmin.open('综合查询','{:url(\'search\')}?keyword={$temp.number}','','',true)"><span style="color:coral;cursor: pointer;">{$temp.number}</span></a></th>
+                                    <th><span>>{$temp.price*1.1+120}</span></th>
+                                    <th title="{$temp.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 6 ? mb_substr($temp->memo, 0, 6).'…' : $temp->memo; ?></span></th>
+                                    <th title="{$temp.prepare}" style="cursor: pointer"><span>{$temp.statusName}</span></th>
+                                    <th><span><?php echo floor((time() - strtotime($temp->date)) / 86400); ?>天</span></th>
+                                    <td class="actions">
+                                        <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
+                                        <?php if ($temp->status == \app\index\model\Item::STATUS_NORMAL) {?>
+                                        <a class="layui-btn layui-btn-normal" onclick="xadmin.open('预售出库','{:url(\'/index/popup/prepareItem\')}?id={$temp.id}',600,300)" title="预售出库" href="javascript:;">
+                                            <i class="layui-icon"></i>预售
+                                        </button>
+                                        <?php }elseif($temp->status == \app\index\model\Item::STATUS_PREPARE){?>
+                                        <!-- <a class="btn btn-small btn-danger cancelPrepare-item" data-id="{$temp.id}" data-value="0" data-href="{:url('cancelPrepare')}">取消</a> -->
+                                        <a class="layui-btn layui-btn-danger" onclick="member_del(this,{$temp.id})" href="javascript:;" data-href="{:url('/index/item/cancelPrepare')}" title="取消预售" >
+                                            <i class="layui-icon"></i>取消预售
+                                        </a>
+                                        <?php }?>
+                                    </td>
+                                  
+                                </tr>
+                                {/volist}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="layui-card-body ">
+                        <div class="page">
+                            {$lists->render()}
                         </div>
                     </div>
                 </div>
             </div>
-        </div> 
-    </body>
+        </div>
+    </div> 
+  
     <script>
     layui.use(['laydate','form','jquery'], function(){
         var laydate = layui.laydate;
-        var  form = layui.form;
+        var form = layui.form;
+        var jquery = layui.jquery;
         
         //执行一个laydate实例
         laydate.render({
@@ -169,7 +160,7 @@
                         reset(data);
                     })
                 } else {
-                    data = jQuery.parseJSON($("#data-all").html());
+                    data = jquery.parseJSON($("#data-all").html());
                     reset(data);
                 }
             }
@@ -198,27 +189,48 @@
 
 
     function reset(data){
-
-       
-        var features_str = '<option value=""> - 配置 - </option>';
-        // $("select[name=feature_id]").append(features_str);
-        $.each(data.features,function(k,v){
-            features_str += '<option value="'+v.data+'"> '+v.data+' </option>';
-        })
-
-        var networks_str = '<option value=""> - 网络模式 - </option>';
-        $.each(data.networks,function(k,v){
-            networks_str += '<option value="'+v.data+'"> '+v.data+' </option>';
-        })
-
-        var appearances_str = '<option value=""> - 外观 - </option>';
-        $.each(data.appearances,function(k,v){
-            appearances_str += '<option value="'+v.data+'"> '+v.data+' </option>';
-        })
-
-        $('#feature_id').html(features_str);
-        $('#network_id').html(networks_str);
-        $('#appearance_id').html(appearances_str);
-        layui.form.render('select');
-    }
-</script>
+      var $ = layui.$
+      ,form = layui.form
+      ,table = layui.table;
+      
+      //监听搜索
+      form.on('submit(LAY-app-forumreply-search)', function(data){
+        var field = data.field;
+        
+        //执行重载
+        table.reload('LAY-app-forumreply-list', {
+          where: field
+        });
+      });
+      
+      var active = {
+        batchdel: function(){
+          var checkStatus = table.checkStatus('LAY-app-forumreply-list')
+          ,checkData = checkStatus.data; //得到选中的数据
+  
+          if(checkData.length === 0){
+            return layer.msg('请选择数据');
+          }
+        
+          layer.confirm('确定删除吗？', function(index) {
+            
+            //执行 Ajax 后重载
+            /*
+            admin.req({
+              url: 'xxx'
+              //,……
+            });
+            */
+            table.reload('LAY-app-forumreply-list');
+            layer.msg('已删除');
+          });
+        }
+      }
+      
+      $('.layui-btn.layuiadmin-btn-replys').on('click', function(){
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+      });
+    });
+    </script>
+  </body>
