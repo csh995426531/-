@@ -61,6 +61,7 @@ class Item
      */
     public function getList($params){
         $lists = \app\index\model\Item::where('id', '>', '0');
+        $limit = $params['limit'] ?? 10;
         
         if (!empty($params['type_id'])) {
             $typeArr = ItemType::where("data", $params['type_id'])->column('id');
@@ -119,14 +120,22 @@ class Item
             $lists = $lists->where("number",  'LIKE', "%". trim($params['keyword']) . "%");
         }
 
-        $data = $lists->paginate(10, false, ['query'=> $params]);
+        $data = $lists->paginate($limit, false, ['query'=> $params]);
         
         // echo $lists->getLastSql();
         foreach ($data as &$temp) {
             $temp->statusName = $temp->getStatusName();
             $temp->lastOutNo = $temp->getLastOutgoNo();
+            $temp->itemType = $temp->itemType;
+            $temp->itemCategory = $temp->itemCategory;
+            $temp->itemName = $temp->itemName;
+            $temp->itemNetwork = $temp->itemNetwork;
+            $temp->itemFeature = $temp->itemFeature;
+            $temp->itemAppearance = $temp->itemAppearance;
+            $temp->itemEdition = $temp->itemEdition;
+            $temp->memo_v = mb_strlen($temp->memo) > 6 ? mb_substr($temp->memo, 0, 6).'…' : $temp->memo;
+            $temp->age = floor((time() - strtotime($temp->date)) / 86400);
         }
-
         return $data;
     }
 

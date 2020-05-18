@@ -1843,14 +1843,6 @@ class Item extends BaseController
     //在库查询
     public function inventory(){
 
-        $this->request->post(['status'=>[
-            \app\index\model\Item::STATUS_NORMAL,
-            \app\index\model\Item::STATUS_INCOME_WAIT,
-            \app\index\model\Item::STATUS_PREPARE
-        ]]);
-
-        $lists = (new ItemService)->getList(array_merge($this->request->get(false), $this->request->post(false)));
-
         $types = ItemType::where("status", ItemType::STATUS_ACTIVE)->distinct(true)->field('data')->select();
 
         $names = ItemName::where("status", ItemName::STATUS_ACTIVE)->distinct(true)->field('data')->select();
@@ -1879,7 +1871,6 @@ class Item extends BaseController
         $breadcrumb = '在库查询';
 
         return $this->fetch('inventory', [
-            'lists' => $lists,
             'breadcrumb' => $breadcrumb,
             'types' => $types,
             'names' => $names,
@@ -1893,6 +1884,18 @@ class Item extends BaseController
                 'appearances' => $appearances
             ]
         ]);
+    }
+
+    //在库查询-列表数据
+    public function inventoryList(){
+        $this->request->post(['status'=>[
+            \app\index\model\Item::STATUS_NORMAL,
+            \app\index\model\Item::STATUS_INCOME_WAIT,
+            \app\index\model\Item::STATUS_PREPARE
+        ]]);
+
+        $lists = (new ItemService)->getList(array_merge($this->request->get(false), $this->request->post(false)));
+        return $lists;
     }
 
     // 预售
@@ -1954,103 +1957,6 @@ class Item extends BaseController
 
     //综合查询
     public function search(){
-        // $lists = \app\index\model\Item::where('id', '>', '0');
-
-        // $typeId = $this->request->get("type_id");
-
-        // if (!empty($typeId)) {
-        //     $typeArr = ItemType::where("data", $typeId)
-        //         ->column('id');
-        //     $lists = $lists->where("type_id",  'in', $typeArr);
-        // }
-
-        // $nameId = $this->request->get("name_id");
-
-        // if (!empty($nameId)) {
-        //     $nameArr = ItemName::where("data", $nameId)
-        //     ->column('id');
-        //     $lists = $lists->where("name_id",  'in', $nameArr);
-        // }
-
-        // $featureId = $this->request->get("feature_id");
-
-        // if (!empty($featureId)) {
-        //     $featureArr = ItemFeature::where("data", $featureId)
-        //     ->column('id');
-            
-        //     $lists = $lists->where("feature_id",  'in',  $featureArr);
-        // }
-
-        // $networkId = $this->request->get("network_id");
-
-        // if (!empty($networkId)) {
-
-        //     $networkArr = ItemNetwork::where("data", $networkId)
-        //     ->column('id');
-
-        //     $typeArr2 = ItemType::where("network_id" ,  'in',  $networkArr)->field("id")->select();
-        //     $lists = $lists->where("type_id", 'in',  array_column($typeArr2, 'id'));
-        // }
-
-        // $appearanceId = $this->request->get("appearance_id");
-
-        // if (!empty($appearanceId)) {
-
-        //     $appearanceArr = ItemAppearance::where("data", $appearanceId)
-        //     ->column('id');
-        //     $lists = $lists->where("appearance_id",  'in', $appearanceArr);
-        // }
-
-        // $categoryId = $this->request->get("category_id");
-
-        // if (!empty($categoryId)) {
-        //     $categoryArr = ItemCategory::where("data", $categoryId)
-        //     ->column('id');
-        //     $lists = $lists->where("category_id",  'in', $categoryArr);
-        // }
-
-        // $editionId = $this->request->get("edition_id");
-
-        // if (!empty($editionId)) {
-        //     $editionArr = ItemEdition::where("data", $editionId)
-        //     ->column('id');
-        //     $lists = $lists->where("edition_id",  'in', $editionArr);
-        // }
-
-        // $channelId = $this->request->get("channel_id");
-
-        // if (!empty($channelId)) {
-        //     $channelArr = ItemChannel::where("data", $channelId)
-        //     ->column('id');
-        //     $lists = $lists->where("channel_id",  'in', $channelArr);
-        // }
-
-        // $date = $this->request->get("date");
-
-        // if (!empty($date) && $date > 0) {
-        //     $lists = $lists->where("date", $date);
-        // }
-
-        // $status = $this->request->get("status");
-
-        // if (!empty($status) && $status > 0) {
-        //     $lists = $lists->where("status", $status);
-        // }
-
-        // $keyword = $this->request->get("keyword");
-
-        // if (!empty($keyword)) {
-        //     $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
-        // }
-
-        // $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
-
-        // foreach ($lists as $list) {
-        //     $list->statusName = $list->getStatusName();
-        //     $list->lastOutNo = $list->getLastOutgoNo();
-        // }
-        $lists = (new ItemService)->getList($this->request->param(false));
-
         $types = ItemType::where("status", ItemType::STATUS_ACTIVE)->distinct(true)->field('data')->select();
 
         $names = ItemName::where("status", ItemName::STATUS_ACTIVE)->distinct(true)->field('data')->select();
@@ -2082,7 +1988,6 @@ class Item extends BaseController
         //     , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
 
         return $this->fetch('search', [
-            'lists' => $lists,
             'breadcrumb' => $breadcrumb,
             'types' => $types,
             'names' => $names,
@@ -2102,6 +2007,12 @@ class Item extends BaseController
                 'appearances' => $appearances
             ]
         ]);
+    }
+
+    //综合查询-列表数据
+    public function searchList(){
+        $lists = (new ItemService)->getList($this->request->param(false));
+        return $lists;
     }
 
     //通过出库审核

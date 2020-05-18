@@ -1,51 +1,45 @@
 
 <body>
-    <div class="layui-fluid">
-        <div class="layui-row">
-            <form class="layui-form" method="post" id="form" data-action="{:url('/index/item/prepare')}">
-                <input type="hidden" name="id" id="prepare-id" value="{$id}" />
-                <div class="layui-form-item layui-form-text">
-                    <label for="desc" class="layui-form-label">预售备注</label>
-                    <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" id="prepare" name="prepare" class="layui-textarea"></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="L_repass" class="layui-form-label"></label>
-                    <button class="layui-btn" lay-filter="save" lay-submit="">确定</button></div>
-            </form>
+    <form class="layui-form" method="post" id="form" data-url="{:url('/index/item/prepare')}"  lay-filter="prepare_form" id="prepare_form" style="padding: 20px 30px 0 0;">
+        <input type="hidden" name="id" id="prepare-id" value="{$id}" />
+        <div class="layui-form-item layui-form-text">
+            <label for="desc" class="layui-form-label">预售备注</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" id="prepare" name="prepare" class="layui-textarea"></textarea>
+            </div>
         </div>
-    </div>
-    <script>layui.use(['form', 'layer','jquery'],
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline">
+              <input type="button" lay-submit="" lay-filter="save" value="确认" class="layui-btn">
+            </div>
+          </div>
+    </form>
+    <script>layui.use(['index', 'form', 'layer','jquery'],
         function() {
             $ = layui.jquery;
             var form = layui.form,
             layer = layui.layer;
 
             //监听提交
-            form.on('submit(save)',
-            function(data) {
-                //发异步，把数据提交给php
-                var url = $("#form").data('action');
+            form.on('submit(save)', function(data){
+                var field = data.field; //获取提交的字段
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
+
+                //提交 Ajax 成功后，关闭当前弹层并重载表格
+                var url = $("#form").data('url');
                 var data = $('#form').serialize();
                 $.post(url, data, function (res) {
-                    layer.alert("修改成功", {
+                    layer.alert("预售成功", {
                         icon: 6
-                    },function() {
-                        //关闭当前frame
-                        xadmin.close();
-                        // 可以对父窗口进行刷新 
-                        xadmin.father_reload();
+                    },function (index) {
+
+                        parent.layui.table.reload('table-list'); //重载表格
+                        parent.layer.close(index); //再执行关闭 
                     })
+                    return false;
                 });
-                return false;
             });
 
         });</script>
-    <!-- <script>var _hmt = _hmt || []; (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();</script> -->
 </body>
