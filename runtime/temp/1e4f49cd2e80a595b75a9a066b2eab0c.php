@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/index/index.html";i:1589513767;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/index/index.html";i:1589888820;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -36,19 +36,19 @@
                   <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
                 </a>
               </li>
-              <li class="layui-nav-item layui-hide-xs" lay-unselect>
+              <!-- <li class="layui-nav-item layui-hide-xs" lay-unselect>
                 <a href="http://www.layui.com/admin/" target="_blank" title="前台">
                   <i class="layui-icon layui-icon-website"></i>
                 </a>
-              </li>
+              </li> -->
               <li class="layui-nav-item" lay-unselect>
                 <a href="javascript:;" layadmin-event="refresh" title="刷新">
                   <i class="layui-icon layui-icon-refresh-3"></i>
                 </a>
               </li>
-              <li class="layui-nav-item layui-hide-xs" lay-unselect>
+              <!-- <li class="layui-nav-item layui-hide-xs" lay-unselect>
                 <input type="text" placeholder="搜索..." autocomplete="off" class="layui-input layui-input-search" layadmin-event="serach" lay-action="template/search.html?keywords="> 
-              </li>
+              </li> -->
             </ul>
             <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
               
@@ -110,9 +110,6 @@
                     <cite>库存查询</cite>
                   </a>
                   <dl class="layui-nav-child">
-                    <!-- <dd data-name="console" class="layui-this">
-                      <a lay-href="home/console.html">控制台</a>
-                    </dd> -->
                     <dd data-name="console">
                       <a lay-href="/index/item/inventory">在库查询</a>
                     </dd>
@@ -131,19 +128,18 @@
                         <a lay-href="/index/item/addIncome">采购入库</a>
                       </dd>
                       <dd data-name="console">
-                        <a lay-href="/index/item/search.html">批量入库</a>
+                        <a lay-href="/index/item/batchAddIncome">批量入库</a>
                       </dd>
                       <dd data-name="console">
-                        <a lay-href="/index/item/inventory.html">入库待核</a>
+                        <a lay-href="/index/item/income">入库待核</a>
                       </dd>
                       <dd data-name="console">
-                        <a lay-href="/index/item/search.html">退货入库</a>
+                        <a lay-href="/index/item/returnIncome">退货入库</a>
                       </dd>
                     </dl>
                 </li>
     
-    
-    
+
                 <li data-name="component" class="layui-nav-item">
                   <a href="javascript:;" lay-tips="组件" lay-direction="2">
                     <i class="layui-icon layui-icon-component"></i>
@@ -485,11 +481,10 @@
           
           <!-- 主体内容 -->
           <div class="layui-body" id="LAY_app_body">
-            <div class="layadmin-tabsbody-item layui-show">
-              <iframe src="home/console.html" frameborder="0" class="layadmin-iframe">{__CONTENT__}</iframe>
+                <div class="layadmin-tabsbody-item layui-show">
+                    <iframe src="home/console.html" frameborder="0" class="layadmin-iframe">{__CONTENT__}</iframe>
+                </div>
             </div>
-          </div>
-    
           
           <!-- 辅助元素，一般用于移动设备下遮罩 -->
           <div class="layadmin-body-shade" layadmin-event="shade"></div>

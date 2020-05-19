@@ -2211,21 +2211,39 @@ class Item extends BaseController
     }
 
     //商品历史
-    public function history($itemId){
+    public function historyList(){
 
-        $lists = ItemHistory::where('item_id', $itemId)->order('id desc')->paginate(10, false, ['query'=>request()->param() ]);
-  
-        foreach ($lists as $list) {
+        $itemId = $this->request->param('item_id');
+        $limit = $this->request->param('limit', 10);
+
+        $lists = ItemHistory::where('item_id', $itemId)
+            ->order('id desc')
+            ->paginate($limit, false, ['query'=>request()->param() ]);
+        foreach ($lists as &$list) {
             
-            $list->eventName = $list->getEventName();
-            $list->resultName = $list->getResultName();
+            $list['eventName'] = $list->getEventName();
+            $list['resultName'] = $list->getResultName();
+            $list->item = $list->item;
+            $list->incomeHistory->createUser = $list->incomeHistory->createUser;
+            $list->incomeHistory->updateUser = $list->incomeHistory->updateUser;
+
+            if ($list->outgoHistory) {
+                $list->outgoHistory->createUser = $list->outgoHistory->createUser;
+                $list->outgoHistory->updateUser = $list->outgoHistory->updateUser;
+                $list->outgoHistory->itemChannel = $list->outgoHistory->itemChannel;
+            } else {
+                $list->outgoHistory = null;
+            }
+            $list->createUser = $list->createUser;
         }
+        return $lists;
+    }
 
+    public function history(){
+        $itemId = $this->request->param('item_id');
         $breadcrumb = '商品历史';
-
         return $this->fetch('history', [
-    
-            'lists' => $lists,
+            'item_id' => $itemId,
             'breadcrumb' => $breadcrumb
         ]);
     }

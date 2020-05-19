@@ -1,0 +1,368 @@
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <form class="layui-form" id="form" data-action="{:url('/index/item/addIncome')}">
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="date" class="layui-form-label">
+                        <span class="x-red">*</span>进货日期</label>
+                    <div class="layui-input-block">
+                        <input class="layui-input" placeholder="进货日期" name="date" type="text" id="date"
+                            lay-verify="required" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="number" class="layui-form-label">
+                        <span class="x-red">*</span>序列号</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="number" name="number" required="" lay-filter="number" lay-verify="required"
+                            autocomplete="off" class="layui-input"
+                            value="<?php if($history){echo $history->item->number;}?>"
+                            data-href="{:url('/index/item/checkNumber')}" placeholder="序列号不能为空"
+                            data-href2="{:url('/index/item/checkIntelligence')}">
+                        <span id="number_message" style="color: red"></span>
+                        <input type="hidden" id="number_status" value="0" />
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="type_id" class="layui-form-label">
+                        <span class="x-red">*</span>型号</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="type_id" name="type_id" required="" lay-filter="type_id" lay-verify="required" autocomplete="off"
+                            class="layui-input"
+                            value="<?php if($history && $history->item->type_id > 0){echo $history->item->itemType->data;}?>"
+                            data-href="{:url('/index/item/changeType')}" placeholder="型号不能为空">
+                        <span id="type_message" style="color: brown"></span>
+                        <input type="hidden" id="type_status" value="1" />
+                    </div>
+                </div>
+                <input type="hidden" name="category_id" id="category_id">
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="name_id" class="layui-form-label">
+                        <span class="x-red">*</span>名称</label>
+                    <div class="layui-input-block">
+                        <select id="name_id" class="" name="name_id" lay-filter="name_id" lay-verify="required">
+                            {foreach $names as $name}
+                            <option value="{$name.id}" data-category-id="{$name.category_id}" data-appearance="
+                                {foreach $name.itemAppearance as $appearance}
+                                    <?php if($history && $history->item->appearance_id == $appearance->id){echo 'selected';}?></option>
+                                    <option value='{$appearance.id}'>{$appearance.data}</option>
+                                {/foreach}" data-edition="
+                                {foreach $name.itemEdition as $edition}
+                                     <?php if($history && $history->item->edition_id == $edition->id){echo 'selected';}?></option>
+                                    <option value='{$edition.id}'>{$edition.data}</option>
+                                {/foreach}" data-feature="
+                                {foreach $name.itemFeature as $feature}
+                                    <?php if($history && $history->item->feature_id == $feature->id){echo 'selected';}?></option>
+                                    <option value='{$feature.id}'>{$feature.data}</option>
+                                {/foreach}" data-network="
+                                {foreach $name.itemNetwork as $network}
+                                    <?php if($history && $history->item->network_id == $network->id){echo 'selected';}?></option>
+                                    <option value='{$network.id}'>{$network.data}</option>
+                                {/foreach}"
+                                <?php if($history && $history->item->name_id == $name->id){echo 'selected';}?>>{$name.data}
+                            </option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="network_id" class="layui-form-label">
+                        <span class="x-red">*</span>网络模式</label>
+                    <div class="layui-input-block">
+                        <select id="network_id" class="" name="network_id" lay-verify="required">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="feature_id" class="layui-form-label">
+                        <span class="x-red">*</span>配置</label>
+                    <div class="layui-input-block">
+                        <select id="feature_id" class="" name="feature_id" lay-verify="required">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="appearance_id" class="layui-form-label">
+                        <span class="x-red">*</span>外观</label>
+                    <div class="layui-input-block">
+                        <select id="appearance_id" class="" name="appearance_id" lay-verify="required">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="edition_id" class="layui-form-label">
+                        <span class="x-red">*</span>固件版本</label>
+                    <div class="layui-input-block">
+                        <select id="edition_id" class="" name="edition_id" lay-verify="required">
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="memo" class="layui-form-label">
+                        商品备注</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="memo" id="memo" rows="3"><?php if($history ){echo $history->item->memo;}?></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="price" class="layui-form-label">
+                        <span class="x-red">*</span>进货价格</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" id="price" name="price" lay-verify="required"
+                            value="<?php if($history ){echo $history->item->price;}?>">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="channel_id" class="layui-form-label">
+                        <span class="x-red">*</span>进货渠道</label>
+                    <div class="layui-input-block">
+                        <select id="channel_id" class="" name="channel_id" lay-verify="required">
+                            {foreach $channels as $channel}
+                                <option value="{$channel.id}" <?php if($history && $history->item->channel_id == $channel->id){echo 'selected="selected"';}?>>{$channel.data}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md8 layui-col-md-offset1">
+                    <label for="L_repass" class="layui-form-label"></label>
+                    <button class="layui-btn layui-btn-lg" lay-filter="submit" type="submit" lay-submit>确定</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="data-all" style="display: none">
+        {foreach $names as $name}
+            <option value="{$name.id}" data-category-id="{$name.category_id}" data-appearance="
+            {foreach $name.itemAppearance as $appearance}
+                <option value='{$appearance.id}'>{$appearance.data}</option>
+            {/foreach}"  data-edition="
+            {foreach $name.itemEdition as $edition}
+                <option value='{$edition.id}'>{$edition.data}</option>
+            {/foreach}"  data-feature="
+            {foreach $name.itemFeature as $feature}
+                <option value='{$feature.id}'>{$feature.data}</option>
+            {/foreach}"
+            data-network="
+            {foreach $name.itemNetwork as $network}
+                <option value='{$network.id}'>{$network.data}</option>
+            {/foreach}"
+            >{$name.data}</option>
+        {/foreach}
+    </div>
+    <span id='item-id' style="display: none" data-id = "<?php if ($history) {echo $history->item->id;} ?>"></span>
+    <script>
+        layui.use(['laydate', 'form', 'layer'],function () {
+            var laydate = layui.laydate;
+            $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#date' //指定元素
+            });
+
+
+            //自定义验证规则
+            // form.verify({
+            //     nikename: function (value) {
+            //         if (value.length < 5) {
+            //             return '昵称至少得5个字符啊';
+            //         }
+            //     },
+            //     pass: [/(.+){6,12}$/, '密码必须6到12位'],
+            //     repass: function (value) {
+            //         if ($('#L_pass').val() != $('#L_repass').val()) {
+            //             return '两次密码不一致';
+            //         }
+            //     }
+            // });
+
+            //监听提交
+            form.on('submit(submit)',
+                function (data) {
+                    changeNumber();
+                    
+                    var number = $("#number").val();
+                    if (number == '') {
+                        // $("#number_message").html('序列号不能为空');
+                    }
+
+                    var type_status = $("#type_status").val();
+                    var number_status = $("#number_status").val();
+                    if (type_status == 1 && number_status == 1) {
+                        var url = $("#form").data('action');
+                        var data = $('#form').serialize();
+                        $.post(url, data, function (res) {console.log(res)
+                            if (res.code == 200) {
+                                layer.alert("保存成功", {
+                                    icon: 6
+                                },function() {
+                                    //关闭当前frame
+                                    xadmin.close();
+                                    // 可以对父窗口进行刷新 
+                                    xadmin.father_reload();
+                                })
+                            } else {
+                                layer.alert(res.data, {
+                                    icon: 5
+                                },function() {
+                                    //关闭当前frame
+                                    xadmin.close();
+                                    // 可以对父窗口进行刷新 
+                                    xadmin.father_reload();
+                                })
+                            }
+                        });
+                        return false;
+                    } else {
+                        return false;
+                    }
+                }
+            );
+
+            form.on('select(name_id)',changeNameSelected);
+            
+            $("#type_id").change(function(){
+                changeTypeValue();
+            })
+
+            $("#number").change(function(){
+                changeNumber();
+            })
+
+            changeNameSelected();
+            changeNumber();
+        });
+
+
+        function changeNameSelected(){
+            var category_id = $("#name_id option:selected").data("category-id");
+            $("#category_id").val(category_id);
+
+            var appearance_str = $("#name_id option:selected").data("appearance");
+            $("#appearance_id").html(appearance_str)
+
+            var edition_str = $("#name_id option:selected").data("edition");
+            $("#edition_id").html(edition_str)
+
+            var feature_str = $("#name_id option:selected").data("feature");
+            $("#feature_id").html(feature_str)
+
+            var network_str = $("#name_id option:selected").data("network");
+            $("#network_id").html(network_str)
+            layui.form.render('select');
+        }
+
+        function changeTypeValue(){
+
+            var type = $("#type_id").val();
+            var url = $("#type_id").data('href');
+            if (type == '') {
+                var str = $("#data-all").html();
+                $("#name_id").html(str);
+                changeNameSelected();
+                $("#name_id").removeAttr("readonly");
+                $("#name_id").removeAttr("onmousedown");
+                $("#network_id").removeAttr("readonly");
+                $("#network_id").removeAttr("onmousedown");
+                $("#type_message").html('')
+                $("#type_status").val(1)
+            } else {
+                $.get(url, {type:type}, function(res) {
+                    if (res.code  == 500) {
+                        layer.alert(res.data, {
+                            icon: 2,
+                            // time: 2000 //2秒关闭
+                        });
+                        $("#type_message").html(res.data)
+                        $("#type_status").val(0)
+                    }  else {
+                        var str = '';
+                        $.each(res.data, function(k, v){
+                            str += '<option value="'+v.itemName.id+'" data-category-id="'+v.itemName.category_id+'" data-appearance="';
+                            $.each(v.itemName.itemAppearance, function (kk, vv){
+                                str += "<option value='"+vv.id+"'>"+vv.data+"</option>";
+                            })
+                            str += '" data-edition="';
+                            $.each(v.itemName.itemEdition, function (kk, vv){
+                                str += "<option value='"+vv.id+"'>"+vv.data+"</option>";
+                            })
+                            str += '" data-feature="';
+                            $.each(v.itemName.itemFeature, function (kk, vv){
+                                str += "<option value='"+vv.id+"'>"+vv.data+"</option>";
+                            })
+                            str += '" data-network="';
+                            str += "<option value='"+v.itemNetwork.id+"'>"+v.itemNetwork.data+"</option>";
+                            str += '">'+v.itemName.data+'</option>';
+                        });
+                            
+                        $("#name_id").html(str);
+                        changeNameSelected();
+                        $("#type_message").html('')
+                        $("#type_status").val(1)
+                    }
+                    $("#name_id").attr("readonly","readonly");
+                    $("#name_id").attr("onmousedown","return false;");
+                    $("#network_id").attr("readonly","readonly");
+                    $("#network_id").attr("onmousedown","return false;");
+                })      
+            }
+            layui.form.render('select');
+        }
+
+        function changeNumber(){
+            var val = $("#number").val();
+            var url = $("#number").data('href');
+            var id = $("#item-id").data('id');
+            if (val == '') {
+
+                $("#number_status").val(0);
+            } else {
+                
+                $.get(url, {number: val, id: id}, function(res){
+
+                    if (res.code == 200) {
+                        $("#number_status").val(1);
+                    } else if (res.code == 222) {
+                        $("#number_status").val(1);
+                        $("#type_id").val(res.data.type);
+                        $("#type_message").html('');
+                        $("#type_status").val(1);
+                        $('#name_id option').each(function(k, v) {
+                            if ($(v).val() == res.data.name_id) {
+                                $(v).prop('selected', true)
+                            }
+                        });
+                        
+                        changeNameSelected();
+                
+                        $('#network_id option').each(function(k, v) {
+                            if ($(v).val() == res.data.network_id) {
+                                $(v).prop('selected', true)
+                            }
+                        });
+                        $('#feature_id option').each(function(k, v) {
+                            if ($(v).val() == res.data.feature_id) {
+                                $(v).prop('selected', true)
+                            }
+                        });
+                        $('#appearance_id option').each(function(k, v) {
+                            if ($(v).val() == res.data.appearance_id) {
+                                $(v).prop('selected', true)
+                            }
+                        });
+                        
+                    } else {
+                        $("#number_status").val(0);
+                        layer.alert(res.data, {
+                            icon: 2,
+                            // time: 2000 //2秒关闭
+                        });
+                    }
+                })
+            }
+            layui.form.render('select');
+        }
+    </script>
+</body>

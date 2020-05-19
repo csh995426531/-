@@ -1,73 +1,95 @@
 
-<div class="row">
-      
-            <div class="span12">
-                <table class="orders-table table">
-                    <tbody>
-    
-                    {volist name='lists' id='temp'}
-                    <div style="margin: 30px;font-size: 1.2em">
-                        <?php 
-                        
-                            echo $temp->create_time . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;【' . $temp->eventName . '】&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                            if (in_array($temp->event, [1,2])) {
-                                echo '入库价格: ' . number_format($temp->item->price, 2) . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                                if ($temp->event == 1) { //入库
-                                    echo '入库人:';
-                                    echo $temp->incomeHistory->createUser ? $temp->incomeHistory->createUser->username : '' ;
-                                    echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
-                                } else { //入库审核
-                                    echo '审核人:';
-                                    echo $temp->incomeHistory->updateUser ? $temp->incomeHistory->updateUser->username : '' ;
-                                    echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . '结果:' .$temp->resultName . '&nbsp;&nbsp;&nbsp;';
-                                }
-                            } elseif (in_array($temp->event, [4,6])) {
-                                echo '审核人:';
-                                if ($temp->event == 4) { //销售出库审核
-                                    echo $temp->outgoHistory->updateUser ? $temp->outgoHistory->updateUser->username : '' ;
-                                    echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
-                                } else { //退货入库审核
-                                    echo $temp->incomeHistory->updateUser ? $temp->incomeHistory->createUser->username : '' ;
-                                    echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
-                                }
-                                echo '结果:' .$temp->resultName . '&nbsp;&nbsp;&nbsp;';
-                            } elseif ($temp->event == 3) { //销售出库
-                                echo '出库人:';
-                                echo $temp->outgoHistory->createUser ? $temp->outgoHistory->createUser->username : '' ;
-                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
-                                echo '销售渠道:';
-                                echo $temp->outgoHistory->itemChannel ? $temp->outgoHistory->itemChannel->data : '' ;
-                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
-                                echo '销售订单号:';
-                                echo $temp->outgoHistory ? $temp->outgoHistory->order_no : '' ;
-                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
-                                echo '销售价格:';
-                                echo $temp->outgoHistory ? number_format($temp->outgoHistory->price, 2) : '' ;
-                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
-                                echo '营销成本:';
-                                echo $temp->outgoHistory ? number_format($temp->outgoHistory->cost, 2) : '' ;
-                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
-                                echo '买家昵称:';
-                                echo $temp->outgoHistory ? $temp->outgoHistory->consignee_nickname : '' ;
-                                echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
-                            } elseif ($temp->event == 5) { //退货入库
-                                echo '入库人:';
-                                echo $temp->incomeHistory->createUser ? $temp->incomeHistory->createUser->username : '' ;
-                            } elseif ($temp->event == 7) { //特殊修改
-                                echo '修改人:';
-                                echo $temp->createUser ? $temp->createUser->username : '' ;
-                            }
-                        ?>
-                    </div>
-                    {/volist}
-                    </tbody>
-                </table>
-            </div>
-            <div class="pull-right">
-                {$lists->render()}
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-body">
+                <table id="history-table-list" lay-filter="history-table-list"></table>
             </div>
         </div>
     </div>
-    <script src="/static/js/jquery.min.js"></script>
     <script>
+        layui.use(['index', 'contlist', 'table', 'jquery'], function(){
+            var table = layui.table
+            var form = layui.form
+            var jquery = layui.jquery
+            var $ = layui.jquery
+
+            table.render({
+                elem: '#history-table-list'
+                ,url: '/index/item/historyList' //数据接口
+                ,where: {item_id: '<?php echo $item_id;?>'}
+                ,parseData: function(res){ //res 即为原始返回的数据
+                    return {
+                    "code": 0, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.data //解析数据列表
+                    };
+                },page: true //开启分页
+                ,cols: [[ //表头
+                    {field: 'id', title: 'ID', minWidth:60, sort: true, fixed: 'left'}
+                    ,{field: 'create_time', title: '', minWidth:60,templet: function(d){
+                        return d.create_time;
+                    }}
+                    ,{field: 'eventName', title: '', minWidth:60,templet: function(d){
+                        return'【' + d.eventName + '】';
+                    }}
+                    ,{field: 'event', title: '', minWidth:320,templet: function(d){
+                        if(d.event == 1 || d.event == 2 ){
+                            var str = '入库价格: ' + parseInt(d.item.price).toFixed(2) + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+                            if (d.event == 1) { //入库
+                                str += '入库人:';
+                                str += d.incomeHistory.createUser != null ? d.incomeHistory.createUser.username : '' ;
+                            } else { //入库审核
+                                str += '审核人:';
+                                str += d.incomeHistory.updateUser != null ? d.incomeHistory.updateUser.username : '' ;
+                                str += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;结果:' + d.resultName;
+                            }
+                        } else if (d.event == 4 || d.event == 6 ) {
+                            var str ='审核人:';
+                            if (d.event == 4) { //销售出库审核
+                                str += d.outgoHistory.updateUser ? d.outgoHistory.updateUser.username : '' ;
+                                str += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                            } else { //退货入库审核
+                                str += d.incomeHistory.updateUser ? d.incomeHistory.createUser.username : '' ;
+                                str += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                            }
+                            str += '结果:' + d.resultName;
+                        } else if (d.event == 3 ) { //销售出库
+                            var str ='出库人:';
+                            str += d.outgoHistory.createUser ? d.outgoHistory.createUser.username : '' ;
+                            str += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                            str += '销售渠道:';
+                            str += d.outgoHistory.itemChannel ? d.outgoHistory.itemChannel.data : '' ;
+                            str += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                            str += '销售订单号:';
+                            str += d.outgoHistory ? d.outgoHistory.order_no : '' ;
+                            str += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                            str += '销售价格:';
+                            str += d.outgoHistory ? parseInt(d.outgoHistory.price).toFixed(2) : '' ;
+                            str += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                            str += '营销成本:';
+                            str += d.outgoHistory ? parseInt(d.outgoHistory.cost).toFixed(2) : '' ;
+                            str += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' ;
+                            str += '买家昵称:';
+                            str += d.outgoHistory ? d.outgoHistory.consignee_nickname : '' ;
+                        } else if (d.event == 5) { //退货入库
+                            str += '入库人:';
+                            str += d.incomeHistory.createUser ? d.incomeHistory.createUser.username : '' ;
+                        } else if (d.event == 7) { //特殊修改
+                            var str = '修改人:';
+                            str += d.createUser ? d.createUser.username : '' ;
+                        }
+                        return str
+                    }} 
+                ]]
+            });
+
+
+            layui.$('.layui-btn.layuiadmin-btn-list').on('click', function(){
+            var type = layui.$(this).data('type');
+            active[type] ? active[type].call(this) : '';
+            });
+
+        });
     </script>

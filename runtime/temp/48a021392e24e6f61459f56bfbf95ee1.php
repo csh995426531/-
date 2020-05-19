@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1589803988;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1589888961;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -24,8 +24,6 @@
         }).use('index');
     </script>
 </head>
-
-<body>
 
     <div class="layui-fluid">
       <div class="layui-card">
@@ -194,8 +192,9 @@
                   ,{field: 'lastOutNo', title: '最近订单号', minWidth: 120, sort: true,templet: function(d){
                       return d.lastOutNo;
                   }}
-                  ,{field: 'right', title: '状态[历史]', minWidth: 120, sort: true,templet: function(d){
-                    return '<a class="layui-btn layui-btn-normal layui-btn-sm" lay-href="/index/item/history?item_id=' + d.id + '" lay-text="状态[历史]">' + d.statusName + '</a>';
+                  ,{fixed: 'right', title: '状态[历史]', minWidth: 120, sort: true,templet: function(d){
+                    return '<a class="layui-btn layui-btn-normal layui-btn-sm" onclick="status_history(this,' + d.id + ')" data-href="/index/item/history?item_id=' + d.id + '">' + d.statusName + '</a>';
+
                   }}
               ]]
           });
@@ -260,7 +259,7 @@
                     layui.form.render('select');
                 }
             }
-        );
+          );
   
           //监听搜索
           form.on('submit(filter-search)', function(data){
@@ -304,7 +303,17 @@
           layui.$('#appearance_id').html(appearances_str);
           layui.form.render('select');
       }
+
+      //状态历史
+      function status_history(obj,id) {
+        layer.open({
+          type: 2
+          ,title: '状态历史'
+          ,content:  [layui.$(obj).data('href'), 'no']
+          ,maxmin: true
+          ,area: ['900px', '600px']
+        });
+      }
+
     </script>
-  </body>
-  
 </html>

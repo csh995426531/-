@@ -12,7 +12,7 @@ class Index extends BaseController
         return $this->fetch();
     }
 
-    public function welcome()
+    public function home()
     {
        echo '桌面';
     }
