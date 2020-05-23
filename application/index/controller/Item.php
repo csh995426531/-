@@ -53,19 +53,23 @@ class Item extends BaseController
 
         $channels = ItemChannel::where("id", 'in', array_column($channelIds, 'channel_id'))->select();
 
+    
+        $breadcrumb = '入库记录处理';
 
-        // $sql = ItemIncomeHistory::alias('t')
-        //     ->field('t.*')
-        //     ->join('item i', 'i.id=t.item_id')
-        //     ->where(function ($query) {
-        //         $query->where('t.status', 'in', [
-        //             ItemIncomeHistory::STATUS_WAIT, 
-        //             ItemIncomeHistory::STATUS_FAIL
-        //         ])->where('t.type', ItemIncomeHistory::TYPE_INCOME);
-        //     })->whereOr(function ($query) {
-        //         $query->where('t.status', ItemIncomeHistory::STATUS_WAIT)
-        //         ->where('t.type', ItemIncomeHistory::TYPE_RETURN_INCOME);
-        //     });
+        return $this->fetch('income', [
+            'users' => $users,
+            'userId' => Session::get("user_id"),
+            'names' => $names,
+            'channels' => $channels,
+            'breadcrumb' => $breadcrumb,
+        ]);
+    }
+
+     // 入库记录处理-列表数据
+    public function incomeList(){
+
+        $limit = $this->request->param('limit', 10);
+        
         $sql = ItemIncomeHistory::alias('t')
             ->field('t.*')
             ->join('item i', 'i.id=t.item_id')
@@ -107,18 +111,23 @@ class Item extends BaseController
             $sql = $sql->where('i.channel_id', $channel_id);
         }
 
-        $lists = $sql->order('update_time', 'desc')->paginate(10, false, ['query'=>request()->param() ]);
-    
-        $breadcrumb = '入库记录处理';
+        $list = $sql->order('update_time', 'desc')->paginate($limit, false, ['query'=>request()->param() ]);
 
-        return $this->fetch('income', [
-            'users' => $users,
-            'userId' => Session::get("user_id"),
-            'names' => $names,
-            'channels' => $channels,
-            'lists' => $lists,
-            'breadcrumb' => $breadcrumb,
-        ]);
+        foreach ($list as &$temp) {
+            $temp['status_name'] = $temp->getStatusName();
+            $temp->item = $temp->item;
+            $temp->createUser = $temp->createUser;
+
+            if ($temp->item) {
+                $temp->item->itemName = $temp->item->itemName;
+                $temp->item->itemNetwork = $temp->item->itemNetwork;
+                $temp->item->itemFeature = $temp->item->itemFeature;
+                $temp->item->itemAppearance = $temp->item->itemAppearance;
+                $temp->item->itemEdition = $temp->item->itemEdition; 
+                $temp->item->itemChannel = $temp->item->itemChannel; 
+            }
+        }
+        return $list;
     }
 
     //进货入库
@@ -577,7 +586,17 @@ class Item extends BaseController
     //退货入库
     public function returnIncome(){
 
+        $breadcrumb = '退货入库';
+        return $this->fetch('return_income', [
+            'breadcrumb' => $breadcrumb,
+        ]);
+    }
+
+    //退货入库-列表数据
+    public function returnIncomeList(){
         $keyword = $this->request->get('keyword', '', 'trim');
+        $limit = $this->request->get('limit', 10);
+
         $lists = ItemOutgoHistory::alias("t")
             ->join("item i", 't.item_id=i.id')
             ->where("t.status", ItemOutgoHistory::STATUS_SUCCESS);
@@ -592,15 +611,22 @@ class Item extends BaseController
             });
         }
 
-        $lists = $lists->field('t.*')
-            ->paginate(10, false, ['query'=>request()->param() ]); 
+        $lists = $lists->field('t.*')->paginate($limit, false, ['query'=>request()->param()]); 
+        foreach ($lists as $temp) {
+            
+            $temp->item = $temp->item;
+            $temp->createUser = $temp->createUser;
+            $temp->itemChannel = $temp->itemChannel;
 
-        $breadcrumb = '退货入库';
-
-        return $this->fetch('return_income', [
-            'lists' => $lists,
-            'breadcrumb' => $breadcrumb,
-        ]);
+            if ($temp->item) {
+                $temp->item->itemName = $temp->item->itemName;
+                $temp->item->itemNetwork = $temp->item->itemNetwork;
+                $temp->item->itemFeature = $temp->item->itemFeature;
+                $temp->item->itemAppearance = $temp->item->itemAppearance;
+                $temp->item->itemEdition = $temp->item->itemEdition; 
+            }
+        }
+        return $lists;
     }
 
     //增加退货入库
@@ -1020,72 +1046,6 @@ class Item extends BaseController
     //产品出库
     public function outgo(){
 
-        $lists = \app\index\model\Item::where("status", "in", [
-            \app\index\model\Item::STATUS_NORMAL,
-            \app\index\model\Item::STATUS_OUTGO_WAIT,
-            \app\index\model\Item::STATUS_PREPARE
-        ]);
-
-        $typeId = $this->request->get("type_id");
-
-        if (!empty($typeId)) {
-            $typeArr = ItemType::where("data", $typeId)
-            ->column('id');
-            $lists = $lists->where("type_id", 'in', $typeArr);
-        }
-
-        $nameId = $this->request->get("name_id");
-
-        if (!empty($nameId)) {
-            $nameArr = ItemName::where("data", $nameId)
-            ->column('id');
-            $lists = $lists->where("name_id",  'in', $nameArr);
-        }
-
-        $featureId = $this->request->get("feature_id");
-
-        if (!empty($featureId)) {
-            $featureArr = ItemFeature::where("data", $featureId)
-            ->column('id');
-            $lists = $lists->where("feature_id",  'in', $featureArr);
-        }
-        
-        $networkId = $this->request->get("network_id");
-
-        if (!empty($networkId)) {
-
-            $networkArr = ItemNetwork::where("data", $networkId)
-            ->column('id');
-
-            $lists = $lists->where("network_id", 'in',  $networkArr);
-        }
-
-        $appearanceId = $this->request->get("appearance_id");
-
-        if (!empty($appearanceId)) {
-
-            $appearanceArr = ItemAppearance::where("data", $appearanceId)
-            ->column('id');
-
-            $lists = $lists->where("appearance_id",  'in', $appearanceArr);
-        }
-
-        $keyword = $this->request->get("keyword", '', 'trim');
-        if (!empty($keyword)) {
-            $lists = $lists->where("number", 'LIKE', '%'.$keyword.'%');
-        }
-
-        $is_prepare = $this->request->get('is_prepare');
-        if ($is_prepare == 1) {
-            $lists = $lists->where("status", \app\index\model\Item::STATUS_PREPARE);
-        }
-
-        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
-
-        foreach ($lists as $list) {
-            $list->statusName = $list->getStatusName();
-        }
-
         $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)->select();
 
         $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
@@ -1134,7 +1094,6 @@ class Item extends BaseController
         return $this->fetch('outgo', [
             'breadcrumb' => $breadcrumb,
             'channels' => $channels,
-            'lists' => $lists,
             'types' => $types,
             'names' => $names,
             'features' => $features,
@@ -1146,6 +1105,69 @@ class Item extends BaseController
                 'appearances' => $appearances
             ]
         ]);
+    }
+
+    //产品出库-列表数据
+    public function outgoList(){
+        $lists = \app\index\model\Item::where("status", "in", [
+            \app\index\model\Item::STATUS_NORMAL,
+            \app\index\model\Item::STATUS_OUTGO_WAIT,
+            \app\index\model\Item::STATUS_PREPARE
+        ]);
+
+        $typeId = $this->request->get("type_id");
+        if (!empty($typeId)) {
+            $typeArr = ItemType::where("data", $typeId)->column('id');
+            $lists = $lists->where("type_id", 'in', $typeArr);
+        }
+
+        $nameId = $this->request->get("name_id");
+        if (!empty($nameId)) {
+            $nameArr = ItemName::where("data", $nameId)->column('id');
+            $lists = $lists->where("name_id",  'in', $nameArr);
+        }
+
+        $featureId = $this->request->get("feature_id");
+        if (!empty($featureId)) {
+            $featureArr = ItemFeature::where("data", $featureId)->column('id');
+            $lists = $lists->where("feature_id",  'in', $featureArr);
+        }
+        
+        $networkId = $this->request->get("network_id");
+        if (!empty($networkId)) {
+            $networkArr = ItemNetwork::where("data", $networkId)->column('id');
+            $lists = $lists->where("network_id", 'in',  $networkArr);
+        }
+
+        $appearanceId = $this->request->get("appearance_id");
+        if (!empty($appearanceId)) {
+            $appearanceArr = ItemAppearance::where("data", $appearanceId)->column('id');
+            $lists = $lists->where("appearance_id",  'in', $appearanceArr);
+        }
+
+        $keyword = $this->request->get("keyword", '', 'trim');
+        if (!empty($keyword)) {
+            $lists = $lists->where("number", 'LIKE', '%'.$keyword.'%');
+        }
+
+        $is_prepare = $this->request->get('is_prepare');
+        if ($is_prepare == 1) {
+            $lists = $lists->where("status", \app\index\model\Item::STATUS_PREPARE);
+        }
+
+        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
+        foreach ($lists as &$temp) {
+            $temp->statusName = $temp->getStatusName();
+            $temp->itemType = $temp->itemType;
+            $temp->itemName = $temp->itemName;
+            $temp->itemNetwork = $temp->itemNetwork;
+            $temp->itemFeature = $temp->itemFeature;
+            $temp->itemAppearance = $temp->itemAppearance;
+            $temp->itemEdition = $temp->itemEdition; 
+            $temp->itemChannel = $temp->itemChannel; 
+        }
+
+        return $lists;
     }
 
     //特殊出库
@@ -2210,7 +2232,7 @@ class Item extends BaseController
         return $result;
     }
 
-    //商品历史
+    //商品历史-列表数据
     public function historyList(){
 
         $itemId = $this->request->param('item_id');
@@ -2239,6 +2261,7 @@ class Item extends BaseController
         return $lists;
     }
 
+    //商品历史
     public function history(){
         $itemId = $this->request->param('item_id');
         $breadcrumb = '商品历史';

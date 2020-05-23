@@ -1,12 +1,12 @@
 
     <div class="layui-fluid">
         <div class="layui-card">
-            <form class="layui-form" id="form" data-action="{:url('/index/item/addIncome')}">
+            <form class="layui-form" id="form" data-action="{:url('/index/item/addIncome')}" data-id="<?php if($history){echo $history->id;}?>">
                 <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12">
                     <div class="layui-inline">
                         <label class="layui-form-label">进货日期</label>
                         <div class="layui-input-inline">
-                            <input class="layui-input" placeholder="进货日期" name="date" type="text" id="date"
+                            <input class="layui-input" placeholder="进货日期" name="date" type="text" id="date" value="<?php if($history){echo $history->item->date;}?>"
                                 lay-verify="required" autocomplete="off">
                         </div>
                     </div>
@@ -130,6 +130,7 @@
             </form>
         </div>
     </div>
+
     <div id="data-all" style="display: none">
         {foreach $names as $name}
         <option value="{$name.id}" data-category-id="{$name.category_id}" data-appearance="
@@ -190,15 +191,21 @@
                     var number_status = $("#number_status").val();
                     if (type_status == 1 && number_status == 1) {
                         var url = $("#form").data('action');
+                        var history_id = $("#form").data('id');
                         var data = $('#form').serialize();
-                        $.post(url, data, function (res) {
-                            console.log(res)
+
+                        $.post(url+'?id='+history_id, data, function (res) {
+
                             if (res.code == 200) {
                                 layer.alert("保存成功", {
                                     icon: 6
                                 }, function () {
                                     //关闭当前frame
                                     window.layer.close();
+                                    
+                                    if (history_id > 0) {
+                                        window.parent.layer.closeAll();//疯狂模式，关闭所有层
+                                    }
                                     // 可以对父窗口进行刷新 
                                     window.location.reload();
                                 })

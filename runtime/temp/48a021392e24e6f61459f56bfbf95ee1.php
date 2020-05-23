@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1589888961;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1590217115;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -95,16 +95,9 @@
                 </select>
             </div>
             <div class="layui-inline">
-                <select name="date">
-                    <option value=""> - 进货日期 - </option>
-                    <?php foreach($dates as $date): ?>
-                    <option value="<?php echo $date; ?>" <?php echo \think\Request::instance()->get('date')==$date?'selected' :''; ?>><?php echo $date; ?></option>
-                    <?php endforeach; ?>
-                </select>
+                <input class="layui-input" placeholder="进货日期" name="date" type="text" id="date"
+                        lay-verify="required" autocomplete="off">
             </div>
-            <!-- <div class="layui-inline">
-                <input class="layui-input" placeholder="开始日" name="start" id="start">
-            </div> -->
             <div class="layui-inline">
                 <select name="status">
                     <option value=""> - 状态 - </option>
@@ -135,12 +128,18 @@
       </div>
     </div>
     <script>
-      layui.use(['index', 'contlist', 'table', 'jquery'], function(){
+      layui.use(['laydate', 'index', 'contlist', 'table', 'jquery'], function(){
           var table = layui.table
           var form = layui.form
           var jquery = layui.jquery
           var $ = layui.jquery
-  
+          var laydate = layui.laydate
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#date' //指定元素
+            });
+
           table.render({
               elem: '#table-list'
               ,url: '/index/item/searchList' //数据接口
@@ -194,7 +193,6 @@
                   }}
                   ,{fixed: 'right', title: '状态[历史]', minWidth: 120, sort: true,templet: function(d){
                     return '<a class="layui-btn layui-btn-normal layui-btn-sm" onclick="status_history(this,' + d.id + ')" data-href="/index/item/history?item_id=' + d.id + '">' + d.statusName + '</a>';
-
                   }}
               ]]
           });

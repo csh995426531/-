@@ -1,168 +1,123 @@
 
-<div class="row">
-
-    <div class="">
-        <div class="span12">
-
-            <form class="form-inline" method="get">
-                <input type="text" class="input-large" name="keyword" placeholder="序列号/订单号/收货人昵称" value="{$Think.get.keyword}">
-                <button type="submit" class="btn btn-primary">搜索</button>
-            </form>
-
+    <div class="layui-fluid">
+        <div class="layui-card">
+          <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+              <div class="layui-inline">
+                  <input type="text" name="keyword" placeholder="序列号/订单号/收货人昵称" value="{$Think.get.keyword}"
+                  autocomplete="off" class="layui-input">
+              </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="filter-search">
+                      <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                  </div>
+            </div>
+          </div>
+          <!-- 表格 -->
+          <div class="layui-card-body">
+            <table id="table-list" lay-filter="table-list"></table>
+          </div>
         </div>
+      </div>
+      
+      <script>
+        layui.use(['index', 'contlist', 'table', 'jquery'], function(){
+            var table = layui.table
+            var form = layui.form
+            var jquery = layui.jquery
+            var $ = layui.jquery
 
-        <div class="row">
-
-            <div class="span12 listing-buttons">
-
-                <!--<button class="btn btn-info">Action</button>-->
-
-                <!--<button class="btn btn-success">Action</button>-->
-
-                <!--<button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>-->
-
-            </div>
-
-            <div class="span12">
-
-                <!--<div class="page-header">-->
-                <!--<div class="btn-group pull-right">-->
-                <!--<button class="btn dropdown-toggle" data-toggle="dropdown">-->
-                <!--<i class="icon-download-alt"></i> Export-->
-                <!--<span class="caret"></span>-->
-                <!--</button>-->
-                <!--<ul class="dropdown-menu">-->
-                <!--<li><a href="">CSV</a></li>-->
-                <!--<li><a href="">Excel</a></li>-->
-                <!--<li><a href="">PDF</a></li>-->
-                <!--</ul>-->
-                <!--</div>-->
-                <!--<h2>Listings</h2>-->
-                <!--</div>-->
-                <h4 class="span12">总条数：{$lists->total()}</h4>
-                <table class="orders-table table">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <!--<th>型号</th>-->
-                          <!--<th>分类</th>-->
-                        <th>名称</th>
-                        <th>网络</th>
-                        <th>配置</th>
-                        <th>外观</th>
-                        <th>序列号</th>
-                        <th>固件版本</th>
-                        <th>备注</th>
-                        <th>销售价格</th>
-                        <th>出货途径</th>
-                        <th>出货人</th>
-                        <th>出货时间</th>
-                        <th>订单号</th>
-                     <!-- <th>收货昵称</th>-->
-                        <th class="actions">操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-info">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-warning">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-important">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-inverse">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-success">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-
-                    {volist name='lists' id='temp'}
-                    <tr>
-                        <td><span>{$temp.id}</span></td>
-                        <!--<th><span>{$temp.item.itemType.data}</span></th>-->
-                        <!--<th><span>{$temp.item.itemCategory.data}</span></th>-->
-                        <th><span>{$temp.item.itemName.data}</span></th>
-                         <th><span>{$temp.item.itemNetWork.data}</span></th>
-                        <th><span>{$temp.item.itemFeature.data}</span></th>
-                        <th><span>{$temp.item.itemAppearance.data}</span></th>
-                        <th><span>{$temp.item.number}</span></th>
-                        <th><span>{$temp.item.itemEdition.data}</span></th>
-                        <th><span>{$temp.memo}</span></th>
-                        <th><span>{$temp.price}</span></th>
-                        <th><span>{$temp.itemChannel.data}</span></th>
-                        <td><span>{$temp.createUser.username}</span></td>
-                        <td><span>{$temp.create_time}</span></td>
-                        <td><span>{$temp.order_no}</span></td>
-                         <!-- <td><span>{$temp.consignee_nickname}</span></td>-->
-                        <td class="actions">
-                            <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
-
-                            <a class="btn btn-small btn-success add-return-income" data-href="{:url('addReturnIncome')}" data-id="{$temp.id}">退货入库</a>
-                            <!--<a class="btn btn-small btn-danger reject-item" data-id="{$temp.id}" data-value="0" data-href="{:url('rejectAgree')}">拒绝</a>-->
-                        </td>
-                    </tr>
-                    {/volist}
-                    </tbody>
-                </table>
-            </div>
-            <div class="pull-right">
-                {$lists->render()}
-            </div>
-        </div>
-
-    </div>
-</div>
-<script src="/static/js/jquery.min.js"></script>
-<script>
-    $(function(){
-        $(".add-return-income").click(function(){
-            var url = $(this).data('href');
-            var id = $(this).data('id');
-            $.post(url, {id:id}, function (res) {
-                alert(res.data);
-                window.location.replace("<?php echo url('returnIncome');?>");
-            })
-        });
-
-        $("#submit").click(function(){
-            var url = $("#form").data('action');
-            var data = $('#form').serialize();
-            $.post(url, data, function (res) {
-                alert(res.data);
-                if (res.code == 200) {
-                    window.location.replace("<?php echo url('returnIncome');?>");
+            table.render({
+                elem: '#table-list'
+                ,url: '/index/item/returnIncomeList' //数据接口
+                ,parseData: function(res){ //res 即为原始返回的数据
+                    return {
+                    "code": 0, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.data //解析数据列表
+                    };
+                },page: true //开启分页
+                ,cols: [[ //表头
+                    {field: 'id', title: 'ID', minWidth:60, sort: true, fixed: 'left'}
+                    ,{field: 'itemName', title: '名称', minWidth:120,templet: function(d){
+                        if(d.item != null && d.item.itemName != null){return d.item.itemName.data} else {return ''}
+                    }} 
+                    ,{field: 'itemNetwork', title: '网络模式', minWidth: 120,templet: function(d){
+                        if(d.item != null && d.item.itemNetwork != null){return d.item.itemNetwork.data} else {return ''}
+                    }}
+                    ,{field: 'itemFeature', title: '配置', minWidth: 120,templet: function(d){
+                        if(d.item != null && d.item.itemFeature != null){return d.item.itemFeature.data} else {return ''}
+                    }}
+                    ,{field: 'itemAppearance', title: '外观', minWidth: 120,templet: function(d){
+                        if(d.item != null && d.item.itemAppearance != null){return d.item.itemAppearance.data} else {return ''}
+                    }}
+                    ,{field: 'number', title: '序列号', minWidth: 150,templet: function(d){
+                        return '<a target="_blank" href="https://checkcoverage.apple.com/cn/zh/?sn=' + d.item.number + '"><span style="color:coral;cursor: pointer;">' + d.item.number +'</span></a>';
+                    }}
+                    ,{field: 'itemEdition', title: '版本', minWidth: 120,templet: function(d){
+                        if(d.item != null && d.item.itemEdition != null){return d.item.itemEdition.data} else {return ''}
+                    }}
+                    ,{field: 'memo', title: '备注', minWidth: 120, sort: true,templet: function(d){
+                        return d.memo;
+                    }}
+                    ,{field: 'price', title: '销售价格', minWidth: 120, sort: true,templet: function(d){
+                        return (d.price*1).toFixed(2);
+                    }}
+                    ,{field: 'itemChannel', title: '出货途径', minWidth: 120, sort: true,templet: function(d){
+                        if(d.itemChannel != null){return d.itemChannel.data} else {return ''}
+                    }}
+                    ,{field: 'createUser', title: '出货人', minWidth: 120, sort: true,templet: function(d){
+                        if(d.createUser != null){return d.createUser.data} else {return ''}
+                    }}
+                    ,{field: 'create_time', title: '出货时间', minWidth: 120, sort: true,templet: function(d){
+                        return d.create_time;
+                    }}
+                    ,{field: 'order_no', title: '订单号', minWidth: 120, sort: true,templet: function(d){
+                        return d.order_no;
+                    }}
+                    ,{fixed: 'right', title: '操作', minWidth: 120, sort: true,templet: function(d){
+                        return '<a class="layui-btn layui-btn-sm" onclick="return_income(this,' + d.id + ')" data-value="1" data-href="/index/item/addReturnIncome?id=' + d.id + '">退货入库</a>';
+                    }}
+                ]]
+            });
+    
+            //监听搜索
+            form.on('submit(filter-search)', function(data){
+              var field = data.field;console.log()
+              //执行重载
+              table.reload('table-list', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
                 }
-            })
+              });
+            });
+    
+            layui.$('.layui-btn.layuiadmin-btn-list').on('click', function(){
+              var type = layui.$(this).data('type');
+              active[type] ? active[type].call(this) : '';
+            });
+    
         });
-    })
-</script>
+        
+        //退货入库
+        function return_income(obj, id) {
+            layer.confirm('确认要退货入库吗？', function (index) {
+                //发异步
+                var url = layui.$(obj).data('href');
+                layui.$.post(url, { id: id }, function (res) {
+                    layer.msg("success!", {
+                        icon: 1,
+                        time: 1000
+                    }, function (index) {
+                        layui.table.reload('table-list'); //重载表格
+                        layer.close(index); //再执行关闭 
+                    })
+                });
+                return false;
+            });
+        }
+  
+      </script>

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/index/index.html";i:1589888820;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/index/index.html";i:1590216541;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -104,7 +104,7 @@
               </div>
               
               <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-                <li data-name="home" class="layui-nav-item layui-nav-itemed">
+                <li data-name="home" class="layui-nav-item">
                   <a href="javascript:;" lay-tips="库存查询" lay-direction="2">
                     <i class="layui-icon layui-icon-home"></i>
                     <cite>库存查询</cite>
@@ -118,7 +118,7 @@
                     </dd>
                   </dl>
                 </li>
-                <li data-name="home" class="layui-nav-item layui-nav-itemed">
+                <li data-name="home" class="layui-nav-item">
                     <a href="javascript:;" lay-tips="产品入库" lay-direction="2">
                       <i class="layui-icon layui-icon-home"></i>
                       <cite>产品入库</cite>
@@ -138,7 +138,35 @@
                       </dd>
                     </dl>
                 </li>
-    
+                <li data-name="home" class="layui-nav-item">
+                    <a href="javascript:;" lay-tips="产品出库" lay-direction="2">
+                      <i class="layui-icon layui-icon-home"></i>
+                      <cite>产品出库</cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                      <dd data-name="console">
+                        <a lay-href="/index/item/outgo">销售出库</a>
+                      </dd>
+                      <dd data-name="console">
+                        <a lay-href="/index/item/specialOutgo">维修登记</a>
+                      </dd>
+                    </dl>
+                </li>
+                <li data-name="home" class="layui-nav-item">
+                    <a href="javascript:;" lay-tips="操作审核" lay-direction="2">
+                      <i class="layui-icon layui-icon-home"></i>
+                      <cite>操作审核</cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                      <dd data-name="console">
+                        <a lay-href="/index/item/incomeAgree">入库审核</a>
+                      </dd>
+                      <dd data-name="console">
+                        <a lay-href="/index/item/outgoAgree">出库审核</a>
+                      </dd>
+                    </dl>
+                </li>
+                
 
                 <li data-name="component" class="layui-nav-item">
                   <a href="javascript:;" lay-tips="组件" lay-direction="2">
