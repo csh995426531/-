@@ -729,13 +729,30 @@ class Item extends BaseController
         $names = ItemName::where('id', 'in', array_column($nameIds, 'name_id'))->select();
 
         $channelIds = Db::name('item_income_history')
-        ->alias('t')
-        ->join('item i', 'i.id = t.item_id')
-        ->distinct(true)
-        ->field('i.channel_id')
-        ->select();
-
+            ->alias('t')
+            ->join('item i', 'i.id = t.item_id')
+            ->distinct(true)
+            ->field('i.channel_id')
+            ->select();
         $channels = ItemChannel::where("id", 'in', array_column($channelIds, 'channel_id'))->select();
+
+        $breadcrumb = '入库审核';
+
+        return $this->fetch('income_agree', [
+            'users' => $users,
+            'names' => $names,
+            'channels' => $channels,
+            // 'lists' => $lists,
+            'breadcrumb' => $breadcrumb,
+            // 'count' => $count ,
+            // 'total' => $total
+        ]);
+    }
+
+    // 入库审核-列表数据
+    public function incomeAgreeList(){
+
+        $limit = $this->request->param('limit', 10);
 
         $sql = ItemIncomeHistory::alias('t')->join('item i', 'i.id=t.item_id')->where("t.status", ItemIncomeHistory::STATUS_WAIT);
 
@@ -773,10 +790,20 @@ class Item extends BaseController
         $total = $sql3->sum('i.price');
 
         $lists = $sql->field('t.*')
-        ->paginate(10, false, ['query'=>request()->param() ]);
+            ->paginate($limit, false, ['query'=>request()->param() ]);
        
-        foreach ($lists as $list) {
-
+        foreach ($lists as &$list) {
+            if ($list->item) {
+                $list->item->itemType = $list->item->itemType;
+                $list->item->itemCategory = $list->item->itemCategory;
+                $list->item->itemName = $list->item->itemName;
+                $list->item->itemFeature = $list->item->itemFeature;
+                $list->item->itemNetwork = $list->item->itemNetwork;
+                $list->item->itemAppearance = $list->item->itemAppearance;
+                $list->item->itemEdition = $list->item->itemEdition;
+                $list->item->itemChannel = $list->item->itemChannel;
+            }
+            $list->createUser = $list->createUser;
             $list->createTime = date('m-d H:i', strtotime($list->create_time));
             $list->typeName = $list->getTypeName();
             if ($list->item->network_id == 0 )  {
@@ -784,17 +811,7 @@ class Item extends BaseController
             }
         }
 
-        $breadcrumb = '入库审核';
-
-        return $this->fetch('income_agree', [
-            'users' => $users,
-            'names' => $names,
-            'channels' => $channels,
-            'lists' => $lists,
-            'breadcrumb' => $breadcrumb,
-            'count' => $count ,
-            'total' => $total
-        ]);
+        return $lists;
     }
 
     //通过入库审核
@@ -1046,8 +1063,6 @@ class Item extends BaseController
     //产品出库
     public function outgo(){
 
-        $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)->select();
-
         $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
 
         if (!empty($typeIds)) {
@@ -1093,7 +1108,6 @@ class Item extends BaseController
 
         return $this->fetch('outgo', [
             'breadcrumb' => $breadcrumb,
-            'channels' => $channels,
             'types' => $types,
             'names' => $names,
             'features' => $features,
@@ -1109,6 +1123,8 @@ class Item extends BaseController
 
     //产品出库-列表数据
     public function outgoList(){
+        $limit = $this->request->param('limit', 10);
+
         $lists = \app\index\model\Item::where("status", "in", [
             \app\index\model\Item::STATUS_NORMAL,
             \app\index\model\Item::STATUS_OUTGO_WAIT,
@@ -1155,7 +1171,7 @@ class Item extends BaseController
             $lists = $lists->where("status", \app\index\model\Item::STATUS_PREPARE);
         }
 
-        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
+        $lists = $lists->paginate($limit, false, ['query'=>request()->param() ]);
         foreach ($lists as &$temp) {
             $temp->statusName = $temp->getStatusName();
             $temp->itemType = $temp->itemType;
@@ -1173,6 +1189,77 @@ class Item extends BaseController
     //特殊出库
     public function specialOutgo(){
 
+        $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
+
+        if (!empty($typeIds)) {
+            $types = ItemType::where("id", 'in', array_column($typeIds, 'type_id'))->distinct(true)->field('data')->select();
+        } else {
+            $types = [];
+        }
+
+        $nameIds = Db::table('y5g_item')->distinct(true)->field("name_id")->select();
+    
+        if (!empty($nameIds)) {
+            $names = ItemName::where("id", 'in', array_column($nameIds, 'name_id'))->distinct(true)->field('data')->select();
+        } else {
+            $names = [];
+        }
+
+        $featureIds = Db::table('y5g_item')->distinct(true)->field("feature_id")->select();
+
+        if (!empty($featureIds)) {
+            $features = ItemFeature::where("id", 'in', array_column($featureIds, 'feature_id'))->distinct(true)->field('data')->select();
+  
+        } else {
+            $features = [];
+        }
+
+        $networkIds = Db::table('y5g_item')->distinct(true)->field("network_id")->select();
+        if (!empty($networkIds)) {
+
+            $networks = itemNetwork::where("id", 'in', array_column($networkIds, 'network_id'))->distinct(true)->field('data')->select();
+        } else {
+            $networks = [];
+        }
+
+        $appearanceIds = Db::table('y5g_item')->distinct(true)->field("appearance_id")->select();
+
+        if (!empty($appearanceIds)) {
+            $appearances = ItemAppearance::where("id", 'in', array_column($appearanceIds, 'appearance_id'))->distinct(true)->field('data')->select();
+        } else {
+            $appearances = [];
+        }
+
+        $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)->select();
+
+        $status = [
+            \app\index\model\Item::STATUS_NORMAL => '在库',
+            \app\index\model\Item::STATUS_REPAIR => '维修中'
+        ];
+
+        $breadcrumb = '维修返库';
+
+        return $this->fetch('special_outgo', [
+            'breadcrumb' => $breadcrumb,
+            'channels' => $channels,
+            'types' => $types,
+            'names' => $names,
+            'features' => $features,
+            'appearances' => $appearances,
+            'networks' => $networks,
+            'data' =>  [
+                'features' => $features,
+                'networks' => $networks,
+                'appearances' => $appearances
+            ],
+            'status' => $status
+        ]);
+    }
+
+    //维修返库-列表数据
+    public function specialoutgoList(){
+        
+        $limit = $this->request->param('limit', 10);
         $status = $this->request->get("status");
 
         if (empty($status)) {
@@ -1236,11 +1323,25 @@ class Item extends BaseController
             $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
         }
 
-        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
+        $lists = $lists->paginate($limit, false, ['query'=>request()->param() ]);
 
-        foreach ($lists as $list) {
+        foreach ($lists as &$list) {
+            $list->itemType = $list->itemType;
+            $list->itemCategory = $list->itemCategory;
+            $list->itemName = $list->itemName;
+            $list->itemFeature = $list->itemFeature;
+            $list->itemNetwork = $list->itemNetwork;
+            $list->itemAppearance = $list->itemAppearance;
+            $list->itemEdition = $list->itemEdition;
+            $list->itemChannel = $list->itemChannel;
             $list->statusName = $list->getStatusName();
         }
+
+        return $lists;
+    }
+
+    //特殊出库2
+    public function specialOutgo2(){
 
         $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
 
@@ -1287,15 +1388,14 @@ class Item extends BaseController
 
         $status = [
             \app\index\model\Item::STATUS_NORMAL => '在库',
-            \app\index\model\Item::STATUS_REPAIR => '维修中'
+            \app\index\model\Item::STATUS_LOSE => '盘库外'
         ];
 
-        $breadcrumb = '维修返库';
-
-        return $this->fetch('special_outgo', [
+        $breadcrumb = '盘点丢失';
+   
+        return $this->fetch('special_outgo2', [
             'breadcrumb' => $breadcrumb,
             'channels' => $channels,
-            'lists' => $lists,
             'types' => $types,
             'names' => $names,
             'features' => $features,
@@ -1310,10 +1410,16 @@ class Item extends BaseController
         ]);
     }
 
-    //特殊出库2
-    public function specialOutgo2(){
+    /**
+     * 库存盘点-列表数据
+     *
+     * @return void
+     * @author CSH <1114313879@qq.com>
+     */
+    public function specialOutgo2List(){
 
         $status = $this->request->get("status");
+        $limit = $this->request->get("limit", 10);
 
         if (empty($status)) {
             $status = [
@@ -1376,95 +1482,38 @@ class Item extends BaseController
             $lists = $lists->where("number",  "LIKE",  "%".$keyword."%");
         }
 
-        $lists = $lists->paginate(10, false, ['query'=>request()->param() ]);
+        $lists = $lists->paginate($limit, false, ['query'=>request()->param() ]);
 
-        foreach ($lists as $list) {
+        foreach ($lists as &$list) {
             $list->statusName = $list->getStatusName();
+            $list->itemCategory = $list->itemCategory;
+            $list->itemType = $list->itemType;
+            $list->itemName = $list->itemName;
+            $list->itemNetwork = $list->itemNetwork;
+            $list->itemFeature = $list->itemFeature;
+            $list->itemAppearance = $list->itemAppearance;
+            $list->itemEdition = $list->itemEdition;
+            $list->itemChannel = $list->itemChannel;
         }
 
-        $typeIds = Db::table('y5g_item')->distinct(true)->field("type_id")->select();
-
-        if (!empty($typeIds)) {
-            $types = ItemType::where("id", 'in', array_column($typeIds, 'type_id'))->distinct(true)->field('data')->select();
-        } else {
-            $types = [];
-        }
-
-        $nameIds = Db::table('y5g_item')->distinct(true)->field("name_id")->select();
-    
-        if (!empty($nameIds)) {
-            $names = ItemName::where("id", 'in', array_column($nameIds, 'name_id'))->distinct(true)->field('data')->select();
-        } else {
-            $names = [];
-        }
-
-        $featureIds = Db::table('y5g_item')->distinct(true)->field("feature_id")->select();
-
-        if (!empty($featureIds)) {
-            $features = ItemFeature::where("id", 'in', array_column($featureIds, 'feature_id'))->distinct(true)->field('data')->select();
-  
-        } else {
-            $features = [];
-        }
-
-        $networkIds = Db::table('y5g_item')->distinct(true)->field("network_id")->select();
-        if (!empty($networkIds)) {
-
-            $networks = itemNetwork::where("id", 'in', array_column($networkIds, 'network_id'))->distinct(true)->field('data')->select();
-        } else {
-            $networks = [];
-        }
-
-        $appearanceIds = Db::table('y5g_item')->distinct(true)->field("appearance_id")->select();
-
-        if (!empty($appearanceIds)) {
-            $appearances = ItemAppearance::where("id", 'in', array_column($appearanceIds, 'appearance_id'))->distinct(true)->field('data')->select();
-        } else {
-            $appearances = [];
-        }
-
-        $channels = ItemChannel::where("type", ItemChannel::TYPE_OUTGO)->select();
-
-        $status = [
-            \app\index\model\Item::STATUS_NORMAL => '在库',
-            \app\index\model\Item::STATUS_LOSE => '盘库外'
-        ];
-
-        $breadcrumb = '盘点丢失';
-   
-        return $this->fetch('special_outgo2', [
-            'breadcrumb' => $breadcrumb,
-            'channels' => $channels,
-            'lists' => $lists,
-            'types' => $types,
-            'names' => $names,
-            'features' => $features,
-            'appearances' => $appearances,
-            'networks' => $networks,
-            'data' =>  [
-                'features' => $features,
-                'networks' => $networks,
-                'appearances' => $appearances
-            ],
-            'status' => $status
-        ]);
+        return $lists;
     }
 
     // 增加特殊出库
     public function addSpecialOutgo(){
         $result = SetResult(200, '操作成功');
-
-        $itemId = $_POST['item_id'];
-        $status = $this->request->param('type');
+        $param = $this->request->param(false);
+        $itemId = $param['id'];
+        $status = $param['type'];
 
         if ($this->request->isPost()) {
 
             try {
                 if (empty($itemId)) {
-                    throw new Exception("itemid错误");
+                    throw new \Exception("itemid错误");
                 }
                 if (!in_array($status,  [4,5])) {
-                    throw new Exception("操作类型错误");
+                    throw new \Exception("操作类型错误");
                 }
 
                 if (is_array($itemId)) {
@@ -1530,18 +1579,18 @@ class Item extends BaseController
     // 返库特殊出库
     public function cancelSpecialOutgo(){
         $result = SetResult(200, '操作成功');
-       
-        $itemId = $_POST['item_id'];
-        $status = $this->request->param('type');
+        $param = $this->request->param(false);
+        $itemId = $param['id'];
+        $status = $param['type'];
 
         if ($this->request->isPost()) {
 
             try {
                 if (empty($itemId)) {
-                    throw new Exception("itemid错误");
+                    throw new \Exception("itemid错误");
                 }
                 if (!in_array($status,  [4,5])) {
-                    throw new Exception("操作类型错误");
+                    throw new \Exception("操作类型错误");
                 }
 
                 if (is_array($itemId)) {
@@ -1731,10 +1780,29 @@ class Item extends BaseController
 
         $channels = ItemChannel::where("id", 'in', array_column($channelIds, 'channel_id'))->select();
 
+
+        $breadcrumb = '出库审核';
+
+        return $this->fetch('outgo_agree', [
+            'names' => $names,
+            'channels' => $channels,
+            'breadcrumb' => $breadcrumb,
+        ]);
+    }
+
+    /**
+     * 出库审核-列表数据
+     *
+     * @return void
+     * @author CSH <1114313879@qq.com>
+     */
+    public function outgoAgreeList()
+    {
+        $limit = $this->request->param('limit', 10);
+        
         $sql = ItemOutgoHistory::alias('t')->join('item i', 'i.id=t.item_id')->where("t.status", ItemOutgoHistory::STATUS_WAIT);
 
         $date = $this->request->get('date');
-
         if (!empty($date)) {
 
             $start_time = strtotime($date. '00:00:00');
@@ -1743,19 +1811,16 @@ class Item extends BaseController
         }
 
         $name_id = $this->request->get('name_id');
-
         if (!empty($name_id) && $name_id > 0) {
             $sql = $sql->where('i.name_id', $name_id);
         }
 
         $channel_id = $this->request->get('channel_id');
-
         if (!empty($channel_id) && $channel_id > 0) {
             $sql = $sql->where('i.channel_id', $channel_id);
         }
 
         $keyword = $this->request->get('keyword', '', 'trim');
-        
         if (!empty($keyword)) {
             $lists = $sql->where(function($sql) use($keyword) {
                 $sql->whereOr([
@@ -1767,22 +1832,35 @@ class Item extends BaseController
         }
 
         $lists = $sql->field('t.*')
-        ->paginate(10, false, ['query'=>request()->param() ]);
+            ->paginate($limit, false, ['query'=>request()->param() ]);
 
         foreach ($lists as $list) {
+            if ($list->item) {
+                $list->item->itemType = $list->item->itemType;
+                $list->item->itemCategory = $list->item->itemCategory;
+                $list->item->itemName = $list->item->itemName;
+                $list->item->itemFeature = $list->item->itemFeature;
+                $list->item->itemNetwork = $list->item->itemNetwork;
+                $list->item->itemAppearance = $list->item->itemAppearance;
+                $list->item->itemEdition = $list->item->itemEdition;
+                $list->item->itemChannel = $list->item->itemChannel;
+            }
+            $list->createUser = $list->createUser;
             $list->createTime = date('m-d H:i', strtotime($list->create_time));
+            if ($list->item->network_id == 0 )  {
+                $list->item->network_id = $list->item->itemNetwork->data;
+            }
         }
 
-        $breadcrumb = '出库审核';
-
-        return $this->fetch('outgo_agree', [
-            'names' => $names,
-            'channels' => $channels,
-            'lists' => $lists,
-            'breadcrumb' => $breadcrumb,
-        ]);
+        return $lists;
     }
 
+    /**
+     * 改变名称
+     *
+     * @return void
+     * @author CSH <1114313879@qq.com>
+     */
     public function changeName(){
 
         $name = $this->request->get('name');

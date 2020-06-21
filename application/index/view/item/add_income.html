@@ -2,130 +2,132 @@
     <div class="layui-fluid">
         <div class="layui-card">
             <form class="layui-form" id="form" data-action="{:url('/index/item/addIncome')}" data-id="<?php if($history){echo $history->id;}?>">
-                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">进货日期</label>
-                        <div class="layui-input-inline">
-                            <input class="layui-input" placeholder="进货日期" name="date" type="text" id="date" value="<?php if($history){echo $history->item->date;}?>"
-                                lay-verify="required" autocomplete="off">
+                <div class="layui-card-body">
+                    <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">进货日期</label>
+                            <div class="layui-input-inline">
+                                <input class="layui-input" placeholder="进货日期" name="date" type="text" id="date" value="<?php if($history){echo $history->item->date;}?>"
+                                    lay-verify="required" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">序列号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="number" name="number" required="" lay-filter="number" lay-verify="required"
+                                    autocomplete="off" class="layui-input"
+                                    value="<?php if($history){echo $history->item->number;}?>"
+                                    data-href="{:url('/index/item/checkNumber')}" placeholder="序列号不能为空"
+                                    data-href2="{:url('/index/item/checkIntelligence')}">
+                                <span id="number_message" style="color: red"></span>
+                                <input type="hidden" id="number_status" value="0" />
+                            </div>
                         </div>
                     </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">序列号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="number" name="number" required="" lay-filter="number" lay-verify="required"
-                                autocomplete="off" class="layui-input"
-                                value="<?php if($history){echo $history->item->number;}?>"
-                                data-href="{:url('/index/item/checkNumber')}" placeholder="序列号不能为空"
-                                data-href2="{:url('/index/item/checkIntelligence')}">
-                            <span id="number_message" style="color: red"></span>
-                            <input type="hidden" id="number_status" value="0" />
+                    <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">型号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" id="type_id" name="type_id" required="" lay-filter="type_id"
+                                    lay-verify="required" autocomplete="off" class="layui-input"
+                                    value="<?php if($history && $history->item->type_id > 0){echo $history->item->itemType->data;}?>"
+                                    data-href="{:url('/index/item/changeType')}" placeholder="型号不能为空">
+                                <span id="type_message" style="color: brown"></span>
+                                <input type="hidden" id="type_status" value="1" />
+                            </div>
+                        </div>
+                        <input type="hidden" name="category_id" id="category_id">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">名称</label>
+                            <div class="layui-input-inline">
+                                <select id="name_id" class="" name="name_id" lay-filter="name_id" lay-verify="required">
+                                    {foreach $names as $name}
+                                    <option value="{$name.id}" data-category-id="{$name.category_id}" data-appearance="
+                                {foreach $name.itemAppearance as $appearance}
+                                    <?php if($history && $history->item->appearance_id == $appearance->id){echo 'selected';}?></option>
+                                    <option value='{$appearance.id}'>{$appearance.data}</option>
+                                {/foreach}" data-edition="
+                                {foreach $name.itemEdition as $edition}
+                                    <?php if($history && $history->item->edition_id == $edition->id){echo 'selected';}?></option>
+                                    <option value='{$edition.id}'>{$edition.data}</option>
+                                {/foreach}" data-feature="
+                                {foreach $name.itemFeature as $feature}
+                                    <?php if($history && $history->item->feature_id == $feature->id){echo 'selected';}?></option>
+                                    <option value='{$feature.id}'>{$feature.data}</option>
+                                {/foreach}" data-network="
+                                {foreach $name.itemNetwork as $network}
+                                    <?php if($history && $history->item->network_id == $network->id){echo 'selected';}?></option>
+                                    <option value='{$network.id}'>{$network.data}</option>
+                                {/foreach}" <?php if($history && $history->item->name_id == $name->id){echo 'selected';}?>>{$name.data}
+                                    </option>
+                                    {/foreach}
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">型号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="type_id" name="type_id" required="" lay-filter="type_id"
-                                lay-verify="required" autocomplete="off" class="layui-input"
-                                value="<?php if($history && $history->item->type_id > 0){echo $history->item->itemType->data;}?>"
-                                data-href="{:url('/index/item/changeType')}" placeholder="型号不能为空">
-                            <span id="type_message" style="color: brown"></span>
-                            <input type="hidden" id="type_status" value="1" />
+                    <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">网络模式</label>
+                            <div class="layui-input-inline">
+                                <select id="network_id" class="" name="network_id" lay-verify="required">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">配置</label>
+                            <div class="layui-input-inline">
+                                <select id="feature_id" class="" name="feature_id" lay-verify="required">
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <input type="hidden" name="category_id" id="category_id">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">名称</label>
-                        <div class="layui-input-inline">
-                            <select id="name_id" class="" name="name_id" lay-filter="name_id" lay-verify="required">
-                                {foreach $names as $name}
-                                <option value="{$name.id}" data-category-id="{$name.category_id}" data-appearance="
-                            {foreach $name.itemAppearance as $appearance}
-                                <?php if($history && $history->item->appearance_id == $appearance->id){echo 'selected';}?></option>
-                                <option value='{$appearance.id}'>{$appearance.data}</option>
-                            {/foreach}" data-edition="
-                            {foreach $name.itemEdition as $edition}
-                                <?php if($history && $history->item->edition_id == $edition->id){echo 'selected';}?></option>
-                                <option value='{$edition.id}'>{$edition.data}</option>
-                            {/foreach}" data-feature="
-                            {foreach $name.itemFeature as $feature}
-                                <?php if($history && $history->item->feature_id == $feature->id){echo 'selected';}?></option>
-                                <option value='{$feature.id}'>{$feature.data}</option>
-                            {/foreach}" data-network="
-                            {foreach $name.itemNetwork as $network}
-                                <?php if($history && $history->item->network_id == $network->id){echo 'selected';}?></option>
-                                <option value='{$network.id}'>{$network.data}</option>
-                            {/foreach}" <?php if($history && $history->item->name_id == $name->id){echo 'selected';}?>>{$name.data}
-                                </option>
+                    <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">外观</label>
+                            <div class="layui-input-inline">
+                                <select id="appearance_id" class="" name="appearance_id" lay-verify="required">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">固件版本</label>
+                            <div class="layui-input-inline">
+                                <select id="edition_id" class="" name="edition_id" lay-verify="required">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs12 layui-col-sm8 layui-col-md8">
+                        <label for="memo" class="layui-form-label">
+                            商品备注</label>
+                        <div class="layui-input-block">
+                            <textarea class="layui-textarea" name="memo" id="memo"
+                                rows="3"><?php if($history ){echo $history->item->memo;}?></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs12 layui-col-sm8 layui-col-md8">
+                        <label for="price" class="layui-form-label">进货价格</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input" id="price" name="price" lay-verify="required"
+                                value="<?php if($history ){echo $history->item->price;}?>">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-col-xs12 layui-col-sm8 layui-col-md8">
+                        <label for="channel_id" class="layui-form-label">进货渠道</label>
+                        <div class="layui-input-block">
+                            <select id="channel_id" class="" name="channel_id" lay-verify="required">
+                                {foreach $channels as $channel}
+                                <option value="{$channel.id}"
+                                    <?php if($history && $history->item->channel_id == $channel->id){echo 'selected="selected"';}?>>
+                                    {$channel.data}</option>
                                 {/foreach}
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">网络模式</label>
-                        <div class="layui-input-inline">
-                            <select id="network_id" class="" name="network_id" lay-verify="required">
-                            </select>
-                        </div>
+                    <div class="layui-form-item">
+                        <label for="L_repass" class="layui-form-label"></label>
+                        <button class="layui-btn layui-btn-lg" lay-filter="submit" type="submit" lay-submit>确定</button>
                     </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">配置</label>
-                        <div class="layui-input-inline">
-                            <select id="feature_id" class="" name="feature_id" lay-verify="required">
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">外观</label>
-                        <div class="layui-input-inline">
-                            <select id="appearance_id" class="" name="appearance_id" lay-verify="required">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">固件版本</label>
-                        <div class="layui-input-inline">
-                            <select id="edition_id" class="" name="edition_id" lay-verify="required">
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs12 layui-col-sm8 layui-col-md8">
-                    <label for="memo" class="layui-form-label">
-                        商品备注</label>
-                    <div class="layui-input-block">
-                        <textarea class="layui-textarea" name="memo" id="memo"
-                            rows="3"><?php if($history ){echo $history->item->memo;}?></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs12 layui-col-sm8 layui-col-md8">
-                    <label for="price" class="layui-form-label">进货价格</label>
-                    <div class="layui-input-block">
-                        <input type="text" class="layui-input" id="price" name="price" lay-verify="required"
-                            value="<?php if($history ){echo $history->item->price;}?>">
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs12 layui-col-sm8 layui-col-md8">
-                    <label for="channel_id" class="layui-form-label">进货渠道</label>
-                    <div class="layui-input-block">
-                        <select id="channel_id" class="" name="channel_id" lay-verify="required">
-                            {foreach $channels as $channel}
-                            <option value="{$channel.id}"
-                                <?php if($history && $history->item->channel_id == $channel->id){echo 'selected="selected"';}?>>
-                                {$channel.data}</option>
-                            {/foreach}
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="L_repass" class="layui-form-label"></label>
-                    <button class="layui-btn layui-btn-lg" lay-filter="submit" type="submit" lay-submit>确定</button>
                 </div>
             </form>
         </div>

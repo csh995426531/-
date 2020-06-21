@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:62:"/data/www/y5g/public/../application/index/view/item/outgo.html";i:1590217786;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:62:"/data/www/y5g/public/../application/index/view/item/outgo.html";i:1590916038;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -152,7 +152,7 @@
                     }}
                     ,{fixed: 'right', title: '操作', minWidth: 120, sort: true,templet: function(d){
                       if (d.status == 2 || d.status == 8) {
-                        return '<a class="layui-btn layui-btn-sm" onclick="add_outgo(this,' + d.id + ')" data-value="1" data-href="/index/item/addIncome?id=' + d.id + '">出库</a>';
+                        return '<a class="layui-btn layui-btn-sm" onclick="add_outgo(this,' + d.id + ')" data-value="1" data-href="/index/popup/outgoItem?id=' + d.id + '">出库</a>';
                       } else {
                         return ''
                       }
@@ -228,8 +228,24 @@
           ,title: '状态历史'
           ,content:  [layui.$(obj).data('href'), 'no']
           ,maxmin: true
-          ,area: ['900px', '600px']
+          ,area: ['90%', '50%']
         });
+      }
+
+      //用户-销售出售
+      function add_outgo(obj,id){
+        layer.open({
+                type: 2
+                , title: '销售出库'
+                , content: [layui.$(obj).data('href'), 'no']
+                , maxmin: true
+                , area: ['80%', '50%']
+                , yes: function (index, layero) {
+                    //点击确认触发 iframe 内容中的按钮提交
+                    var submit = layero.find('iframe').contents().find("#save");
+                    submit.click();
+                }
+            });
       }
   
       </script>

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"/data/www/y5g/public/../application/index/view/item/inventory.html";i:1589888942;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"/data/www/y5g/public/../application/index/view/item/inventory.html";i:1592293468;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -21,7 +21,7 @@
             base: '/static/lib/layuiadmin/' //静态资源所在路径
         }).extend({
             index: 'lib/index' //主入口模块
-        }).use('index');
+        }).use(['index', 'admin', 'carousel']);
     </script>
 </head>
 
@@ -88,7 +88,6 @@
                     <div class="layui-inline">
                         <input type="text" name="keyword" placeholder="序列号" value="<?php echo \think\Request::instance()->get('keyword'); ?>"
                             autocomplete="off" class="layui-input">
-
                     </div>
                     <div class="layui-inline">
                         <button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="filter-search">
@@ -266,7 +265,7 @@
                 , title: '预售'
                 , content: [layui.$(obj).data('href'), 'no']
                 , maxmin: true
-                , area: ['550px', '300px']
+                , area: ['80%', '50%']
                 , yes: function (index, layero) {
                     //点击确认触发 iframe 内容中的按钮提交
                     var submit = layero.find('iframe').contents().find("#save");

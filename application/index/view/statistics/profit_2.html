@@ -1,0 +1,134 @@
+
+<div class="row">
+
+    <div class="span5">
+
+        <div class="">
+
+            <div class="page-header">
+                <h2>筛选条件</h2>
+            </div>
+
+            <form class="form-inline" method="get">
+                <input type="hidden" name="mark" value="1"/>
+                <div class="control-group">
+                    <label class="control-label" for="start_date">开始日期</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="start_date"  name="start_date" value="" autocomplete="off">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="end_date">结束日期</label>
+                    <div class="controls">
+                        <input type="text" class="input-xlarge" id="end_date"  name="end_date" value="" autocomplete="off">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="name_id">产品名称</label>
+                    <div class="controls">
+                       <select class="span2" name="name_id">
+                           <option value="0"> -  - </option>
+                           {foreach $names as $name}
+                           <option value="{$name.id}" {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
+                           {/foreach}
+                       </select>
+                   </div>    
+               </div>
+                <div class="control-group">
+                     <label class="control-label" for="income_channel_id">进货渠道</label>
+                     <div class="controls">
+                        <select class="span2" name="income_channel_id">
+                            <option value="0"> -  - </option>
+                            {foreach $income_channels as $channel}
+                            <option value="{$channel.id}" {$Think.get.income_channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
+                            {/foreach}
+                        </select>
+                    </div>    
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="create_user_id">进货人</label>
+                    <div class="controls">
+                        <select class="span2" name="create_user_id">
+                            <option value="0"> -  - </option>
+                            {foreach $create_users as $createUser}
+                            <option value="{$createUser.id}" {$Think.get.create_user_id==$createUser.id ? 'selected' :''}>{$createUser.username}</option>
+                            {/foreach}
+                        </select>
+                    </div>    
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="outgo_channel_id">出货途径</label>
+                    <div class="controls">
+                        <select class="span2" name="outgo_channel_id">
+                            <option value="0"> -  - </option>
+                            {foreach $outgo_channels as $channel}
+                            <option value="{$channel.id}" {$Think.get.outgo_channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" name="sub" value="search">搜索</button>
+                <button type="submit" class="btn btn-success" name="sub" value="excel">导出EXCEL</button>
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="span5">
+        <div class="slate">
+
+            <div class="page-header">
+                <h2>筛选结果</h2>
+            </div>
+
+            <p>进货总数量：{$income_count}</p>
+            <p>进货总价格：{$income_price}</p>
+            <p>平均进货价格：{$ave_income_price}</p>
+            <p>销售总数量：{$outgo_count}</p>
+            <p>平均销售价格：{$ave_outgo_price}</p>
+            <p>总利润：{$profit}</p>
+            <p>平均利润：{$ave_profit}</p>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery-1.8.3.js"></script>
+<script>
+    $(function () {
+
+        var startDate = "<?php echo $start_date;?>";
+        var endDate = "<?php echo $end_date;?>";
+
+        $.datepicker.regional['zh-CN'] = {
+            closeText: '关闭',
+            prevText: '<上月',
+            nextText: '下月>',
+            currentText: '今天',
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                '七', '八', '九', '十', '十一', '十二'],
+            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+            weekHeader: '周',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: true,
+            yearSuffix: '年'
+        };
+
+        $.datepicker.setDefaults( $.datepicker.regional[ "zh-CN" ] );
+
+        $("#start_date, #end_date").datepicker({
+            dateFormat: "yy-mm-dd",
+            todayHighlight: false,
+            // minDate: 0,
+            // maxDate: "+2D"
+        });
+
+        $('#start_date').datepicker("setDate", startDate);
+        $('#end_date').datepicker("setDate", endDate);
+    })
+</script>

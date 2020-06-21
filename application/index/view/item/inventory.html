@@ -62,7 +62,6 @@
                     <div class="layui-inline">
                         <input type="text" name="keyword" placeholder="序列号" value="{$Think.get.keyword}"
                             autocomplete="off" class="layui-input">
-
                     </div>
                     <div class="layui-inline">
                         <button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="filter-search">
@@ -240,7 +239,7 @@
                 , title: '预售'
                 , content: [layui.$(obj).data('href'), 'no']
                 , maxmin: true
-                , area: ['550px', '300px']
+                , area: ['80%', '50%']
                 , yes: function (index, layero) {
                     //点击确认触发 iframe 内容中的按钮提交
                     var submit = layero.find('iframe').contents().find("#save");

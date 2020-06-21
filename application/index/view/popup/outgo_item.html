@@ -1,0 +1,73 @@
+
+<body>
+    <form class="layui-form" method="post" id="form" data-url="{:url('/index/item/addOutgo')}"  lay-filter="outgo_item_form" id="outgo_item_form" style="padding: 20px 30px 0 0;">
+        <input type="hidden" name="item_id" id="item_id" value="{$id}" />
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="channel_id" >出货途径</label>
+            <div class="layui-input-block">
+                <select id="channel_id" class="input-input" name="channel_id" lay-verify="required">
+                    {foreach $channels as $channel}
+                    <option value="{$channel.id}">{$channel.data}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="order_no" class="layui-form-label">订单号</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" id="order_no" name="order_no" lay-verify="required" placeholder="必填项">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="price" class="layui-form-label">销售价格</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" id="price" name="price" lay-verify="required" placeholder="必填项">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="cost" class="layui-form-label">营销成本</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" id="cost" name="cost" lay-verify="required" placeholder="必填项">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="consignee_nickname" class="layui-form-label">买家昵称</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" id="consignee_nickname" name="consignee_nickname">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline">
+              <input type="button" lay-submit="" lay-filter="save" value="确认" class="layui-btn">
+            </div>
+        </div>
+    </form>
+    <script>layui.use(['index', 'form', 'layer','jquery'],
+        function() {
+            $ = layui.jquery;
+            var form = layui.form,
+            layer = layui.layer;
+
+            //监听提交
+            form.on('submit(save)', function(data){
+                var field = data.field; //获取提交的字段
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
+
+                //提交 Ajax 成功后，关闭当前弹层并重载表格
+                var url = $("#form").data('url');
+                var data = $('#form').serialize();
+                $.post(url, data, function (res) {
+                    layer.alert("出库成功", {
+                        icon: 6
+                    },function (index) {
+
+                        parent.layui.table.reload('table-list'); //重载表格
+                        parent.layer.close(index); //再执行关闭 
+                    })
+                    return false;
+                });
+            });
+
+        });</script>
+</body>

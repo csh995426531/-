@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1590217115;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1590831923;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -309,7 +309,7 @@
           ,title: '状态历史'
           ,content:  [layui.$(obj).data('href'), 'no']
           ,maxmin: true
-          ,area: ['900px', '600px']
+          ,area: ['90%', '50%']
         });
       }
 

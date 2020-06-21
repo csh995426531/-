@@ -1,211 +1,236 @@
 
-<div class="row">
-
-    <div class="">
-        <div class="span12">
-
-            <form class="form-inline" method="get">
-                <select class="span2" name="user_id">
-                    <option value=""> - 入库人 - </option>
-                    {foreach $users as $user}
-                    <option value="{$user.id}" {$Think.get.user_id==$user.id ? 'selected' :''}>{$user.username}</opion>
-                    {/foreach}
-                </select>
-                <label class="control-label" for="date">进货日期</label>
-                <input type="text" class="input-xlarge span2" id="date"  name="date" value="" data-val="{$Think.get.date}" autocomplete="off">
-                <select class="span2" name="name_id">
-                    <option value=""> - 名称 - </option>
-                    {foreach $names as $name}
-                    <option value="{$name.id}" {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
-                    {/foreach}
-                </select>
-                <select class="span2" name="channel_id">
-                    <option value=""> - 进货渠道 - </option>
-                    {foreach $channels as $channel}
-                    <option value="{$channel.id}" {$Think.get.channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
-                    {/foreach}
-                </select>
-                <button type="submit" class="btn btn-primary">搜索</button>
-            </form>
+    <div class="layui-fluid">
+        <div class="layui-card">
+          <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <select name="user_id" id='user_id'>
+                        <option value=""> - 入库人 - </option>
+                        {foreach $users as $user}
+                        <option value="{$user.id}" {$Think.get.user_id==$user.id ? 'selected' :''}>{$user.username}</opion>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <input class="layui-input" placeholder="进货日期" name="date" type="text" id="date" autocomplete="off">
+                </div>
+                <div class="layui-inline">
+                    <select id="name_id" name="name_id">
+                        <option value=""> - 名称 - </option>
+                        {foreach $names as $name}
+                        <option value="{$name.id}" {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select  id="channel_id"name="channel_id">
+                        <option value=""> - 进货渠道 - </option>
+                        {foreach $channels as $channel}
+                        <option value="{$channel.id}" {$Think.get.channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="filter-search">
+                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+              </div>
+          </div>
+          <!-- 表格 -->
+          <div class="layui-card-body">
+            <table id="table-list" lay-filter="table-list"></table>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                  <button class="layui-btn layui-btn-sm" lay-event="batchPass">批量通过</button>
+                  <button class="layui-btn layui-btn-sm" lay-event="batchReject">批量拒绝</button>
+                </div>
+              </script>
+          </div>
         </div>
-  
-        <div class="span12">
-            <table class="orders-table table">
-                <thead>
-                <tr>
-                    <th>⊙</th>
-                    <th>编号</th>
-                    <th>入库类型</th>
-                    <th>型号</th>
-                    <th>名称</th>
-                    <th>网络模式</th>
-                    <th>配置</th>
-                    <th>外观</th>
-                    <th>序列号</th>
-                    <th>固件版本</th>
-                    <th>备注</th>
-                    <th>进货价格</th>
-                    <th>进货渠道</th>
-                    <th>入库人</th>
-                    <th>入库时间</th>
-                    <th class="actions">操作</th>
-                </tr>
-                </thead>
-                <tbody>
+      </div>
+      
+      <script>
+        layui.use(['laydate', 'index', 'contlist', 'table', 'jquery'], function(){
+            var table = layui.table
+            var form = layui.form
+            var jquery = layui.jquery
+            var $ = layui.jquery
+            var laydate = layui.laydate
 
-                {volist name='lists' id='temp'}
-                <tr>
-                    <td><input type="checkbox" class="checkbox-checked" data-id="{$temp.id}"  /></td>
-                     <th title="商品ID:{$temp.item.id}" ><span>{$temp.id}</span></th>
-                    <td><span>{$temp.typeName}</span></td>
-                    <th><span>{$temp.item.itemType.data}</span></th>
-                    <th><span>{$temp.item.itemName.data}</span></th>
-                    <th><span>{$temp.item.itemNetwork.data}</span></th>
-                    <th><span>{$temp.item.itemFeature.data}</span></th>
-                    <th><span>{$temp.item.itemAppearance.data}</span></th>
-                  
-                   <th><a href="https://checkcoverage.apple.com/cn/zh/?sn={$temp.item.number}" target="_blank"><span>{$temp.item.number}</span></a></th>
-                    <th><span>{$temp.item.itemEdition.data}</span></th>
-                   <!--<th><span>{$temp.item.memo}</span></th>-->
-                   <th title="{$temp.item.memo}" style="cursor: pointer"><span><?php echo mb_strlen($temp->item->memo) > 6 ? mb_substr($temp->item->memo, 0, 6).'…' : $temp->item->memo; ?></span></th>
-                    <th><span>{$temp.item.price}</span></th>
-                    <th><span>{$temp.item.itemChannel.data}</span></th>
-                    <td><span>{$temp.createUser.username}</span></td>
-                    <td><span>{$temp.createTime}</span></td>
-                    <td class="actions">
-                        <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
-                        <a class="btn btn-small btn-success allow-item" data-id="{$temp.id}" data-value="1" data-href="{:url('allowAgree')}">通过</a>
-                        <a class="btn btn-small btn-danger reject-item" data-id="{$temp.id}" data-value="0" data-href="{:url('rejectAgree')}">拒绝</a>
-                    </td>
-                </tr>
-                {/volist}
-                <tr>
-                   
-                  　<td colspan="2"><label style="cursor: pointer"><input type="checkbox" id="checkbox-all"  />　全选</label> </td>
-                    <td colspan="14">共{$count}记录 ， 共{$total}金额</td>
-                </tr>
-                <tr>
-                    <td colspan="15">
-                            <a class="btn btn-small btn-success " id="allow-all" data-href="{:url('allowAgree')}">批量通过</a>
-                            <a class="btn btn-small btn-danger" id="reject-all" data-href="{:url('rejectAgree')}">批量拒绝</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="pull-right">
-            {$lists->render()}
-        </div>
-    </div>
-</div>
-<script src="/static/js/jquery.min.js"></script>
-<script>
-    $(function(){
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#date' //指定元素
+            });
 
-        $(".allow-item, .reject-item").click(function(){
-            var url = $(this).data('href');
-            var id = $(this).data('id');
-            $.post(url, {id:id}, function (res) {
-                alert(res.data);
-                window.location.replace("<?php echo url('incomeAgree');?>");
-            })
-        })
+            table.render({
+                elem: '#table-list'
+                ,url: '/index/item/incomeAgreeList' //数据接口
+                ,title: '入库审核'
+                ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                    title: '提示'
+                    ,layEvent: 'LAYTABLE_TIPS'
+                    ,icon: 'layui-icon-tips'
+                }]
+                ,parseData: function(res){ //res 即为原始返回的数据
+                    return {
+                    "code": 0, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.data //解析数据列表
+                    };
+                },page: true //开启分页
+                ,cols: [[ //表头
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field: 'id', title: 'ID', minWidth:60, sort: true}
+                    ,{field: 'date', title: '入库类型', minWidth:100,templet: function(d){
+                        return d.typeName;
+                    }}
+                    ,{field: 'itemType', title: '型号', minWidth:100,templet: function(d){
+                        if(d.item.itemType != null){return d.item.itemType.data} else {return ''}
+                    }}
+                    ,{field: 'itemName', title: '名称', minWidth:100,templet: function(d){
+                        if(d.item.itemName != null){return d.item.itemName.data} else {return ''}
+                    }} 
+                    ,{field: 'itemNetwork', title: '网络模式', minWidth: 100,templet: function(d){
+                        if(d.item.itemNetwork != null){return d.item.itemNetwork.data} else {return ''}
+                    }}
+                    ,{field: 'itemFeature', title: '配置', minWidth: 100,templet: function(d){
+                        if(d.item.itemFeature != null){return d.item.itemFeature.data} else {return ''}
+                    }}
+                    ,{field: 'itemAppearance', title: '外观', minWidth: 100,templet: function(d){
+                        if(d.item.itemAppearance != null){return d.item.itemAppearance.data} else {return ''}
+                    }}
+                    ,{field: 'number', title: '序列号', minWidth: 170,templet: function(d){
+                        return d.item.number;
+                    }}
+                    ,{field: 'itemEdition', title: '版本', minWidth: 100,templet: function(d){
+                        if(d.item.itemEdition != null){return d.item.itemEdition.data} else {return ''}
+                    }}
+                    ,{field: 'itemChannel', title: '进货渠道', minWidth: 100, sort: true,templet: function(d){
+                      if(d.item.itemChannel != null){return d.item.itemChannel.data} else {return ''}
+                    }}
+                    ,{field: 'price', title: '进价', minWidth: 120, sort: true,templet: function(d){
+                        return (d.item.price*1).toFixed(2);
+                    }}
+                    ,{field: 'memo', title: '商品备注', minWidth:120,templet: function(d){
+                        return d.item.memo;
+                    }}
+                    ,{field: 'createUser', title: '入库人', minWidth:120,templet: function(d){
+                        if(d.createUser != null){return d.createUser.username} else {return ''}
+                    }}
+                    ,{field: 'createTime', title: '入库时间', minWidth:120,templet: function(d){
+                        return d.createTime;
+                    }}
+                    ,{fixed: 'right', title: '操作', minWidth: 140, sort: true,templet: function(d){
+                        var str = '<a class="layui-btn layui-btn-sm" onclick="allowAgree(this,' + d.id + ')" data-value="1" data-href="/index/item/allowAgree?id=' + d.id + '">通过</a>';
+                        return str + '<a class="layui-btn layui-btn-warm layui-btn-sm" onclick="rejectAgree(this,' + d.id + ')" data-value="0" data-href="/index/item/rejectAgree?id=' + d.id + '">拒绝</a>';
+                    }}
+                ]]
+            });
 
-        $("#checkbox-all").click(function(){
-
-            var all_checked = 1;
-
-            $(".checkbox-checked").each(function(k, v){
-              
-                if ($(v).prop('checked') == false){
-                    all_checked = 0;
+            //监听搜索
+            form.on('submit(filter-search)', function(data){
+              var field = data.field;console.log()
+              //执行重载
+              table.reload('table-list', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
                 }
-            })
-            
-            if (all_checked == 1) {
-                $(".checkbox-checked").each(function(k, v){
-                    $(v).prop('checked', false)
+              });
+            });
+    
+            layui.$('.layui-btn.layuiadmin-btn-list').on('click', function(){
+              var type = layui.$(this).data('type');
+              active[type] ? active[type].call(this) : '';
+            });
+
+            //头工具栏事件
+            table.on('toolbar(table-list)', function(obj){
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data;
+                var arr = new Array();
+                layui.$.each(data, function(k, v){
+                    arr. push(v.id);
                 })
-                $("#checkbox-all").prop('checked', false)
-            } else {
-                $(".checkbox-checked").each(function(k, v){
-                    $(v).prop('checked', true)
-                })
-                $("#checkbox-all").prop('checked', true)
-            }
+
+                switch(obj.event){
+                    case 'batchPass':
+                        var url = '/index/item/allowAgree';
+                        if (arr.length > 0) {
+                            $.post(url, {id:arr}, function(res) {
+                                layer.msg(res.data, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function (index) {
+                                    layui.table.reload('table-list'); //重载表格
+                                    layer.close(index); //再执行关闭 
+                                })
+                            })
+                        }
+                    break;
+                    case 'batchReject':
+                        var url = '/index/item/rejectAgree';
+                        if (arr.length > 0) {
+                            $.post(url, {id:arr}, function(res) {
+                                layer.msg(res.data, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function (index) {
+                                    layui.table.reload('table-list'); //重载表格
+                                    layer.close(index); //再执行关闭 
+                                })
+                            })
+                        }
+                    break;
+                    case 'isAll':
+                        layer.msg(checkStatus.isAll ? '全选': '未全选');
+                    break;
+                    
+                    //自定义头工具栏右侧图标 - 提示
+                    case 'LAYTABLE_TIPS':
+                        layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+                };
+            });
+    
         });
 
-        $("#allow-all").click(function(){
-
-            var url = $(this).data('href');
-            var arr = new Array();
-            $(".checkbox-checked").each(function(k, v){
-                if ($(v).prop('checked') == true){
-                    arr. push($(v).data('id'));
-                }
-            })
-
-            if (arr.length > 0) {
-                $.post(url, {id:arr}, function(res) {
-                        alert(res.data)
-                        window.location.replace("<?php echo url('incomeAgree');?>");
-                })
-            }
-        })
-
-        $("#reject-all").click(function(){
-
-            var url = $(this).data('href');
-            var arr = new Array();
-            $(".checkbox-checked").each(function(k, v){
-                if ($(v).prop('checked') == true){
-                    arr. push($(v).data('id'));
-                }
-            })
-
-            if (arr.length > 0) {
-                $.post(url, {id:arr}, function(res) {
-                    alert(res.data)
-                    window.location.replace("<?php echo url('incomeAgree');?>");
-                })
-            }
-        })
-
-        $.datepicker.regional['zh-CN'] = {
-            closeText: '关闭',
-            prevText: '<上月',
-            nextText: '下月>',
-            currentText: '今天',
-            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
-                '七月', '八月', '九月', '十月', '十一月', '十二月'],
-            monthNamesShort: ['一', '二', '三', '四', '五', '六',
-                '七', '八', '九', '十', '十一', '十二'],
-            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
-            weekHeader: '周',
-            dateFormat: 'yy-mm-dd',
-            firstDay: 1,
-            isRTL: false,
-            showMonthAfterYear: true,
-            yearSuffix: '年'
-        };
-
-        $.datepicker.setDefaults( $.datepicker.regional[ "zh-CN" ] );
-
-        $("#date").datepicker({
-            dateFormat: "yy-mm-dd",
-            todayHighlight: false,
-            minDate: "-3600D",
-            maxDate: "+0D"
-        });
-
-        var date_val = $("#date").data('val');
-        if (date_val != '') {
-            $('#date').datepicker("setDate", date_val);
-        } else {
-            $('#date').datepicker("setDate", '+0D');
+        //通过
+        function allowAgree(obj, id) {
+            layer.confirm('确认要通过吗？', function (index) {
+                //发异步
+                var url = layui.$(obj).data('href');
+                layui.$.post(url, { id: id}, function (res) {
+                    layer.msg("success!", {
+                        icon: 1,
+                        time: 1000
+                    }, function (index) {
+                        layui.table.reload('table-list'); //重载表格
+                        layer.close(index); //再执行关闭 
+                    })
+                });
+                return false;
+            });
         }
-
-    })
-</script>
+        //拒绝
+        function rejectAgree(obj, id) {
+            layer.confirm('确认要拒绝吗？', function (index) {
+                //发异步
+                var url = layui.$(obj).data('href');
+                layui.$.post(url, { id: id}, function (res) {
+                    layer.msg("success!", {
+                        icon: 1,
+                        time: 1000
+                    }, function (index) {
+                        layui.table.reload('table-list'); //重载表格
+                        layer.close(index); //再执行关闭 
+                    })
+                });
+                return false;
+            });
+        }
+    
+    </script>

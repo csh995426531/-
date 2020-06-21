@@ -1,0 +1,101 @@
+
+<div class="row">
+
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+    <div id="main" style="width: 100%;height:600px;margin: 10px 20px"></div>
+</div>
+<script src="/static/js/jquery-1.8.3.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="/static/js/echarts.js"></script>
+<span id="data_date" style="display: none"><?php echo implode(',',$date);?></span>
+<span id="data_income_amount" style="display: none"><?php echo implode(',',$income_amount);?></span>
+<span id="data_income_num" style="display: none"><?php echo implode(',',$income_num);?></span>
+<span id="data_outgo_amount" style="display: none"><?php echo implode(',',$outgo_amount);?></span>
+<span id="data_outgo_num" style="display: none"><?php echo implode(',',$outgo_num);?></span>
+<span id="data_return_amount" style="display: none"><?php echo implode(',',$return_amount);?></span>
+<span id="data_return_num" style="display: none"><?php echo implode(',',$return_num);?></span>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var data_date = $("#data_date").html().split(',');
+    var data_income_amount = $("#data_income_amount").html().split(',');
+    var data_income_num = $("#data_income_num").html().split(',');
+    var data_outgo_amount = $("#data_outgo_amount").html().split(',');
+    var data_outgo_num = $("#data_outgo_num").html().split(',');
+    var data_return_amount = $("#data_return_amount").html().split(',');
+    var data_return_num = $("#data_return_num").html().split(',');
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '近30天出入库'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['入库金额','入库件数','出库金额','出库件数', '退货金额', '退货件数']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: "category",
+            boundaryGap: !1,
+            data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name:'入库金额',
+                type:'line',
+                stack: '总量',
+                data:data_income_amount
+            },
+            {
+                name:'入库件数',
+                type:'line',
+                stack: '总量',
+                data:data_income_num
+            },
+            {
+                name:'出库金额',
+                type:'line',
+                stack: '总量',
+                data:data_outgo_amount
+            },
+            {
+                name:'出库件数',
+                type:'line',
+                stack: '总量',
+                data:data_outgo_num
+            },
+            {
+                name:'退货金额',
+                type:'line',
+                stack: '总量',
+                data:data_return_amount
+            },
+            {
+                name:'退货件数',
+                type:'line',
+                stack: '总量',
+                data:data_return_num
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>

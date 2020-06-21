@@ -1,595 +1,339 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/item/special_outgo.html";i:1576940528;s:48:"/data/www/y5g/application/index/view/layout.html";i:1587719872;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/item/special_outgo.html";i:1592142973;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
 <!DOCTYPE html>
-<html lang="en" style="height:100%">
+<html>
+
 <head>
-
     <meta charset="utf-8">
-    <title>库存管理</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <title>库存管理系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/lib/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/lib/layuiadmin/style/admin.css" media="all">
 
-    <!-- Le styles -->
-    <link href="http://fonts.googleapis.com/css?family=Oxygen|Marck+Script" rel="stylesheet" type="text/css">
-    <link href="/static/css/bootstrap.css" rel="stylesheet">
-    <link href="/static/css/font-awesome.css" rel="stylesheet">
-    <link href="/static/css/admin.css" rel="stylesheet">
-    <link href="/static/css/jquery-192custom.min.css" rel="stylesheet">
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
+    <script>
+        /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+    </script>
+    <script src="/static/lib/layuiadmin/layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: '/static/lib/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use('index');
+    </script>
 </head>
-<body style="height:100%">
 
-<div class="container-fluid " style="padding: 0px;height:100%">
-    <div class="row" style="height:100%">
-        <div class="span2" style="width: 9.3%;background: #484646;height:100%">
-            <div class="main-left-col" style="border-right: 0px solid #F1F1F1; ">
-                <h1><i class="icon-large"></i> <img src="/bg.png"></h1>
-                <ul class="side-nav">
-                    <li><a href="<?php echo url('/index/statistics/index'); ?>"><i class="icon-home"></i>库存主页</a></li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-dropdown" href="#"><i class="icon-th"></i> 库存查询 <b class="caret"></b></a>
-                        <ul id="item-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/inventory'); ?>">在库查询</a></li>
-                           
-                            <li><a href="<?php echo url('item/search'); ?>">综合查询</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-income-dropdown" href="#"><i class="icon-share-alt"></i> 产品入库 <b class="caret"></b></a>
-                        <ul id="item-income-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/addIncome'); ?>">采购入库</a></li>
-                            <li><a href="<?php echo url('item/batchAddIncome'); ?>">批量入库</a></li>
-                            <li><a href="<?php echo url('item/income'); ?>">入库待核</a></li>
-                            <li><a href="<?php echo url('item/returnIncome'); ?>">退货入库</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#item-outgo-dropdown" href="#"><i class="icon-arrow-left"></i> 产品出库 <b class="caret"></b></a>
-                        <ul id="item-outgo-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/outgo'); ?>">销售出库</a></li>
-                            <li><a href="<?php echo url('item/specialOutgo'); ?>">维修登记</a></li>
-                           <!--  <li><a href="<?php echo url('item/specialOutgo2'); ?>">仓库盘点</a></li>!-->
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#examine-dropdown" href="#"><i class="icon-check"></i> 操作审核 <b class="caret"></b></a>
-                        <ul id="examine-dropdown" class="collapse">
-                            <li><a href="<?php echo url('item/incomeAgree'); ?>">入库审核</a></li>
-                            <li><a href="<?php echo url('item/outgoAgree'); ?>">出库审核</a></li>
-                        </ul>
-                    </li>
-                    <!-- <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
-                        <ul id="statistics-dropdown" class="collapse">
-                            <li><a href="<?php echo url('/index/statistics/income'); ?>">进货统计</a></li>
-                            <li><a href="<?php echo url('/index/statistics/profit'); ?>">利润统计</a></li>
-                        </ul>
-                    </li> -->
-               <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#statistics-dropdown" href="#"><i class="icon-bar-chart"></i> 统计功能 <b class="caret"></b></a>
-                        <ul id="statistics-dropdown" class="collapse">
-                            <li><a href="<?php echo url('/index/statistics/index'); ?>">30天统计</a></li>                                                                         
-                             <li><a href="<?php echo url('/index/statistics/profit'); ?>">数据统计</a></li>
-                             </ul>
-                    </li>
-
-                               <li><a href="<?php echo url('item/specialOutgo2'); ?>"><i class="icon-check"></i>仓库盘点</a></li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#settings-dropdown" href="#"><i class="icon-cogs"></i> 基础设置 <b class="caret"></b></a>
-                        <ul id="settings-dropdown" class="collapse">
-                            <li><a href="<?php echo url('setting/category'); ?>">产品类别</a></li>
-                            <li><a href="<?php echo url('setting/name'); ?>">产品名称</a></li>
-                           <li><a href="<?php echo url('setting/type'); ?>">网络型号</a></li>
-                            <li><a href="<?php echo url('setting/feature'); ?>">产品配置</a></li>
-                            <li><a href="<?php echo url('setting/appearance'); ?>">产品外观</a></li>
-                            <li><a href="<?php echo url('setting/edition'); ?>">产品版本</a></li>
-                            <li><a href="<?php echo url('setting/incomeChannel'); ?>">渠道录入</a></li>
-                            <!-- <li><a href="<?php echo url('setting/outgoChannel'); ?>">出货途径</a></li> -->
-                            <!-- <li><a href="<?php echo url('setting/network'); ?>">网络模式录入</a></li> -->
-                            <li><a href="<?php echo url('setting/intelligence'); ?>">智能识别码录入</a></li>
-                            <li><a href="<?php echo url('setting/specialEditItemList'); ?>">特殊修改</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="collapse" data-target="#members-dropdown" href="#"><i class="icon-group"></i> 角色管理 <b class="caret"></b></a>
-                        <ul id="members-dropdown" class="collapse">
-                            <li><a href="<?php echo url('members/add'); ?>">添加账号</a></li>
-                            <li><a href="<?php echo url('members/updatePwd'); ?>">密码修改</a></li>
-                            <li><a href="<?php echo url('members/updateAccess'); ?>">权限修改</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="<?php echo url('/index/log/index'); ?>"><i class="icon-book"></i> 系统日志 </a></li>
-                </ul>
-
-            </div> <!-- end main-left-col -->
-
-        </div> <!-- end span2 -->
-
-        <div class="span10" style="width: 82%;    margin-left: 2%;height:100%">
-
-            <div class="secondary-masthead span12">
-
-                <ul class="nav nav-pills pull-right">
-                    <li>
-                        <a href="<?php echo url('index/index/index'); ?>"><i class="icon-globe"></i> 首页</a>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> <?php echo think\Session::get('user_name');?><b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="<?php echo url('logout'); ?>">登出</a></li>
-                        </ul>
-                    </li>
-                </ul>
-
-                <ul class="breadcrumb">
-                    <a href="<?php echo url('index/index/index'); ?>">库存系统</a>
-                    <?php echo isset($breadcrumb) && !empty($breadcrumb) ? '/ <a href="#">'.$breadcrumb.'</a>' : '';?>
-                </ul>
-
-            </div>
-
-
-            <div class="main-area dashboard">
-                
-<div class="row">
-
-    <div class="">
-        <div class="span12">
-
-            <form class="form-inline" method="get">
-                <select class="span2" name="type_id">
-                    <option value=""> - 型号 - </option>
-                    <?php foreach($types as $type): ?>
-                    <option value="<?php echo $type['data']; ?>" <?php echo \think\Request::instance()->get('type_id')==$type['data']?'selected' :''; ?>><?php echo $type['data']; ?></opion>
-                    <?php endforeach; ?>
-                </select>
+    <div class="layui-fluid">
+        <div class="layui-card">
+          <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <select name="type_id" id='type_id'>
+                        <option value=""> - 型号 - </option>
+                        <?php foreach($types as $type): ?>
+                        <option value="<?php echo $type['data']; ?>" <?php echo \think\Request::instance()->get('type_id')==$type['data']?'selected' :''; ?>><?php echo $type['data']; ?></opion>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <span id="data-all" style="display:none"><?php echo json_encode($data); ?></span>
-                <select class="span2" name="name_id" id='name_id'   data-href="<?php echo url('changeName'); ?>">
-                    <option value=""> - 名称 - </option>
-                    <?php foreach($names as $name): ?>
-                    <option value="<?php echo $name['data']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['data']?'selected' :''; ?>><?php echo $name['data']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <select class="span2" name="network_id" id='network_id'>
-                    <option value=""> - 网络模式 - </option>
-                    <?php foreach($networks as $network): ?>
-                    <option value="<?php echo $network['data']; ?>" <?php echo \think\Request::instance()->get('network_id')==$network['data']?'selected' :''; ?>><?php echo $network['data']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <select class="span2" name="feature_id" id='feature_id'>
-                    <option value=""> - 配置 - </option>
-                    <?php foreach($features as $feature): ?>
-                    <option value="<?php echo $feature['data']; ?>" <?php echo \think\Request::instance()->get('feature_id')==$feature['data']?'selected' :''; ?>><?php echo $feature['data']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <select class="span2" name="appearance_id" id='appearance_id'>
-                    <option value=""> - 外观 - </option>
-                    <?php foreach($appearances as $appearance): ?>
-                    <option value="<?php echo $appearance['data']; ?>" <?php echo \think\Request::instance()->get('appearance_id')==$appearance['data']?'selected' :''; ?>><?php echo $appearance['data']; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <select class="span2" name="status" id='status'>
-                    <option value=""> - 库存状态 - </option>
-                    <?php foreach($status as $key => $val) {?>
-                    <option value="<?php echo $key; ?>" <?php echo \think\Request::instance()->get('status')==$key?'selected' :''; ?>><?php echo $val; ?></option>
-                    <?php }?>
-                </select>
-                <input type="text" class="input-large" name="keyword" placeholder="序列号" value="<?php echo \think\Request::instance()->get('keyword'); ?>">
-                <button type="submit" class="btn btn-primary">搜索</button>
-            </form>
-
+                <div class="layui-inline">
+                    <select id="name_id" name="name_id" lay-filter="name_id" data-href="<?php echo url('/index/item/changeName'); ?>">
+                        <option value=""> - 名称 - </option>
+                        <?php foreach($names as $name): ?>
+                        <option value="<?php echo $name['data']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['data']?'selected' :''; ?>><?php echo $name['data']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select id="network_id" name="network_id">
+                        <option value=""> - 网络模式 - </option>
+                        <?php foreach($networks as $network): ?>
+                        <option value="<?php echo $network['data']; ?>" <?php echo \think\Request::instance()->get('network_id')==$network['data']?'selected' :''; ?>><?php echo $network['data']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select  id="feature_id"name="feature_id" lay-filter="feature_id" class="form-control">
+                        <option value=""> - 配置 - </option>
+                        <?php foreach($features as $feature): ?>
+                            <option value="<?php echo $feature['data']; ?>" <?php echo \think\Request::instance()->get('feature_id')==$feature['data']?'selected' :''; ?>><?php echo $feature['data']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select id="appearance_id" name="appearance_id">
+                        <option value=""> - 外观 - </option>
+                        <?php foreach($appearances as $appearance): ?>
+                            <option value="<?php echo $appearance['data']; ?>" <?php echo \think\Request::instance()->get('appearance_id')==$appearance['data']?'selected' :''; ?>><?php echo $appearance['data']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select id="status" name="status">
+                        <option value=""> - 库存状态 - </option>
+                        <?php foreach($status as $key => $val): ?>
+                            <option value="<?php echo $key; ?>" <?php echo \think\Request::instance()->get('status')==$val?'selected' :''; ?>><?php echo $val; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <input type="text" name="keyword"  placeholder="序列号" value="<?php echo \think\Request::instance()->get('keyword'); ?>" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="filter-search">
+                    <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+              </div>
+          </div>
+          <!-- 表格 -->
+          <div class="layui-card-body">
+            <table id="table-list" lay-filter="table-list"></table>
+            <script type="text/html" id="toolbarDemo">
+                <div class="layui-btn-container">
+                  <button class="layui-btn layui-btn-sm" lay-event="allAddSpecialOutgo">批量维修</button>
+                  <button class="layui-btn layui-btn-sm" lay-event="allCancelSpecialOutgo">批量返库</button>
+                </div>
+              </script>
+          </div>
         </div>
+      </div>
+      
+      <script>
+        layui.use(['index', 'contlist', 'table', 'jquery'], function(){
+            var table = layui.table
+            var form = layui.form
+            var jquery = layui.jquery
+            var $ = layui.jquery
 
-        <div class="row">
-
-            <div class="span12 listing-buttons">
-
-                <!--<button class="btn btn-info">Action</button>-->
-
-                <!--<button class="btn btn-success">Action</button>-->
-
-                <!--<button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>-->
-
-            </div>
-
-            <div class="span12">
-
-                <!--<div class="page-header">-->
-                <!--<div class="btn-group pull-right">-->
-                <!--<button class="btn dropdown-toggle" data-toggle="dropdown">-->
-                <!--<i class="icon-download-alt"></i> Export-->
-                <!--<span class="caret"></span>-->
-                <!--</button>-->
-                <!--<ul class="dropdown-menu">-->
-                <!--<li><a href="">CSV</a></li>-->
-                <!--<li><a href="">Excel</a></li>-->
-                <!--<li><a href="">PDF</a></li>-->
-                <!--</ul>-->
-                <!--</div>-->
-                <!--<h2>Listings</h2>-->
-                <!--</div>-->
-                 <!-- <h4 class="span12">总条数：<?php echo $lists->total(); ?></h4>-->
-                <table class="orders-table table">
-                    <thead>
-                    <tr>
-                        <th>选择</th>
-                        <th>ID</th>
-                        <th>入库时间</th>
-                        <th>型号</th>
-                        <th>分类</th>
-                        <th>名称</th>
-                        <th>配置</th>
-                        <th>网络模式</th>
-                        <th>外观</th>
-                        <th>序列号</th>
-                        <th>固件版本</th>
-                        <th>备注</th>
-                        <th>进货价格</th>
-                        <th>进货渠道</th>
-                        <th>状态</th>
-                        <th class="actions">操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-info">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-warning">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-important">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-inverse">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-success">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-
-                    <?php if(is_array($lists) || $lists instanceof \think\Collection || $lists instanceof \think\Paginator): $i = 0; $__LIST__ = $lists;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$temp): $mod = ($i % 2 );++$i;?>
-                    <tr>
-                        <td><input type="checkbox" class="checkbox-checked" data-id="<?php echo $temp['id']; ?>"  /></td>
-                        <td><span><?php echo $temp['id']; ?></span></td>
-                        <th><span><?php echo $temp['date']; ?></span></th>
-                        <th><span><?php echo $temp['itemType']['data']; ?></span></th>
-                        <th><span><?php echo $temp['itemCategory']['data']; ?></span></th>
-                        <th><span><?php echo $temp['itemName']['data']; ?></span></th>
-                        <th><span><?php echo $temp['itemFeature']['data']; ?></span></th>
-                       <th><span><?php echo $temp['itemNetwork']['data']; ?></span></th>
-                        <th><span><?php echo $temp['itemAppearance']['data']; ?></span></th>
-                        <th><span><?php echo $temp['number']; ?></span></th>
-                        <th><span><?php echo $temp['itemEdition']['data']; ?></span></th>
-                          <!--<th><span><?php echo $temp['memo']; ?></span></th>-->
-                         <th title="<?php echo $temp['memo']; ?>" style="cursor: pointer"><span><?php echo mb_strlen($temp->memo) > 6 ? mb_substr($temp->memo, 0, 6).'…' : $temp->memo; ?></span></th>
-                        <th><span><?php echo $temp['price']; ?></span></th>
-                        <th><span><?php echo $temp['itemChannel']['data']; ?></span></th>
-                        <th><span><?php echo $temp['statusName']; ?></span></th>
-                        <td class="actions">
-                            <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
-                            <?php if ($temp->status == 2) {?>
-                            <a class="btn btn-small btn-warning add-outgo" data-toggle="modal" data-href="<?php echo url('addSpecialOutgo'); ?>" data-id="<?php echo $temp['id']; ?>" data-type="4">维修</a>
-                             <!--<a class="btn btn-small btn-danger reject-item" data-id="<?php echo $temp['id']; ?>" data-value="0" data-href="<?php echo url('rejectAgree'); ?>">拒绝</a>-->
-                            <?php } else {?>
-                                <a class="btn btn-small btn-success add-outgo" data-toggle="modal" data-href="<?php echo url('cancelSpecialOutgo'); ?>" data-id="<?php echo $temp['id']; ?>" data-type="4">返库</a>
-                            <?php } ?>
-                        </td>
-                    </tr>
-                    <?php endforeach; endif; else: echo "" ;endif; ?>
-                        <tr>
-                            <td><label style="cursor: pointer"><input type="checkbox" id="checkbox-all"  />全选</label> </td>
-                            <td colspan="14">共<?php echo $lists->total(); ?>记录 </td>
-                        </tr>
-                        <tr>
-                            <td colspan="15">
-                                <a class="btn btn-small btn-warning" id="allow-all" data-href="<?php echo url('addSpecialOutgo'); ?>" data-type="4">批量维修</a>
-                                <a class="btn btn-small btn-success" id="allow-all-2" data-href="<?php echo url('cancelSpecialOutgo'); ?>" data-type="4">批量返库</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="pull-right">
-                <?php echo $lists->render(); ?>
-            </div>
-        </div>
-
-        <!-- <div class="modal hide fade" id="addOutgo">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <h3>出库</h3>
-            </div>
-            <form class="form-horizontal" method="post" id="form" data-action="<?php echo url('addOutgo'); ?>">
-                <fieldset>
-                    <div class="modal-body">
-                        <input type="hidden" name="item_id" id="item_id" />
-                        <div class="control-group">
-                            <label class="control-label" for="channel_id">出货途径</label>
-                            <div class="controls">
-                                <select id="channel_id" class="input-xlarge" name="channel_id">
-                                        <option value="0"> - 请选择 - </option>
-                                    <?php foreach($channels as $channel): ?>
-                                    <option value="<?php echo $channel['id']; ?>"><?php echo $channel['data']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="order_no">订单号</label>
-                            <div class="controls">
-                                <input type="text" class="input-xlarge" id="order_no" name="order_no" value="" placeholder="必填项">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="price">销售价格</label>
-                            <div class="controls">
-                                <input type="text" class="input-xlarge" id="price" name="price" value=""  placeholder="必填项">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="consignee_nickname">收货人昵称</label>
-                            <div class="controls">
-                                <input type="text" class="input-xlarge" id="consignee_nickname" name="consignee_nickname" value="">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="consignee">收货人</label>
-                            <div class="controls">
-                                <input type="text" class="input-xlarge" id="consignee" name="consignee" value="">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="consignee_address">收货人地址</label>
-                            <div class="controls">
-                                <input type="text" class="input-xlarge" id="consignee_address" name="consignee_address" value="">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="consignee_phone">收货人手机号</label>
-                            <div class="controls">
-                                <input type="text" class="input-xlarge" id="consignee_phone" name="consignee_phone" value="">
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="memo">订单备注</label>
-                            <div class="controls">
-                                <textarea class="input-xlarge" name="memo" id="memo" rows="2"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="#" class="btn" data-dismiss="modal">关闭</a>
-                        <button class="btn btn-success" type="button" id="submit">确定</button>
-                    </div>
-                </fieldset>
-            </form>
-        </div> -->
-
-    </div>
-</div>
-<script src="/static/js/jquery.min.js"></script>
-<script>
-    $(function(){
-        // $(".add-outgo").click(function () {
-        //     var id = $(this).data('id');
-        //     $("#item_id").val(id);
-        // });
-
-        $("#checkbox-all").click(function(){
-
-            var all_checked = 1;
-
-            $(".checkbox-checked").each(function(k, v){
+            table.render({
+                elem: '#table-list'
+                ,url: '/index/item/specialoutgoList' //数据接口
+                ,title: '维修登记'
+                ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                    title: '提示'
+                    ,layEvent: 'LAYTABLE_TIPS'
+                    ,icon: 'layui-icon-tips'
+                }]
+                ,parseData: function(res){ //res 即为原始返回的数据
+                    return {
+                    "code": 0, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.data //解析数据列表
+                    };
+                },page: true //开启分页
+                ,cols: [[ //表头
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field: 'id', title: 'ID', minWidth:60, sort: true}
+                    ,{field: 'date', title: '入库时间', minWidth:120,templet: function(d){
+                        return d.date;
+                    }}
+                    ,{field: 'itemType', title: '型号', minWidth:120,templet: function(d){
+                        if(d.itemType != null){return d.itemType.data} else {return ''}
+                    }}
+                    ,{field: 'itemName', title: '名称', minWidth:120,templet: function(d){
+                        if(d.itemName != null){return d.itemName.data} else {return ''}
+                    }} 
+                    ,{field: 'itemNetwork', title: '网络模式', minWidth: 120,templet: function(d){
+                        if(d.itemNetwork != null){return d.itemNetwork.data} else {return ''}
+                    }}
+                    ,{field: 'itemFeature', title: '配置', minWidth: 120,templet: function(d){
+                        if(d.itemFeature != null){return d.itemFeature.data} else {return ''}
+                    }}
+                    ,{field: 'itemAppearance', title: '外观', minWidth: 120,templet: function(d){
+                        if(d.itemAppearance != null){return d.itemAppearance.data} else {return ''}
+                    }}
+                    ,{field: 'number', title: '序列号', minWidth: 170,templet: function(d){
+                        return d.number;
+                    }}
+                    ,{field: 'itemEdition', title: '版本', minWidth: 120,templet: function(d){
+                        if(d.itemEdition != null){return d.itemEdition.data} else {return ''}
+                    }}
+                    ,{field: 'itemChannel', title: '进货渠道', minWidth: 120, sort: true,templet: function(d){
+                      if(d.itemChannel != null){return d.itemChannel.data} else {return ''}
+                    }}
+                    ,{field: 'price', title: '进价', minWidth: 120, sort: true,templet: function(d){
+                        return (d.price*1).toFixed(2);
+                    }}
+                    ,{field: 'memo', title: '商品备注', minWidth:80,templet: function(d){
+                        return d.memo;
+                    }}
+                    ,{field: 'history', title: '状态[全]', minWidth:120,templet: function(d){
+                        return '<a title="' + d.prepare + '" style="cursor: pointer" class="layui-btn layui-btn-normal layui-btn-sm" onclick="status_history(this,' + d.id + ')" data-href="/index/item/history?item_id=' + d.id + '">' + d.statusName + '</a>';
+                    }}
+                    ,{fixed: 'right', title: '操作', minWidth: 120, sort: true,templet: function(d){
+                      if (d.status == 2) {
+                        return '<a class="layui-btn layui-btn-sm" onclick="addSpecialOutgo(this,' + d.id + ')" data-value="1" data-type="4" data-href="/index/item/addSpecialOutgo?id=' + d.id + '">维修</a>';
+                      } else {
+                        return '<a class="layui-btn layui-btn-warm layui-btn-sm" onclick="cancelSpecialOutgo(this,' + d.id + ')" data-value="1" data-type="4" data-href="/index/item/cancelSpecialOutgo?id=' + d.id + '">返库</a>';
+                      }
+                    }}
+                ]]
+            });
             
-                if ($(v).prop('checked') == false){
-                    all_checked = 0;
+            //监听选择名称
+            form.on('select(name_id)',
+                function (obj) {
+                    var val = obj.value;
+                    var data;
+                    if (val != '') {
+                        var url = obj.elem.getAttribute('data-href');
+                        layui.$.get(url, { name: val }, function (res) {
+                            data = res.data;
+                            reset(data);
+                        })
+                    } else {
+                        data = jquery.parseJSON(layui.$("#data-all").html());
+                        reset(data);
+                    }
                 }
-            })
+            );
 
-            if (all_checked == 1) {
-                $(".checkbox-checked").each(function(k, v){
-                    $(v).prop('checked', false)
+            //监听搜索
+            form.on('submit(filter-search)', function(data){
+              var field = data.field;console.log()
+              //执行重载
+              table.reload('table-list', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+              });
+            });
+    
+            layui.$('.layui-btn.layuiadmin-btn-list').on('click', function(){
+              var type = layui.$(this).data('type');
+              active[type] ? active[type].call(this) : '';
+            });
+
+            //头工具栏事件
+            table.on('toolbar(table-list)', function(obj){
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data;
+                var arr = new Array();
+                layui.$.each(data, function(k, v){
+                    arr. push(v.id);
                 })
-                $("#checkbox-all").prop('checked', false)
-            } else {
-                $(".checkbox-checked").each(function(k, v){
-                    $(v).prop('checked', true)
-                })
-                $("#checkbox-all").prop('checked', true)
-            }
+
+                switch(obj.event){
+                    case 'allAddSpecialOutgo':
+                        var url = '/index/item/addSpecialOutgo';
+                        var type = 4;
+                        if (arr.length > 0) {
+                            $.post(url, {id:arr,type:type}, function(res) {
+                                layer.msg(res.data, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function (index) {
+                                    layui.table.reload('table-list'); //重载表格
+                                    layer.close(index); //再执行关闭 
+                                })
+                            })
+                        }
+                    break;
+                    case 'allCancelSpecialOutgo':
+                        var url = '/index/item/cancelSpecialOutgo';
+                        var type = 4;
+                        if (arr.length > 0) {
+                            $.post(url, {id:arr,type:type}, function(res) {
+                                layer.msg(res.data, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function (index) {
+                                    layui.table.reload('table-list'); //重载表格
+                                    layer.close(index); //再执行关闭 
+                                })
+                            })
+                        }
+                    break;
+                    case 'isAll':
+                        layer.msg(checkStatus.isAll ? '全选': '未全选');
+                    break;
+                    
+                    //自定义头工具栏右侧图标 - 提示
+                    case 'LAYTABLE_TIPS':
+                        layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+                };
+            });
+    
         });
 
-        $("#allow-all,#allow-all-2").click(function(){
-            var type = $(this).data('type')
-            var url = $(this).data('href');
-            var arr = new Array();
-            $(".checkbox-checked").each(function(k, v){
-                if ($(v).prop('checked') == true){
-                    arr. push($(v).data('id'));
-                }
-            })
+      //重置对应的网络模式
+      function reset(data){
+          var features_str = '<option value=""> - 配置 - </option>';
+          // $("select[name=feature_id]").append(features_str);
+          layui.$.each(data.features,function(k,v){
+              features_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+          })
+  
+          var networks_str = '<option value=""> - 网络模式 - </option>';
+          layui.$.each(data.networks,function(k,v){
+              networks_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+          })
+  
+          var appearances_str = '<option value=""> - 外观 - </option>';
+          layui.$.each(data.appearances,function(k,v){
+              appearances_str += '<option value="'+v.data+'"> '+v.data+' </option>';
+          })
+  
+          layui.$('#feature_id').html(features_str);
+          layui.$('#network_id').html(networks_str);
+          layui.$('#appearance_id').html(appearances_str);
+          layui.form.render('select');
+      }
 
-            if (arr.length > 0) {
-                $.post(url, {item_id:arr,type:type}, function(res) {
-                        alert(res.data)
-                        window.location.replace("<?php echo url('specialOutgo');?>");
-                })
-            }
-        })
-
-        $("#reject-all").click(function(){
-            var type = $(this).data('type')
-            var url = $(this).data('href');
-            var arr = new Array();
-            $(".checkbox-checked").each(function(k, v){
-                if ($(v).prop('checked') == true){
-                    arr. push($(v).data('id'));
-                }
-            })
-
-            if (arr.length > 0) {
-                $.post(url, {item_id:arr,type:type}, function(res) {
-                    alert(res.data)
-                    window.location.replace("<?php echo url('specialOutgo');?>");
-                })
-            }
-        })
-
-        $("#submit").click(function(){
-            var url = $("#form").data('action');
-            var data = $('#form').serialize();
-            $.post(url, data, function (res) {
-                alert(res.data);
-                if (res.code == 200) {
-                    window.location.replace("<?php echo url('specialOutgo');?>");
-                }
-            })
+      //状态历史
+      function status_history(obj,id) {
+        layer.open({
+          type: 2
+          ,title: '状态历史'
+          ,content:  [layui.$(obj).data('href'), 'no']
+          ,maxmin: true
+          ,area: ['90%', '50%']
         });
+      }
 
-        $(".add-outgo").click(function(){
-            var id = $(this).data('id')
-            var url = $(this).data('href')
-            var type = $(this).data('type')
-            $.post(url, {item_id:id,type:type}, function(res){
-                alert(res.data);
-                window.location.replace("<?php echo url('specialOutgo');?>");
-            })
-        })
-
-
-        $("#name_id").change(function(){
-            var val = $(this).val();
-            var data;
-            if (val != '') {
-
-                var url = $(this).data('href');
-
-                var name = $(this).val();
-                $.get(url, {name:name}, function(res){
-                    data = res.data;
-                    reset(data);
-                })
-            } else {
-                data = jQuery.parseJSON($("#data-all").html());
-                reset(data);
-            }
-        }); 
-
-        // changeNameSelected();
-    })
-
-    function reset(data){
-        var features_str = '<option value=""> - 配置 - </option>';
-        $.each(data.features,function(k,v){
-            features_str += '<option value="'+v.data+'"> '+v.data+' </option>';
-        })
-
-        var networks_str = '<option value=""> - 网络模式 - </option>';
-        $.each(data.networks,function(k,v){
-            networks_str += '<option value="'+v.data+'"> '+v.data+' </option>';
-        })
-
-        var appearances_str = '<option value=""> - 外观 - </option>';
-        $.each(data.appearances,function(k,v){
-            appearances_str += '<option value="'+v.data+'"> '+v.data+' </option>';
-        })
-
-        $('#feature_id').html(features_str);
-        $('#network_id').html(networks_str);
-        $('#appearance_id').html(appearances_str);
-    }
-
-    function changeNameSelected(){
-
-        var appearance_str = $("#name_id option:selected").data("appearance");
-        $("#appearance_id").html(appearance_str)
-
-        var feature_str = $("#name_id option:selected").data("feature");
-        $("#feature_id").html(feature_str)
-    }
-</script>
-            </div>
-
-        </div> <!-- end span10 -->
-
-    </div> <!-- end row -->
-
-</div> <!-- end container -->
-
-<!-- Le javascript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="/static/js/jquery.min.js"></script>
-<script src="/static/js/bootstrap.js"></script>
-<script src="/static/js/excanvas.min.js"></script>
-<!-- <script src="/static/js/jquery.flot.min.js"></script> -->
-<!-- <script src="/static/js/jquery.flot.resize.js"></script> -->
-<script src="/static/js/jquery-192custom.min.js"></script>
-<script type="text/javascript">
-    // $(function () {
-    //     var d1 = [];
-    //     d1.push([0, 32]);
-    //     d1.push([1, 30]);
-    //     d1.push([2, 24]);
-    //     d1.push([3, 17]);
-    //     d1.push([4, 11]);
-    //     d1.push([5, 25]);
-    //     d1.push([6, 28]);
-    //     d1.push([7, 36]);
-    //     d1.push([8, 44]);
-    //     d1.push([9, 52]);
-    //     d1.push([10, 53]);
-    //     d1.push([11, 50]);
-    //     d1.push([12, 45]);
-    //     d1.push([13, 42]);
-    //     d1.push([14, 40]);
-    //     d1.push([15, 36]);
-    //     d1.push([16, 34]);
-    //     d1.push([17, 24]);
-    //     d1.push([18, 17]);
-    //     d1.push([19, 17]);
-    //     d1.push([20, 20]);
-    //     d1.push([21, 28]);
-    //     d1.push([22, 36]);
-    //     d1.push([23, 38]);
-
-    //     // $.plot($("#placeholder"), [ d1 ], { grid: { backgroundColor: 'white', color: '#999', borderWidth: 1, borderColor: '#DDD' }, colors: ["#FC6B0A"], series: { lines: { show: true, fill: true, fillColor: "rgba(253,108,11,0.4)" } } });
-    // });
-</script>
-
-
-</body>
+        //维修
+        function addSpecialOutgo(obj, id) {
+            layer.confirm('确认要维修吗？', function (index) {
+                //发异步
+                var url = layui.$(obj).data('href');
+                var type = layui.$(obj).data('type');
+                layui.$.post(url, { id: id, type: type}, function (res) {
+                    layer.msg("success!", {
+                        icon: 1,
+                        time: 1000
+                    }, function (index) {
+                        layui.table.reload('table-list'); //重载表格
+                        layer.close(index); //再执行关闭 
+                    })
+                });
+                return false;
+            });
+        }
+        //返库
+        function cancelSpecialOutgo(obj, id) {
+            layer.confirm('确认要返库吗？', function (index) {
+                //发异步
+                var url = layui.$(obj).data('href');
+                var type = layui.$(obj).data('type');
+                layui.$.post(url, { id: id, type: type}, function (res) {
+                    layer.msg("success!", {
+                        icon: 1,
+                        time: 1000
+                    }, function (index) {
+                        layui.table.reload('table-list'); //重载表格
+                        layer.close(index); //再执行关闭 
+                    })
+                });
+                return false;
+            });
+        }
+    
+    </script>
 </html>
