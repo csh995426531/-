@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/item/special_outgo.html";i:1592142973;s:48:"/data/www/y5g/application/index/view/layout.html";i:1589513789;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/item/special_outgo.html";i:1592142973;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -21,7 +21,7 @@
             base: '/static/lib/layuiadmin/' //静态资源所在路径
         }).extend({
             index: 'lib/index' //主入口模块
-        }).use('index');
+        }).use(['index', 'admin', 'carousel']);
     </script>
 </head>
 

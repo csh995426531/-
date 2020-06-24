@@ -1,11 +1,31 @@
 
 <body>
-    <form class="layui-form" method="post" id="form" data-url="{:url('/index/item/prepare')}"  lay-filter="prepare_form" id="prepare_form" style="padding: 20px 30px 0 0;">
+    <form class="layui-form" method="post" id="form" data-url="{:url('/index/setting/addFeature')}" style="padding: 20px 30px 0 0;">
         <input type="hidden" name="id" id="prepare-id" value="{$id}" />
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="name_id" >名称</label>
+            <div class="layui-input-inline">
+                <select id="name_id" class="input-input" name="name_id" lay-verify="required">
+                    <option value="">请选择名称</option>
+                    {foreach $names as $category}
+                    <optgroup label="{$category.category.data}">
+                        {foreach $category.lists as $name}
+                            {if $data != null && $data.name_id == $name.id}
+                            <option value="{$name.id}" selected>{$name.data}</option>
+                            {else /}
+                            <option value="{$name.id}" >{$name.data}</option>
+                            {/if}
+                        {/foreach}
+                    </optgroup>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
         <div class="layui-form-item layui-form-text">
-            <label for="desc" class="layui-form-label">预售备注</label>
+            <label for="desc" class="layui-form-label">配置</label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入内容" id="prepare" name="prepare" class="layui-textarea"></textarea>
+                <input type="text" class="layui-input" id="data" name="data" lay-verify="required"
+                value="{$data.data}">
             </div>
         </div>
         <div class="layui-form-item">
@@ -30,7 +50,7 @@
                 var url = $("#form").data('url');
                 var data = $('#form').serialize();
                 $.post(url, data, function (res) {
-                    layer.alert("预售成功", {
+                    layer.alert("保存成功", {
                         icon: 6
                     },function (index) {
                         parent.layer.closeAll(); //再执行关闭 

@@ -1,254 +1,149 @@
 
-
-{$message}
-<div class="row">
-
-    <div class="">
-        <div class="span12 listing-buttons">
-
-            <!--<button class="btn btn-info">Action</button>-->
-
-            <!--<button class="btn btn-success">Action</button>-->
-
-            <button class="btn btn-primary" id='add' data-toggle="modal" href="#addItem" >录入</button>
-
-        </div>
-
-        <div class="span12">
-
-            <!--<div class="page-header">-->
-            <!--<div class="btn-group pull-right">-->
-            <!--<button class="btn dropdown-toggle" data-toggle="dropdown">-->
-            <!--<i class="icon-download-alt"></i> Export-->
-            <!--<span class="caret"></span>-->
-            <!--</button>-->
-            <!--<ul class="dropdown-menu">-->
-            <!--<li><a href="">CSV</a></li>-->
-            <!--<li><a href="">Excel</a></li>-->
-            <!--<li><a href="">PDF</a></li>-->
-            <!--</ul>-->
-            <!--</div>-->
-            <!--<h2>Listings</h2>-->
-            <!--</div>-->
-            <h4 class="span12">总条数：{$lists->total()}</h4>
-            <table class="orders-table table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>类别</th>
-                    <th>名称</th>
-                    <th>网络模式</th>
-                    <th>型号值</th>
-                    <th class="actions">操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label label-info">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label label-warning">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label label-important">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label label-inverse">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label label-success">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td><a href="form.html">Listing title</a> <span class="label">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                <!--<td class="actions">-->
-                <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                <!--</td>-->
-                <!--</tr>-->
-
-                {volist name='lists' id='temp'}
-                <tr>
-                    <td><span>{$temp.id}</span></td>
-                    <td><span>{$temp.category.data}</span></td>
-                    <td><span>{$temp.itemName.data}</span></td>
-                    <td><span>{$temp.itemNetwork.data}</span></td>
-                    <td><span>{$temp.data}</span></td>
-                    <td class="actions">
-                        <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
-                        <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                        {if $temp.status == 1}
-                        <a class="btn btn-small btn-danger del-item" data-id="{$temp.id}" data-href="{:url('delType')}">停用</a>
-                        {else /}
-                        <a class="btn btn-small btn-success del-item" data-id="{$temp.id}" data-href="{:url('openType')}">启用</a>
-                        {/if}
-                        <button class="btn btn-info edit"  data-toggle="modal" href="#addItem" data-id="{$temp.id}" data-name_id="{$temp.name_id}" data-network_id="{$temp.network_id}" data-network="{$temp.itemNetwork.data}" data-data="{$temp.data}">修改</button>
-                    </td>
-                </tr>
-                {/volist}
-                </tbody>
-            </table>
-        </div>
-        <div class="pull-right">
-            {$lists->render()}
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <!-- 表格 -->
+            <div class="layui-card-body">
+                <table id="table-list" lay-filter="table-list"></table>
+                <script type="text/html" id="toolbarDemo">
+                    <div class="layui-btn-container">
+                      <button class="layui-btn layui-btn-sm" lay-event="addItem">录入</button>
+                    </div>
+                </script>
+            </div>
         </div>
     </div>
+    <script>
+        layui.use(['index', 'contlist', 'table', 'jquery'], function () {
+            var table = layui.table
+            var form = layui.form
+            var jquery = layui.jquery
+            var $ = layui.jquery
 
-    <div class="modal hide fade" id="addItem">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">×</button>
-            <h3>录入</h3>
-        </div>
-        <form class="form-horizontal" method="post" id="form" data-action="{:url('addType')}">
-            <fieldset>
-                <input type="hidden" name="id" id="id"/>
-                <div class="modal-body control-group">
-                    <label class="control-label" for="data">名称</label>
-                    <div class="controls">
-                        <select id="name_id" class="input-xlarge" name="name_id">
-                            {foreach $names as $category}
-                            <optgroup label="{$category.category.data}">
-                                {foreach $category.lists as $name}
-                                <option value="{$name.id}" data-network="
-                                    {foreach $name.itemNetwork as $network}
-                                        <option value='{$network.id}'>{$network.data}</option>
-                                    {/foreach}"
-                                >{$name.data}</option>
-                                {/foreach}
-                            </optgroup>
-                            {/foreach}
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-body control-group">
-                    <label class="control-label" for="network">网络模式</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" id="network"  name="network" value="">
-                        <input type="hidden" class="input-xlarge" id="network_id"  name="network_id" value="">
-                    </div>
-                </div>
-                <div class="modal-body control-group">
-                    <label class="control-label" for="data">型号</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" id="data"  name="data" value="">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn" data-dismiss="modal">关闭</a>
-                    <button class="btn btn-success" type="button" id="submit">确定</button>
-                </div>
-            </fieldset>
-        </form>
-    </div>
+            table.render({
+                elem: '#table-list'
+                , url: '/index/setting/typeList' //数据接口
+                ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                , parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.total, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                }, page: true //开启分页
+                , cols: [[ //表头
+                    { field: 'id', title: 'ID', minWidth: 60, sort: true, fixed: 'left' }
+                    , {
+                        field: 'category', title: '类别', minWidth: 80,templet: function(d){
+                        if(d.category != null){return d.category.data} else {return ''}
+                    }}
+                    , {
+                        field: 'itemName', title: '名称', minWidth: 80,templet: function(d){
+                        if(d.itemName != null){return d.itemName.data} else {return ''}
+                    }}
+                    , {
+                        field: 'itemNetwork', title: '网络模式', minWidth: 80,templet: function(d){
+                        if(d.itemNetwork != null){return d.itemNetwork.data} else {return ''}
+                    }}
+                    , {
+                        field: 'data', title: '型号值', minWidth: 80
+                    }
+                    , {
+                        fixed: 'right', title: '操作', minWidth: 100, templet: function (d) {
+                            if (d.status == 1) {
+                                var str = '<a class="layui-btn-sm layui-btn layui-btn-danger" onclick="stopItem(this,' + d.id + ')" data-href="/index/setting/delType?id=' + d.id + '" >停用</a>';
+                            } else {
+                                var str = '<a class="layui-btn-sm layui-btn" onclick="openItem(this,' + d.id + ')" data-href="/index/setting/openType?id=' + d.id + '" >启用</a>';
+                            }
+                            return str += '<a class="layui-btn-sm layui-btn layui-btn-normal" onclick="edit(this,' + d.id + ')" data-href="/index/popup/type?id=' + d.id + '" >修改</a>';
+                        }
+                    }
+                ]]
+            });
 
-    <!--<div class="span5">-->
+            //头工具栏事件
+            table.on('toolbar(table-list)', function(obj){
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data;
+                var arr = new Array();
+                layui.$.each(data, function(k, v){
+                    arr. push(v.id);
+                })
 
-    <!--<div class="pagination pull-left">-->
-    <!--<ul>-->
-    <!--<li><a href="#">Prev</a></li>-->
-    <!--<li class="active">-->
-    <!--<a href="#">1</a>-->
-    <!--</li>-->
-    <!--<li><a href="#">2</a></li>-->
-    <!--<li><a href="#">3</a></li>-->
-    <!--<li><a href="#">4</a></li>-->
-    <!--<li><a href="#">Next</a></li>-->
-    <!--</ul>-->
-    <!--</div>-->
+                switch(obj.event){
+                    case 'addItem':
+                        var url = '/index/popup/type';
+                        layer.open({
+                            type: 2
+                            , title: '录入'
+                            , content: [url, 'no']
+                            , maxmin: true
+                            , area: ['80%', '50%']
+                            , yes: function (index, layero) {
+                                //点击确认触发 iframe 内容中的按钮提交
+                                var submit = layero.find('iframe').contents().find("#save");
+                                submit.click();
+                            }
+                        });
+                    break;
+                    //自定义头工具栏右侧图标 - 提示
+                    case 'LAYTABLE_TIPS':
+                        layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+                };
+            });
 
-    <!--</div>-->
+        })
 
-    <!--<div class="span5 listing-buttons pull-right">-->
-
-    <!--<button class="btn btn-info">Action</button>-->
-
-    <!--<button class="btn btn-success">Action</button>-->
-
-    <!--<button class="btn btn-primary">Add New Item</button>-->
-
-    <!--</div>-->
-
-</div>
-<script src="/static//js/jquery.min.js"></script>
-<script>
-    function changeNameSelected(){
-
-        // var str = $("#name_id option:selected").data("network");
-        // $("#network_id").html(str)
-    }
-
-    $(function(){
-
-        changeNameSelected();
-        $("#name_id").change(function () {
-            changeNameSelected();
-        });
-
-        $("#submit").click(function(){
-            var url = $("#form").data('action');
-            var data = $('#form').serialize();
-            $.post(url, data, function (res) {
-                alert(res.data);
-                window.location.replace("<?php echo url('type');?>");
-            })
-        });
-
-        $(".del-item").click(function(){
-            var url = $(this).data('href');
-            var id = $(this).data('id');
-            $.post(url, {id:id}, function (res) {
-                alert(res.data);
-                window.location.replace("<?php echo url('type');?>");
-            })
-        });
-
-        $(".edit").click(function(){
-            var id = $(this).data('id');
-            var name_id = $(this).data('name_id');
-            var network_id = $(this).data('network_id');
-            var network = $(this).data('network');
-            var data = $(this).data('data');
-
-            $("#id").val(id);
-            $('#data').val(data);
-            $('#network').val(network);
-            $('#network_id').val(network_id);
-            $('#name_id option').each(function(k, v) {
-                if ($(v).val() == name_id) {
-                    $(v).prop('selected', true)
+        //修改
+        function edit(obj,id) {
+            layer.open({
+                type: 2
+                , title: '修改'
+                , content: [layui.$(obj).data('href'), 'no']
+                , maxmin: true
+                , area: ['80%', '50%']
+                , yes: function (index, layero) {
+                    //点击确认触发 iframe 内容中的按钮提交
+                    var submit = layero.find('iframe').contents().find("#save");
+                    submit.click();
                 }
             });
-        });
+        }
 
-        $("#add").click(function(){
-
-            $("#id").val('');
-            $('#data').val('');
-            $('#network').val('');
-            $('#network_id').val('');
-            $('#name_id option').each(function(k, v) {
-                $(v).prop('selected', false)
+        //启用
+        function openItem(obj, id) {
+            layer.confirm('确认要启用吗？', function (index) {
+                //发异步
+                var url = layui.$(obj).data('href');
+                layui.$.post(url, { id: id}, function (res) {
+                    layer.msg("success!", {
+                        icon: 1,
+                        time: 1000
+                    }, function (index) {
+                        layui.table.reload('table-list'); //重载表格
+                        layer.close(index); //再执行关闭 
+                    })
+                });
+                return false;
             });
-        });
+        }
 
-    })
-</script>
+        //停用
+        function stopItem(obj, id) {
+            layer.confirm('确认要停用吗？', function (index) {
+                //发异步
+                var url = layui.$(obj).data('href');
+                layui.$.post(url, { id: id}, function (res) {
+                    layer.msg("success!", {
+                        icon: 1,
+                        time: 1000
+                    }, function (index) {
+                        layui.table.reload('table-list'); //重载表格
+                        layer.close(index); //再执行关闭 
+                    })
+                });
+                return false;
+            });
+        }
+    </script>

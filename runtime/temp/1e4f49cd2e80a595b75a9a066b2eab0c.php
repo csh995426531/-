@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/index/index.html";i:1592472558;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/index/index.html";i:1592993816;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -53,7 +53,7 @@
             <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
               
               <li class="layui-nav-item" lay-unselect>
-                <a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心">
+                <a lay-href="" layadmin-event="message" lay-text="消息中心">
                   <i class="layui-icon layui-icon-notice"></i>  
                   
                   <!-- 如果有新消息，则显示小圆点 -->
@@ -88,7 +88,7 @@
               </li>
               
               <li class="layui-nav-item layui-hide-xs" lay-unselect>
-                <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
+                <!-- <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a> -->
               </li>
               <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
                 <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
@@ -193,113 +193,41 @@
                     <cite>基础设置</cite>
                   </a>
                   <dl class="layui-nav-child">
-                    <dd><a lay-href="template/personalpage.html">个人主页</a></dd>
-                    <dd><a lay-href="template/addresslist.html">通讯录</a></dd>
-                    <dd><a lay-href="template/goodslist.html">商品列表</a></dd>
-                    <dd><a lay-href="template/msgboard.html">留言板</a></dd>
-                    <dd><a lay-href="template/search.html">搜索结果</a></dd>
-                    <dd><a href="user/reg.html" target="_blank">注册</a></dd>
+                    <dd><a lay-href="/index/setting/category">产品类别</a></dd>
+                    <dd><a lay-href="/index/setting/name">产品名称</a></dd>
+                    <dd><a lay-href="/index/setting/type">网络型号</a></dd>
+                    <dd><a lay-href="/index/setting/feature">产品配置</a></dd>
+                    <dd><a lay-href="/index/setting/appearance">产品外观</a></dd>
+                    <!-- <dd><a href="user/reg.html" target="_blank">注册</a></dd>
                     <dd><a href="user/login.html" target="_blank">登入</a></dd>
-                    <dd><a href="user/forget.html" target="_blank">忘记密码</a></dd>
-                    <dd><a lay-href="template/tips/404.html">404页面不存在</a></dd>
-                    <dd><a lay-href="template/tips/error.html">错误提示</a></dd>
-                    <dd><a lay-href="http://www.baidu.com/">百度一下</a></dd>
-                    <dd><a lay-href="http://www.layui.com/">layui官网</a></dd>
-                    <dd><a lay-href="http://www.layui.com/admin/">layuiAdmin官网</a></dd>
+                    <dd><a href="user/forget.html" target="_blank">忘记密码</a></dd> -->
+                    <dd><a lay-href="/index/setting/edition">产品版本</a></dd>
+                    <dd><a lay-href="/index/setting/incomeChannel">渠道录入</a></dd>
+                    <dd><a lay-href="/index/setting/intelligence">智能识别码</a></dd>
+                    <dd><a lay-href="/index/setting/specialEditItemList">特殊修改</a></dd>
                   </dl>
                 </li>
-                <li data-name="app" class="layui-nav-item">
-                  <a href="javascript:;" lay-tips="应用" lay-direction="2">
-                    <i class="layui-icon layui-icon-app"></i>
-                    <cite>应用</cite>
+                <li data-name="component" class="layui-nav-item">
+                  <a href="javascript:;" lay-tips="角色管理" lay-direction="2">
+                    <i class="layui-icon layui-icon-component"></i>
+                    <cite>角色管理</cite>
                   </a>
                   <dl class="layui-nav-child">
-                    
-                    <dd data-name="content">
-                      <a href="javascript:;">内容系统</a>
-                      <dl class="layui-nav-child">
-                        <dd data-name="list"><a lay-href="app/content/list.html">文章列表</a></dd>
-                        <dd data-name="tags"><a lay-href="app/content/tags.html">分类管理</a></dd>
-                        <dd data-name="comment"><a lay-href="app/content/comment.html">评论管理</a></dd>
-                      </dl>
+                    <dd data-name="console">
+                      <a lay-href="/index/members/add">添加账号</a>
                     </dd>
-                    <dd data-name="forum">
-                      <a href="javascript:;">社区系统</a>
-                      <dl class="layui-nav-child">
-                        <dd data-name="list"><a lay-href="app/forum/list.html">帖子列表</a></dd>
-                        <dd data-name="replys"><a lay-href="app/forum/replys.html">回帖列表</a></dd>
-                      </dl>
+                    <dd data-name="console">
+                      <a lay-href="/index/members/updatePwd">密码修改</a>
                     </dd>
-                    <dd>
-                      <a lay-href="app/message/index.html">消息中心</a>
-                    </dd>
-                    <dd data-name="workorder">
-                      <a lay-href="app/workorder/list.html">工单系统</a>
-                    </dd>
-                  </dl>
-                </li>
-                <li data-name="senior" class="layui-nav-item">
-                  <a href="javascript:;" lay-tips="高级" lay-direction="2">
-                    <i class="layui-icon layui-icon-senior"></i>
-                    <cite>高级</cite>
-                  </a>
-                  <dl class="layui-nav-child">
-                    <dd>
-                      <a layadmin-event="im">LayIM 通讯系统</a>  
-                    </dd>
-                    <dd data-name="echarts">
-                      <a href="javascript:;">Echarts集成</a>
-                      <dl class="layui-nav-child">
-                        <dd><a lay-href="senior/echarts/line.html">折线图</a></dd>
-                        <dd><a lay-href="senior/echarts/bar.html">柱状图</a></dd>
-                        <dd><a lay-href="senior/echarts/map.html">地图</a></dd>
-                      </dl>
-                    </dd>
-                  </dl>
-                </li>
-                <li data-name="user" class="layui-nav-item">
-                  <a href="javascript:;" lay-tips="用户" lay-direction="2">
-                    <i class="layui-icon layui-icon-user"></i>
-                    <cite>用户</cite>
-                  </a>
-                  <dl class="layui-nav-child">
-                    <dd>
-                      <a lay-href="user/user/list.html">网站用户</a>
-                    </dd>
-                    <dd>
-                      <a lay-href="user/administrators/list.html">后台管理员</a>
-                    </dd>
-                    <dd>
-                      <a lay-href="user/administrators/role.html">角色管理</a>
-                    </dd>
-                  </dl>
-                </li>
-                <li data-name="set" class="layui-nav-item">
-                  <a href="javascript:;" lay-tips="设置" lay-direction="2">
-                    <i class="layui-icon layui-icon-set"></i>
-                    <cite>设置</cite>
-                  </a>
-                  <dl class="layui-nav-child">
-                    <dd class="layui-nav-itemed">
-                      <a href="javascript:;">系统设置</a>
-                      <dl class="layui-nav-child">
-                        <dd><a lay-href="set/system/website.html">网站设置</a></dd>
-                        <dd><a lay-href="set/system/email.html">邮件服务</a></dd>
-                      </dl>
-                    </dd>
-                    <dd class="layui-nav-itemed">
-                      <a href="javascript:;">我的设置</a>
-                      <dl class="layui-nav-child">
-                        <dd><a lay-href="set/user/info.html">基本资料</a></dd>
-                        <dd><a lay-href="set/user/password.html">修改密码</a></dd>
-                      </dl>
+                    <dd data-name="console">
+                      <a lay-href="/index/members/updateAccess">权限修改</a>
                     </dd>
                   </dl>
                 </li>
                 <li data-name="get" class="layui-nav-item">
-                  <a href="javascript:;" lay-href="http://www.layui.com/admin/#get" lay-tips="授权" lay-direction="2">
+                  <a href="javascript:;" lay-href='/index/log/index' lay-tips="系统日志" lay-direction="2">
                     <i class="layui-icon layui-icon-auz"></i>
-                    <cite>授权</cite>
+                    <cite>系统日志</cite>
                   </a>
                 </li>
               </ul>

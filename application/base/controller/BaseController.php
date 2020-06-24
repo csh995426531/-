@@ -22,15 +22,23 @@ class BaseController extends Controller
 
     protected function checkLogin(){
 
-        $uri = $this->request->module() .'/'. $this->request->controller() .'/'. $this->request->action();
-        if (!in_array(strtolower($uri), ["login", "index/index/login", "index/index/logout", "index/index/executsql", 'index/statistics/index'])) {
+        $module = strtolower($this->request->module());
+        $controller = strtolower($this->request->controller());
+        $action = strtolower($this->request->action());
+        $uri = $module .'/'. $controller .'/'. $action;
+        if (!in_array($uri, ["login", "index/index/login", "index/index/captcha_src", "index/index/logout", "index/index/executsql", 'index/statistics/index'])) {
 
             $userId = Session::get("user_id");
 
             if (empty($userId)){
                 $this->redirect("/login");
             }
-            $this->checkRules($uri);
+
+            if ($controller == 'popup') {
+            
+            } else {
+                $this->checkRules($uri);
+            }
         }
     }
 
@@ -41,7 +49,7 @@ class BaseController extends Controller
             ->where("status", UserAccess::STATUS_ACTIVE)
             ->select();
 
-        $nodes = ['login', "index/index/login", 'index/index/logout', "index/index/executsql", 'index/index/index', 'index/statistics/index', 'index/item/changename', 'index/item/changecategory'];
+        $nodes = ['index/index/index', 'index/index/home', 'index/statistics/index', 'index/item/changename', 'index/item/changecategory'];
         if (!empty($userNodes)) {
             $userNodesTemp = collection($userNodes)->toArray();
 
@@ -61,12 +69,11 @@ class BaseController extends Controller
                 }
             }
         }
-  
-        if (!in_array(strtolower($uri), $nodes)){
-            // $this->error("权限不足", '/index/statistics/index');
-            
-            // return SetResult(500, '权限不足');
+        
+        if (!in_array($uri, $nodes)){
+            $this->error("权限不足", '/index/index/index');
+            return SetResult(500, '权限不足');
         }
-
+        
     }
 }

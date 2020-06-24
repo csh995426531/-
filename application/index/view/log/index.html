@@ -1,208 +1,112 @@
-
-<div class="row">
-
-    <div class="">
-
-        <div class="span12">
-
-            <form class="form-inline" method="get">
-                <label for="start_date">开始日期
-                    <input type="text" class="span2 input-xlarge" id="start_date"  name="start_date" value="" autocomplete="off">
-                </label>
-
-                <label for="end_date">结束日期
-                    <input type="text" class="span2 input-xlarge" id="end_date"  name="end_date" value="" autocomplete="off">
-                </label>
-                <select class="span2" name="user_id">
-                    <option value="0"> - 操作人 - </option>
-                    {foreach $users as $user}
-                    <option value="{$user.id}" {$Think.get.user_id==$user.id ? 'selected' :''}>{$user.username}</option>
-                    {/foreach}
-                </select>
-                <select class="span2" name="action">
-                    <option value="0"> - 操作菜单 - </option>
-                    {foreach $actions as $action}
-                    <option value="{$action}" {$Think.get.action==$action ? 'selected' :''}>{$action}</option>
-                    {/foreach}
-                </select>
-                <select class="span2" name="response">
-                    <option value="0"> - 操作结果 - </option>
-                    {foreach $responses as $key => $response}
-                    <option value="{$key}" {$Think.get.response==$key ? 'selected' :''}>{$response}</option>
-                    {/foreach}
-                </select>
-                <button type="submit" class="btn btn-primary">搜索</button>
-            </form>
-        </div>
-
-        <div class="row">
-
-            <div class="span12 listing-buttons">
-
-                <!--<button class="btn btn-info">Action</button>-->
-
-                <!--<button class="btn btn-success">Action</button>-->
-
-                <!--<button class="btn btn-primary"  data-toggle="modal" href="#addItem" >录入</button>-->
-
-            </div>
-
-            <div class="span12">
-
-                <!--<div class="page-header">-->
-                <!--<div class="btn-group pull-right">-->
-                <!--<button class="btn dropdown-toggle" data-toggle="dropdown">-->
-                <!--<i class="icon-download-alt"></i> Export-->
-                <!--<span class="caret"></span>-->
-                <!--</button>-->
-                <!--<ul class="dropdown-menu">-->
-                <!--<li><a href="">CSV</a></li>-->
-                <!--<li><a href="">Excel</a></li>-->
-                <!--<li><a href="">PDF</a></li>-->
-                <!--</ul>-->
-                <!--</div>-->
-                <!--<h2>Listings</h2>-->
-                <!--</div>-->
-                <h4 class="span12">总条数：{$lists->total()}</h4>
-                <table class="orders-table table">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>操作时间</th>
-                        <th>操作人</th>
-                        <th>操作菜单</th>
-                        <th>操作内容</th>
-                        <th>操作结果</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-info">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-warning">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-important">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-inverse">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label label-success">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                    <!--<td><a href="form.html">Listing title</a> <span class="label">Item Status</span><br /><span class="meta">Added Today</span></td>-->
-                    <!--<td class="actions">-->
-                    <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">Remove</a>-->
-                    <!--<a class="btn btn-small btn-primary" href="form.html">Edit</a>-->
-                    <!--</td>-->
-                    <!--</tr>-->
-
-                    {volist name='lists' id='temp'}
-                    <tr>
-                        <td><span>{$temp.id}</span></td>
-                        <th><span>{$temp.create_time}</span></th>
-                        <th><span>{$temp.user.username}</span></th>
-                        <th><span>{$temp.action}</span></th>
-                        <th><span>{$temp.request}</span></th>
-                        <th><span>{$temp.response}</span></th>
-                    </tr>
-                    {/volist}
-                    </tbody>
-                </table>
-            </div>
-            <div class="pull-right">
-                {$lists->render()}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <input class="layui-input" placeholder="日期" name="date" type="text" id="date"
+                     autocomplete="off">
+                </div>
+                <div class="layui-inline">
+                    <select id="user_id" name="user_id" lay-filter="user_id">
+                        <option value="0"> - 操作人 - </option>
+                        {foreach $users as $user}
+                        <option value="{$user.id}" {$Think.get.user_id==$user.id ? 'selected' :''}>{$user.username}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="action">
+                        <option value="0"> - 操作菜单 - </option>
+                        {foreach $actions as $action}
+                        <option value="{$action}" {$Think.get.action==$action ? 'selected' :''}>{$action}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="response">
+                        <option value="0"> - 操作结果 - </option>
+                        {foreach $responses as $key => $response}
+                        <option value="{$key}" {$Think.get.response==$key ? 'selected' :''}>{$response}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="filter-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
             </div>
         </div>
-
-        <!--<div class="span5">-->
-
-        <!--<div class="pagination pull-left">-->
-        <!--<ul>-->
-        <!--<li><a href="#">Prev</a></li>-->
-        <!--<li class="active">-->
-        <!--<a href="#">1</a>-->
-        <!--</li>-->
-        <!--<li><a href="#">2</a></li>-->
-        <!--<li><a href="#">3</a></li>-->
-        <!--<li><a href="#">4</a></li>-->
-        <!--<li><a href="#">Next</a></li>-->
-        <!--</ul>-->
-        <!--</div>-->
-
-        <!--</div>-->
-
-        <!--<div class="span5 listing-buttons pull-right">-->
-
-        <!--<button class="btn btn-info">Action</button>-->
-
-        <!--<button class="btn btn-success">Action</button>-->
-
-        <!--<button class="btn btn-primary">Add New Item</button>-->
-
-        <!--</div>-->
-
+        <!-- 表格 -->
+        <div class="layui-card-body">
+            <table id="table-list" lay-filter="table-list"></table>
+            <!-- <script type="text/html" id="barDemo">
+                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+              </script> -->
+        </div>
     </div>
 </div>
-<script src="/static/js/jquery-1.8.3.js"></script>
 <script>
-    $(function () {
+    layui.use(['laydate', 'index', 'contlist', 'table', 'jquery'], function () {
+        var table = layui.table
+        var form = layui.form
+        var jquery = layui.jquery
+        var $ = layui.jquery
+        var laydate = layui.laydate
 
-        var startDate = "<?php echo $start_date;?>";
-        var endDate = "<?php echo $end_date;?>";
-
-        $.datepicker.regional['zh-CN'] = {
-            closeText: '关闭',
-            prevText: '<上月',
-            nextText: '下月>',
-            currentText: '今天',
-            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
-                '七月', '八月', '九月', '十月', '十一月', '十二月'],
-            monthNamesShort: ['一', '二', '三', '四', '五', '六',
-                '七', '八', '九', '十', '十一', '十二'],
-            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
-            weekHeader: '周',
-            dateFormat: 'yy-mm-dd',
-            firstDay: 1,
-            isRTL: false,
-            showMonthAfterYear: true,
-            yearSuffix: '年'
-        };
-
-        $.datepicker.setDefaults( $.datepicker.regional[ "zh-CN" ] );
-
-        $("#start_date, #end_date").datepicker({
-            dateFormat: "yy-mm-dd",
-            todayHighlight: false,
-            // minDate: 0,
-            // maxDate: "+2D"
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#date' //指定元素
+            ,range: '~'
         });
 
-        $('#start_date').datepicker("setDate", startDate);
-        $('#end_date').datepicker("setDate", endDate);
-    })
+        table.render({
+            elem: '#table-list'
+            , url: '/index/log/indexList' //数据接口
+            , parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": 0, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+            }, page: true //开启分页
+            , cols: [[ //表头
+                { field: 'id', title: 'ID', minWidth: 60, sort: true, fixed: 'left' }
+                , { field: 'create_time', title: '操作时间', minWidth: 60, sort: true, fixed: 'left' }
+                , { field: 'username', title: '操作人', minWidth: 60, sort: true, templet: function (d) {
+                        if (d.user != null) { return d.user.username } else { return '' }
+                } }
+                , {
+                    field: 'action', title: '操作菜单', minWidth: 120
+                }
+                , {
+                    field: 'request', title: '操作内容', minWidth: 120
+                }
+                , {
+                    field: 'response', title: '操作结果', minWidth: 120
+                }
+            ]]
+        });
+
+        //监听搜索
+        form.on('submit(filter-search)', function (data) {
+            var field = data.field; console.log()
+            //执行重载
+            table.reload('table-list', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+        layui.$('.layui-btn.layuiadmin-btn-list').on('click', function () {
+            var type = layui.$(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
 </script>

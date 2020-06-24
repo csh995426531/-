@@ -1,0 +1,137 @@
+
+<body>
+    <form class="layui-form" method="post" id="form" data-url="{:url('/index/setting/addIntelligence')}" style="padding: 20px 30px 0 0;">
+        <input type="hidden" name="id" id="prepare-id" value="{$id}" />
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="name_id" >名称</label>
+            <div class="layui-input-inline">
+                <select id="name_id" class="input-input" name="name_id" lay-filter="name_id" lay-verify="required">
+                    <option value="">请选择名称</option>
+                    {foreach $names as $category}
+                    <optgroup label="{$category.category.data}">
+                        {foreach $category.lists as $name}
+                            <option value="{$name.id}" 
+                            {if $data && $data.itemType && $data.itemType.name_id == $name.id} selected {/if}
+                             data-type="
+                            {foreach $name.itemType as $type}
+                                <option value='{$type.id}'>{$type.data}</option>
+                            {/foreach}" data-feature="
+                            {foreach $name.itemFeature as $feature}
+                                <option value='{$feature.id}'>{$feature.data}</option>
+                            {/foreach}" data-appearance="
+                            {foreach $name.itemAppearance as $appearance}
+                                <option value='{$appearance.id}'>{$appearance.data}</option>
+                            {/foreach}">{$name.data}</option>
+                        {/foreach}
+                    </optgroup>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label" for="type_id">型号</label>
+            <div class="layui-input-block">
+                <select id="type_id" class="input-input" name="type_id" lay-verify="required">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label" for="feature_id">配置</label>
+            <div class="layui-input-block">
+                <select id="feature_id" class="input-input" name="feature_id" lay-verify="required">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label" for="appearance_id">外观</label>
+            <div class="layui-input-block">
+                <select id="appearance_id" class="input-input" name="appearance_id" lay-verify="required">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label for="desc" class="layui-form-label">识别码</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" id="data" name="data" lay-verify="data" minlength="3" maxlength="3" 
+                value="{$data.data}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline">
+              <input type="button" lay-submit="" lay-filter="save" value="确认" class="layui-btn">
+            </div>
+        </div>
+    </form>
+    <script>
+    layui.use(['index', 'form', 'layer','jquery'],
+        function() {
+            $ = layui.jquery;
+            var form = layui.form,
+            layer = layui.layer;
+            //自定义验证规则
+            form.verify({
+                data: function(value){
+                    if(value.length != 3){
+                        return '识别码长度为3位';
+                    }
+                },content: function(value){
+                    layedit.sync(editIndex);
+                }
+            })
+            //监听提交
+            form.on('submit(save)', function(data){
+                var field = data.field; //获取提交的字段
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
+
+                //提交 Ajax 成功后，关闭当前弹层并重载表格
+                var url = $("#form").data('url');
+                var data = $('#form').serialize();
+                $.post(url, data, function (res) {
+                    layer.alert("保存成功", {
+                        icon: 6
+                    },function (index) {
+                        parent.layer.closeAll(); //再执行关闭 
+                        parent.layui.table.reload('table-list'); //重载表格
+                    })
+                    return false;
+                });
+            });
+            form.on('select(name_id)', changeNameSelected);
+            changeNameSelected();
+        });
+
+        function changeNameSelected(){
+            var str1 = $("#name_id option:selected").data("type");console.log(str1);
+            $("#type_id").html(str1)
+            var str2 = $("#name_id option:selected").data("feature");
+            $("#feature_id").html(str2)
+            var str3 = $("#name_id option:selected").data("appearance");
+            $("#appearance_id").html(str3)
+            layui.form.render('select');
+
+            "<?php if($data){?>"
+                
+                $('#type_id option').each(function(k, v) {
+                    if ($(v).val() == "<?php echo $data->type_id;?>") {
+                        $(v).prop('selected', true)
+                    }
+                });
+                $('#feature_id option').each(function(k, v) {
+                    if ($(v).val() == "<?php echo $data->feature_id;?>") {
+                        $(v).prop('selected', true)
+                    }
+                });
+                $('#appearance_id option').each(function(k, v) {
+                    if ($(v).val() == "<?php echo $data->appearance_id;?>") {
+                        $(v).prop('selected', true)
+                    }
+                });
+                layui.form.render('select');
+            "<?php }?>"
+        }
+    </script>
+</body>

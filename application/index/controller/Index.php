@@ -4,6 +4,7 @@ namespace app\index\controller;
 use app\base\controller\BaseController;
 use app\index\model\User;
 use think\Session;
+use think\captcha\Captcha;
 
 class Index extends BaseController
 {
@@ -15,6 +16,15 @@ class Index extends BaseController
     public function home()
     {
        echo '桌面';
+    }
+
+    public function captcha_src(){
+
+        $captcha = new Captcha();
+        $captcha->fontSize = 30;
+        $captcha->length   = 4;
+        $captcha->useNoise = false;
+        return $captcha->entry();
     }
 
     public function login()
@@ -52,17 +62,12 @@ class Index extends BaseController
 
                 Session::set("user_id", $user->id);
                 Session::set("user_name", $user->username);
-                AddLog(\app\index\model\Log::ACTION_LOGIN, json_encode($_POST)
-                    , \app\index\model\Log::RESPONSE_SUCCESS, $user->id);
-                header('Location: '. Url("index"));exit();
-
+                
+                return SetResult(200, 'success');
             } catch (\Exception $e) {
-
-                echo $e->getMessage();exit();
+                return SetResult(500, $e->getMessage());
             }
-
         } else{
-
             $this->view->engine->layout(false);
             return $this->fetch("login");
         }
@@ -81,7 +86,7 @@ class Index extends BaseController
                 , \app\index\model\Log::RESPONSE_SUCCESS, $userId);
         }
 
-        $this->redirect("index");
+        $this->redirect("/login");
     }
 
     public function executSql()

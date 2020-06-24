@@ -134,9 +134,17 @@ class Item extends BaseController
     public function addIncome(){
 
         $id = $this->request->get('id');
+        $is_special = $this->request->get('is_special', 0);
         if ($id) {
-            $history = ItemIncomeHistory::where('id', $id)->find();
+            if ($is_special) {
+                $item = \app\index\model\Item::where('id', $id)->find();
+                $history = false;
+            } else {
+                $history = ItemIncomeHistory::where('id', $id)->find();
+                $item = $history->item;
+            }
         } else {
+            $item = false;
             $history = false;
         }
 
@@ -249,7 +257,7 @@ class Item extends BaseController
                     throw new \Exception("价格错误");
                 }
 
-                $item = \app\index\model\Item::where("number", $number)
+                $number_item = \app\index\model\Item::where("number", $number)
                     ->where("status", "in", [
                         \app\index\model\Item::STATUS_INCOME_WAIT,
                         \app\index\model\Item::STATUS_NORMAL,
@@ -259,9 +267,9 @@ class Item extends BaseController
                         ])
                     ->find();
 
-                if (!empty($item) && empty($history)) {
+                if (!empty($number_item) && empty($item)) {
                     throw new \Exception("序列号重复");
-                } elseif (!empty($item) && !empty($history) && $item->id != $history->item->id) {
+                } elseif (!empty($number_item) && !empty($item) && $number_item->id != $item->id) {
                     throw new \Exception("序列号重复");
                 }
               
@@ -273,9 +281,9 @@ class Item extends BaseController
                     $typeId = $type->id;
                 }
                 
-                if (!empty($history)) {
+                if (!empty($item)) {
                     $model = new \app\index\model\Item;
-                    $updated = $model->save([
+                    $data = [
                         "category_id" => $categoryTd,
                         "name_id" => $nameId,
                         "feature_id" => $featureId,
@@ -288,22 +296,30 @@ class Item extends BaseController
                         "price" => $price,
                         "network_id" => $networkId,
                         "channel_id" => $channelId,
-                        "status" => \app\index\model\Item::STATUS_INCOME_WAIT,
                         "update_time" => time()
-                    ], ['id' => $history->item->id]);
+                    ];
+
+
+                    if (!$is_special) {
+                        $data["status"] = \app\index\model\Item::STATUS_INCOME_WAIT;
+                    }
+
+                    $updated = $model->save($data, ['id' => $item->id]);
     
                     if (!$updated) {
                         throw new \Exception("库存更新失败");
                     }
     
-                    $model = new ItemIncomeHistory;
-                    $updated = $model->save([
-                        "status" => ItemIncomeHistory::STATUS_WAIT,
-                        "update_time" => time()
-                    ], ['id' => $history->id]);
-    
-                    if (!$updated) {
-                        throw new \Exception("入库记录更新失败");
+                    if (!$is_special) {
+                        $model = new ItemIncomeHistory;
+                        $updated = $model->save([
+                            "status" => ItemIncomeHistory::STATUS_WAIT,
+                            "update_time" => time()
+                        ], ['id' => $history->id]);
+        
+                        if (!$updated) {
+                            throw new \Exception("入库记录更新失败");
+                        }
                     }
 
                     $history = ItemIncomeHistory::where('id', $id)->find();
@@ -398,14 +414,16 @@ class Item extends BaseController
             ->where("status", ItemChannel::STATUS_ACTIVE)
             ->select();
         
-        $breadcrumb = $history ?  '入库记录修改' : '进货入库';
+        $breadcrumb = $item ?  '入库记录修改' : '进货入库';
 
         return $this->fetch('add_income', [
             'message' => $message,
             'breadcrumb' => $breadcrumb,
             'names' => $names,
             'channels' => $channels,
+            'item' => $item,
             'history' => $history,
+            'is_special' => $is_special
         ]);
     }
 

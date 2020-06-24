@@ -1,143 +1,158 @@
-
-<div class="row">
-
-    <div class="">
-        <div class="span12">
-
-            <form class="form-inline" method="get">
-            <!-- <select class="span2" name="user_id">
-                <option value=""> - 入库人 - </option>
-                {foreach $users as $user}
-                <option value="{$user.id}" {$Think.get.user_id==$user.id ? 'selected' :''}>{$user.username}</opion>
-                {/foreach}
-            </select> -->
-            <label class="control-label" for="date">进货日期</label>
-            <input type="text" class="input-xlarge span2" id="date"  name="date" value="" data-val="{$Think.get.date}" autocomplete="off">
-            <select class="span2" name="name_id">
-                <option value=""> - 名称 - </option>
-                {foreach $names as $name}
-                <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
-                {/foreach}
-            </select>
-            <select class="span2" name="channel_id">
-                <option value=""> - 进货渠道 - </option>
-                {foreach $channels as $channel}
-                <option value="{$channel.data}" {$Think.get.channel_id==$channel.data ? 'selected' :''}>{$channel.data}</option>
-                {/foreach}
-            </select>
-            <input type="text" class="input-large" name="keyword" placeholder="序列号" value="{$Think.get.keyword}">
-            <button type="submit" class="btn btn-primary">搜索</button>
-        </form>
-    </div>
-        <div class="span12">
-            <table class="orders-table table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>审核状态</th>
-                     <!-- <th>型号</th>-->
-                    <th>名称</th>
-                    <th>网络模式</th>
-                    <th>配置</th>
-                    <th>外观</th>
-                    <th>序列号</th>
-                    <th>固件版本</th>
-                    <th>进货价格</th>
-                    <th>进货渠道</th>
-                    <th>入库时间</th>
-                  
-                    <th class="actions">操作</th>
-                </tr>
-                </thead>
-                <tbody>
-
-                {volist name='lists' id='temp'}
-                <tr>
-                    <td><span>{$temp.id}</span></td>
-                    <td><span>{$temp->getStatusName()}</span></td>
-                      <!-- <th><span>{$temp.itemType.data}</span></th>-->
-                    <th><span>{$temp.itemName.data}</span></th>
-                    <th><span>{$temp.itemNetwork.data}</span></th>
-                    <th><span>{$temp.itemFeature.data}</span></th>
-                    <th><span>{$temp.itemAppearance.data}</span></th>
-                   
-                    <th><a href="https://checkcoverage.apple.com/cn/zh/?sn={$temp.number}" target="_blank"><span>{$temp.number}</span></a></th>
-                    <th><span>{$temp.itemEdition.data}</span></th>
-                    <!-- <th><span>{$temp.memo}</span></th> -->
-                    <th><span>{$temp.price}</span></th>
-                    <th><span>{$temp.itemChannel.data}</span></th>
-                    <td><span>{$temp.create_time}</span></td>
-                
-                    <td class="actions">
-                        <!--<a class="btn btn-small btn-danger" data-toggle="modal" href="#removeItem">删除</a>-->
-                        <a class="btn btn-small btn-success update-item" data-id="{$temp.id}" data-value="1" data-href="{:url('specialEditItem')}">修改</a>
-                        <!--<a class="btn btn-small btn-danger delete-item" data-id="{$temp.id}" data-value="0" data-href="{:url('deleteAgree')}">删除</a>-->
-                    </td>
-                </tr>
-                {/volist}
-                </tbody>
-            </table>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <input class="layui-input" placeholder="进货日期" name="date" type="text" id="date"
+                     autocomplete="off">
+                </div>
+                <div class="layui-inline">
+                    <select id="name_id" name="name_id" lay-filter="name_id"
+                        data-href="{:url('/index/item/changeName')}">
+                        <option value=""> - 名称 - </option>
+                        {foreach $names as $name}
+                        <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}
+                        </option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="channel_id">
+                        <option value=""> - 进货渠道 - </option>
+                        {foreach $channels as $channel}
+                        <option value="{$channel.data}" {$Think.get.channel_id==$channel.data ? 'selected' :''}>{$channel.data}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <input type="text" name="keyword" placeholder="序列号" value="{$Think.get.keyword}" autocomplete="off"
+                        class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="filter-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="pull-right">
-            {$lists->render()}
+        <!-- 表格 -->
+        <div class="layui-card-body">
+            <table id="table-list" lay-filter="table-list"></table>
+            <!-- <script type="text/html" id="barDemo">
+                <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+              </script> -->
         </div>
     </div>
 </div>
-<script src="/static/js/jquery.min.js"></script>
 <script>
-    $(function(){
+    layui.use(['laydate', 'index', 'contlist', 'table', 'jquery'], function () {
+        var table = layui.table
+        var form = layui.form
+        var jquery = layui.jquery
+        var $ = layui.jquery
+        var laydate = layui.laydate
 
-        $(".delete-item").click(function(){
-            var url = $(this).data('href');
-            var id = $(this).data('id');
-            $.post(url, {id:id}, function (res) {
-                alert(res.data);
-                window.location.replace("<?php echo url('income');?>");
-            })
-        })
-
-        $(".update-item").click(function(){
-            var url = $(this).data('href');
-            var id = $(this).data('id');
-            url = url + '?id=' + id;
-            window.location.replace(url);
-        })
-
-        $.datepicker.regional['zh-CN'] = {
-            closeText: '关闭',
-            prevText: '<上月',
-            nextText: '下月>',
-            currentText: '今天',
-            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
-                '七月', '八月', '九月', '十月', '十一月', '十二月'],
-            monthNamesShort: ['一', '二', '三', '四', '五', '六',
-                '七', '八', '九', '十', '十一', '十二'],
-            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
-            weekHeader: '周',
-            dateFormat: 'yy-mm-dd',
-            firstDay: 1,
-            isRTL: false,
-            showMonthAfterYear: true,
-            yearSuffix: '年'
-        };
-
-        $.datepicker.setDefaults( $.datepicker.regional[ "zh-CN" ] );
-
-        $("#date").datepicker({
-            dateFormat: "yy-mm-dd",
-            todayHighlight: false,
-            minDate: "-3600D",
-            maxDate: "+0D"
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#date' //指定元素
         });
 
-        var date_val = $("#date").data('val');
-        if (date_val != '') {
-            $('#date').datepicker("setDate", date_val);
-        } else {
-            $('#date').datepicker("setDate", '+0D');
-        }
+        table.render({
+            elem: '#table-list'
+            , url: '/index/setting/specialEditItemLists' //数据接口
+            , parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": 0, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+            }, page: true //开启分页
+            , cols: [[ //表头
+                { field: 'id', title: 'ID', minWidth: 60, sort: true, fixed: 'left' }
+                , { field: 'statusName', title: '审核状态', minWidth: 60, sort: true, fixed: 'left' }
+                , {
+                    field: 'itemName', title: '名称', minWidth: 120, templet: function (d) {
+                        if (d.itemName != null) { return d.itemName.data } else { return '' }
+                    }
+                }
+                , {
+                    field: 'itemNetwork', title: '网络模式', minWidth: 120, templet: function (d) {
+                        if (d.itemNetwork != null) { return d.itemNetwork.data } else { return '' }
+                    }
+                }
+                , {
+                    field: 'itemFeature', title: '配置', minWidth: 120, templet: function (d) {
+                        if (d.itemFeature != null) { return d.itemFeature.data } else { return '' }
+                    }
+                }
+                , {
+                    field: 'itemAppearance', title: '外观', minWidth: 120, templet: function (d) {
+                        if (d.itemAppearance != null) { return d.itemAppearance.data } else { return '' }
+                    }
+                }
+                , {
+                    field: 'number', title: '序列号', minWidth: 150, templet: function (d) {
+                        return '<a lay-text="综合查询" target="_blank" href="https://checkcoverage.apple.com/cn/zh/?sn=' + d.number + '"><span style="color:coral;cursor: pointer;">' + d.number + '</span></a>';
+                    }
+                }
+                , {
+                    field: 'itemEdition', title: '版本', minWidth: 120, templet: function (d) {
+                        if (d.itemEdition != null) { return d.itemEdition.data } else { return '' }
+                    }
+                }
+                , {
+                    field: 'price', title: '进价', minWidth: 120, sort: true, templet: function (d) {
+                        return (d.price * 1).toFixed(2);
+                    }
+                }
+                , {
+                    field: 'itemChannel', title: '进货渠道', minWidth: 120, sort: true, templet: function (d) {
+                        if (d.itemChannel != null) { return d.itemChannel.data } else { return '' }
+                    }
+                }
+                , {
+                    field: 'create_time', title: '入库时间', minWidth: 120, sort: true
+                }
+                , {
+                    fixed: 'right', title: '操作', minWidth: 120, sort: true, templet: function (d) {
+                        return '<a class="layui-btn-sm layui-btn layui-btn-normal" onclick="edit(this,' + d.id + ')" data-href="/index/item/addincome?is_special=1&id=' + d.id + '" >修改</a>';
+                    }
+                }
+            ]]
+        });
 
-    })
+        //监听搜索
+        form.on('submit(filter-search)', function (data) {
+            var field = data.field; console.log()
+            //执行重载
+            table.reload('table-list', {
+                where: field,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        });
+
+        layui.$('.layui-btn.layuiadmin-btn-list').on('click', function () {
+            var type = layui.$(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+
+    //修改
+    function edit(obj, id) {
+        layer.open({
+            type: 2
+            , title: '修改'
+            , content: [layui.$(obj).data('href'), 'no']
+            , maxmin: true
+            , area: ['90%', '90%']
+        });
+    }
+
 </script>

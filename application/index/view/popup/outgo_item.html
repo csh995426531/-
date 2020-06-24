@@ -61,9 +61,8 @@
                     layer.alert("出库成功", {
                         icon: 6
                     },function (index) {
-
+                        parent.layer.closeAll(); //再执行关闭 
                         parent.layui.table.reload('table-list'); //重载表格
-                        parent.layer.close(index); //再执行关闭 
                     })
                     return false;
                 });

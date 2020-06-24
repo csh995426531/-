@@ -133,6 +133,7 @@ class Item
             $temp->itemFeature = $temp->itemFeature;
             $temp->itemAppearance = $temp->itemAppearance;
             $temp->itemEdition = $temp->itemEdition;
+            $temp->itemChannel = $temp->itemChannel;
             $temp->memo_v = mb_strlen($temp->memo) > 6 ? mb_substr($temp->memo, 0, 6).'…' : $temp->memo;
             $temp->age = floor((time() - strtotime($temp->date)) / 86400);
         }

@@ -34,15 +34,17 @@ class Setting extends BaseController
             $message = urldecode($message);
         }
 
-        $lists = ItemCategory::paginate(10, false, ['query'=>request()->param() ]);
-
         $breadcrumb = '类别录入';
-
         return $this->fetch("category", [
             'message' => $message,
-            'lists' => $lists,
             'breadcrumb' => $breadcrumb,
         ]);
+    }
+
+    //类别-列表数据
+    public function categoryList(){
+        $limit = $this->request->param('limit', 10);
+        return ItemCategory::order('id desc')->paginate($limit, false, ['query'=>request()->param() ]);
     }
 
     //增加类别
@@ -163,19 +165,22 @@ class Setting extends BaseController
         if (!empty($message)) {
             $message = urldecode($message);
         }
-
-        $categories = ItemCategory::where('status', ItemCategory::STATUS_ACTIVE)->select();
-
-        $lists = ItemName::paginate(10, false, ['query'=>request()->param() ]);
-
         $breadcrumb = '名称录入';
 
         return $this->fetch("name", [
             'message' => $message,
-            'lists' => $lists,
-            'categories' => $categories,
             'breadcrumb' => $breadcrumb,
         ]);
+    }
+
+    //名称-列表数据
+    public function nameList(){
+        $limit = $this->request->param('limit', 10);
+        $lists = ItemName::order('id desc')->paginate($limit, false, ['query'=>request()->param() ]);
+        foreach ($lists as &$list) {
+            $list->category = $list->category;
+        }
+        return $lists;
     }
 
     //增加名称
@@ -311,31 +316,23 @@ class Setting extends BaseController
         if (!empty($message)) {
             $message = urldecode($message);
         }
-
-        $nameData = ItemName::where('status', ItemName::STATUS_ACTIVE)->select();
-
-        $names = [];
-
-        foreach ($nameData as $nameTemp) {
-
-            if (!isset($names[$nameTemp->category_id])) {
-                $names[$nameTemp->category_id]['category'] = $nameTemp->category;
-            }
-
-            $names[$nameTemp->category_id]['lists'][] = $nameTemp;
-        }
-
-
-        $lists = ItemFeature::paginate(10, false, ['query'=>request()->param() ]);
-
         $breadcrumb = '配置录入';
 
         return $this->fetch("feature", [
             'message' => $message,
-            'lists' => $lists,
-            'names' => $names,
             'breadcrumb' => $breadcrumb,
         ]);
+    }
+
+    //配置-列表数据
+    public function featureList(){
+        $limit = $this->request->param('limit', 10);
+        $lists = ItemFeature::order('id desc')->paginate($limit, false, ['query'=>request()->param() ]);
+        foreach ($lists as &$list) {
+            $list->category = $list->category;
+            $list->itemName = $list->itemName;
+        }
+        return $lists;
     }
 
     //增加配置
@@ -482,30 +479,23 @@ class Setting extends BaseController
         if (!empty($message)) {
             $message = urldecode($message);
         }
-
-        $nameData = ItemName::where('status', ItemName::STATUS_ACTIVE)->select();
-
-        $names = [];
-
-        foreach ($nameData as $nameTemp) {
-
-            if (!isset($names[$nameTemp->category_id])) {
-                $names[$nameTemp->category_id]['category'] = $nameTemp->category;
-            }
-
-            $names[$nameTemp->category_id]['lists'][] = $nameTemp;
-        }
-
-        $lists = ItemAppearance::paginate(10, false, ['query'=>request()->param() ]);
-
         $breadcrumb = '外观录入';
 
         return $this->fetch("appearance", [
             'message' => $message,
-            'lists' => $lists,
-            'names' => $names,
             'breadcrumb' => $breadcrumb,
         ]);
+    }
+
+    //外观-列表数据
+    public function appearanceList(){
+        $limit = $this->request->param('limit', 10);
+        $lists = ItemAppearance::order('id desc')->paginate($limit, false, ['query'=>request()->param() ]);
+        foreach ($lists as &$list) {
+            $list->category = $list->category;
+            $list->itemName = $list->itemName;
+        }
+        return $lists;
     }
 
     //增加外观
@@ -647,32 +637,23 @@ class Setting extends BaseController
         if (!empty($message)) {
             $message = urldecode($message);
         }
-
-        // $nameData = ItemName::where('status', ItemName::STATUS_ACTIVE)->select();
-
-        // $names = [];
-
-        // foreach ($nameData as $nameTemp) {
-
-        //     if (!isset($names[$nameTemp->category_id])) {
-        //         $names[$nameTemp->category_id]['category'] = $nameTemp->category;
-        //     }
-
-        //     $names[$nameTemp->category_id]['lists'][] = $nameTemp;
-        // }
-        $categories = ItemCategory::where('status', ItemCategory::STATUS_ACTIVE)->select();
-
-
-        $lists = ItemEdition::paginate(10, false, ['query'=>request()->param() ]);
-
         $breadcrumb = '固件版本录入';
 
         return $this->fetch("edition", [
             'message' => $message,
-            'lists' => $lists,
-            'categories' => $categories,
             'breadcrumb' => $breadcrumb,
         ]);
+    }
+
+    //固件版本-列表数据
+    public function editionList(){
+        $limit = $this->request->param('limit', 10);
+        $lists = ItemEdition::order('id desc')->paginate($limit, false, ['query'=>request()->param() ]);
+        foreach ($lists as &$list) {
+            $list->category = $list->category;
+            $list->itemName = $list->itemName;
+        }
+        return $lists;
     }
 
     //增加固件版本
@@ -814,30 +795,24 @@ class Setting extends BaseController
         if (!empty($message)) {
             $message = urldecode($message);
         }
-
-        $nameData = ItemName::where('status', ItemName::STATUS_ACTIVE)->select();
-
-        $names = [];
-
-        foreach ($nameData as $nameTemp) {
-
-            if (!isset($names[$nameTemp->category_id])) {
-                $names[$nameTemp->category_id]['category'] = $nameTemp->category;
-            }
-
-            $names[$nameTemp->category_id]['lists'][] = $nameTemp;
-        }
-
-        $lists = ItemType::paginate(10, false, ['query'=>request()->param() ]);
-
         $breadcrumb = '网络模式型号录入';
 
         return $this->fetch("type", [
             'message' => $message,
-            'lists' => $lists,
-            'names' => $names,
             'breadcrumb' => $breadcrumb,
         ]);
+    }
+
+    //型号-列表数据
+    public function typeList(){
+        $limit = $this->request->param('limit', 10);
+        $lists = ItemType::order('id desc')->paginate($limit, false, ['query'=>request()->param() ]);
+        foreach ($lists as &$list) {
+            $list->category = $list->category;
+            $list->itemName = $list->itemName;
+            $list->itemNetwork = $list->itemNetwork;
+        }
+        return $lists;
     }
 
     //增加型号
@@ -998,32 +973,34 @@ class Setting extends BaseController
         return $result;
     }
 
-    //进货渠道
+    //渠道
     public function incomeChannel($message=''){
 
         if (!empty($message)) {
             $message = urldecode($message);
         }
+        $breadcrumb = '渠道录入';
+        return $this->fetch("income_channel", [
+            'message' => $message,
+            'breadcrumb' => $breadcrumb,
+        ]);
+    }
 
+    //渠道-列表数据
+    public function incomeChannelList(){
+        $limit = $this->request->param('limit', 10);
         $type = $this->request->param('type', 0);
-
         if ($type > 0) {
-            $lists = ItemChannel::where('type', $type)->paginate(10, false, ['query'=>request()->param()]);
+            $lists = ItemChannel::where('type', $type)->paginate($limit, false, ['query'=>request()->param()]);
         } else {
-            $lists = ItemChannel::paginate(10, false, ['query'=>request()->param()]);
+            $lists = ItemChannel::paginate($limit, false, ['query'=>request()->param()]);
         }
 
         $itemChannel = new ItemChannel; 
-        foreach ($lists as $list) {
+        foreach ($lists as &$list) {
             $list['type_name'] = $itemChannel->formatTypeName($list->type);
         }
-        $breadcrumb = '渠道录入';
-
-        return $this->fetch("income_channel", [
-            'message' => $message,
-            'lists' => $lists,
-            'breadcrumb' => $breadcrumb,
-        ]);
+        return $lists;
     }
 
     //出货途径
@@ -1307,7 +1284,7 @@ class Setting extends BaseController
     }
 
     /**
-     * 特殊修改列表
+     * 特殊修改
      *
      * @return void
      * @author CSH <1114313879@qq.com>
@@ -1336,61 +1313,6 @@ class Setting extends BaseController
 
         $channels = ItemChannel::where("id", 'in', array_column($channelIds, 'channel_id'))->select();
 
-
-        // $sql = ItemIncomeHistory::alias('t')
-        //     ->field('t.*')
-        //     ->join('item i', 'i.id=t.item_id')
-        //     ->where(function($query) {
-        //         $query->where(function ($query) {
-        //             $query->where('t.status', 'in', [
-        //                 ItemIncomeHistory::STATUS_WAIT, 
-        //                 ItemIncomeHistory::STATUS_FAIL
-        //             ])->where('t.type', ItemIncomeHistory::TYPE_INCOME);
-        //         })->whereOr(function ($query) {
-        //             $query->where('t.status', ItemIncomeHistory::STATUS_WAIT)
-        //             ->where('t.type', ItemIncomeHistory::TYPE_RETURN_INCOME);
-        //         });
-        //     });
-
-        // $user_id = $this->request->get('user_id');
-
-        // if (!empty($user_id) && $user_id > 0) {
-        //     $sql = $sql->where('t.create_user_id', $user_id);
-        // }
-
-        // $date = $this->request->get('date');
-
-        // if (!empty($date)) {
-
-        //     $start_time = strtotime($date. '00:00:00');
-        //     $end_time = strtotime($date. '23:59:59');
-        //     $sql = $sql->where('t.create_time',  '>=', $start_time)->where('t.create_time', '<=', $end_time);
-        // }
-
-        // $name_id = $this->request->get('name_id');
-
-        // if (!empty($name_id) && $name_id > 0) {
-        //     $sql = $sql->where('i.name_id', $name_id);
-        // }
-
-        // $channel_id = $this->request->get('channel_id');
-
-        // if (!empty($channel_id) && $channel_id > 0) {
-        //     $sql = $sql->where('i.channel_id', $channel_id);
-        // }
-       
-        // $keyword = $this->request->get("keyword", '', 'trim'); 
-        // if (!empty($keyword)) {
-        //     $sql = $sql->where("i.number", 'LIKE', '%'.$keyword.'%');
-        // }
-
-        // $lists = $sql->order('update_time', 'desc')->paginate(10, false, ['query'=>request()->param() ]);
-        $this->request->get(['status'=>[
-            \app\index\model\Item::STATUS_NORMAL,
-            \app\index\model\Item::STATUS_OUTGO_WAIT
-        ]]);
-        $lists = (new ItemService)->getList(array_merge($this->request->get(false), $this->request->get(false)));
-
         $breadcrumb = '特殊修改';
 
         return $this->fetch('special_edit_item_list', [
@@ -1398,9 +1320,25 @@ class Setting extends BaseController
             'userId' => Session::get("user_id"),
             'names' => $names,
             'channels' => $channels,
-            'lists' => $lists,
             'breadcrumb' => $breadcrumb,
         ]);
+    }
+
+    /**
+     * 特殊修改-列表数据
+     *
+     * @return void
+     * @author CSH <1114313879@qq.com>
+     */
+    public function specialEditItemLists(){
+
+        $this->request->get(['status'=>[
+            \app\index\model\Item::STATUS_NORMAL,
+            \app\index\model\Item::STATUS_OUTGO_WAIT
+        ]]);
+        $lists = (new ItemService)->getList(array_merge($this->request->get(false), $this->request->get(false)));
+
+        return $lists;
     }
 
     //特殊修改编辑保存
@@ -1625,32 +1563,30 @@ class Setting extends BaseController
         if (!empty($message)) {
             $message = urldecode($message);
         }
-
-        $nameData = ItemName::where('status', ItemName::STATUS_ACTIVE)->select();
-
-        $names = [];
-
-        foreach ($nameData as $nameTemp) {
-
-            if (!isset($names[$nameTemp->category_id])) {
-                $names[$nameTemp->category_id]['category'] = $nameTemp->category;
-            }
-
-            // $nameTemp['itemFeature'] = $nameTem->itemFeature;
-
-            $names[$nameTemp->category_id]['lists'][] = $nameTemp;
-        }
-
-        $lists = ItemIntelligence::paginate(10, false, ['query'=>request()->param() ]);
-
         $breadcrumb = '智能识别码录入';
 
         return $this->fetch("intelligence", [
             'message' => $message,
-            'lists' => $lists,
-            'names' => $names,
             'breadcrumb' => $breadcrumb,
         ]);
+    }
+
+    //智能标识码-列表数据
+    public function intelligenceList(){
+
+        $limit = $this->request->param('limit', 10);
+        $lists = ItemIntelligence::paginate($limit, false, ['query'=>request()->param() ]);
+        foreach ($lists as &$list) {
+            $list->itemFeature = $list->itemFeature;
+            $list->itemAppearance = $list->itemAppearance;
+            $list->itemType = $list->itemType;
+            if ($list->itemType) {
+                $list->itemType->category = $list->itemType->category;
+                $list->itemType->itemName = $list->itemType->itemName;
+                $list->itemType->itemNetwork = $list->itemType->itemNetwork;
+            }
+        }
+        return $lists;
     }
 
     //增加智能标识码

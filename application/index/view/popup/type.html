@@ -1,0 +1,71 @@
+
+<body>
+    <form class="layui-form" method="post" id="form" data-url="{:url('/index/setting/addType')}" style="padding: 20px 30px 0 0;">
+        <input type="hidden" name="id" id="prepare-id" value="{$id}" />
+        <div class="layui-form-item">
+            <label class="layui-form-label" for="name_id" >名称</label>
+            <div class="layui-input-inline">
+                <select id="name_id" class="input-input" name="name_id" lay-verify="required">
+                    <option value="">请选择名称</option>
+                    {foreach $names as $category}
+                    <optgroup label="{$category.category.data}">
+                        {foreach $category.lists as $name}
+                            {if $data != null && $data.name_id == $name.id}
+                            <option value="{$name.id}" selected>{$name.data}</option>
+                            {else /}
+                            <option value="{$name.id}" >{$name.data}</option>
+                            {/if}
+                        {/foreach}
+                    </optgroup>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label" for="network">网络模式</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" id="network"  name="network" value="{$data.itemNetwork.data}" lay-verify="required">
+                <input type="hidden" class="layui-input" id="network_id"  name="network_id" value="{$data.network_id}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label for="desc" class="layui-form-label">型号</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" id="data" name="data" lay-verify="required"
+                value="{$data.data}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline">
+              <input type="button" lay-submit="" lay-filter="save" value="确认" class="layui-btn">
+            </div>
+        </div>
+    </form>
+    <script>layui.use(['index', 'form', 'layer','jquery'],
+        function() {
+            $ = layui.jquery;
+            var form = layui.form,
+            layer = layui.layer;
+
+            //监听提交
+            form.on('submit(save)', function(data){
+                var field = data.field; //获取提交的字段
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
+
+                //提交 Ajax 成功后，关闭当前弹层并重载表格
+                var url = $("#form").data('url');
+                var data = $('#form').serialize();
+                $.post(url, data, function (res) {
+                    layer.alert("保存成功", {
+                        icon: 6
+                    },function (index) {
+                        parent.layer.closeAll(); //再执行关闭 
+                        parent.layui.table.reload('table-list'); //重载表格
+                    })
+                    return false;
+                });
+            });
+
+        });</script>
+</body>
