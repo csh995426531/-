@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:63:"/data/www/y5g/public/../application/index/view/index/login.html";i:1592996915;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:63:"/data/www/y5g/public/../application/index/view/index/login.html";i:1593316812;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item" style="margin-bottom: 20px;">
-                    <input type="checkbox" name="remember" lay-skin="primary" title="记住密码">
+                    <!-- <input type="checkbox" name="remember" lay-skin="primary" title="记住密码"> -->
                     <!-- <a href="forget.html" class="layadmin-user-jump-change layadmin-link" style="margin-top: 7px;">忘记密码？</a> -->
                 </div>
                 <div class="layui-form-item">
@@ -118,19 +118,20 @@
                 $.post('login', obj.field, function (res) {
                         console.log();
                     if (res.code == 200) {
+                       
                         //请求成功后，写入 access_token
                         layui.data(setter.tableName, {
-                            key: setter.request.tokenName
-                            , value: res.data.access_token
+                            key: 'user'
+                            ,value: res.data
                         });
-
+                        
                         //登入成功的提示与跳转
                         layer.msg('登入成功', {
                             offset: '15px'
                             , icon: 6
                             , time: 1000
                         }, function () {
-                            location.href = '/index/index/index'; //后台主页
+                            location.href = '/'; //后台主页
                         });
                     } else {
                         layer.msg(res.data, {

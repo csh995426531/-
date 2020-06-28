@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:61:"/data/www/y5g/public/../application/index/view/log/index.html";i:1592993335;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:61:"/data/www/y5g/public/../application/index/view/log/index.html";i:1593316541;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -90,7 +90,7 @@
 
         table.render({
             elem: '#table-list'
-            , url: '/index/log/indexList' //数据接口
+            , url: '/log/indexList' //数据接口
             , parseData: function (res) { //res 即为原始返回的数据
                 return {
                     "code": 0, //解析接口状态

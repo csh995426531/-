@@ -1,7 +1,7 @@
 
     <div class="layui-fluid">
         <div class="layui-card">
-            <form class="layui-form" id="form" data-action="{:url('/index/item/addIncome')}" data-is_special="{$is_special}" data-id="<?php if($history){echo $history->id;} elseif ($item){echo $item->id;}?>">
+            <form class="layui-form" id="form" data-action="{:url('/item/addIncome')}" data-is_special="{$is_special}" data-id="<?php if($history){echo $history->id;} elseif ($item){echo $item->id;}?>">
                 <div class="layui-card-body">
                     <div class="layui-form-item layui-col-xs12 layui-col-sm12 layui-col-md12">
                         <div class="layui-inline">
@@ -17,8 +17,8 @@
                                 <input type="text" id="number" name="number" required="" lay-filter="number" lay-verify="required"
                                     autocomplete="off" class="layui-input"
                                     value="<?php if($item){echo $item->number;}?>"
-                                    data-href="{:url('/index/item/checkNumber')}" placeholder="序列号不能为空"
-                                    data-href2="{:url('/index/item/checkIntelligence')}">
+                                    data-href="{:url('/item/checkNumber')}" placeholder="序列号不能为空"
+                                    data-href2="{:url('/item/checkIntelligence')}">
                                 <span id="number_message" style="color: red"></span>
                                 <input type="hidden" id="number_status" value="0" />
                             </div>
@@ -31,7 +31,7 @@
                                 <input type="text" id="type_id" name="type_id" required="" lay-filter="type_id"
                                     lay-verify="required" autocomplete="off" class="layui-input"
                                     value="<?php if($item && $item->type_id > 0 && $item->itemType){echo $item->itemType->data;}?>"
-                                    data-href="{:url('/index/item/changeType')}" placeholder="型号不能为空">
+                                    data-href="{:url('/item/changeType')}" placeholder="型号不能为空">
                                 <span id="type_message" style="color: brown"></span>
                                 <input type="hidden" id="type_status" value="1" />
                             </div>

@@ -53,26 +53,15 @@ class Members extends BaseController
                 ]);
                 $user->add();
 
-                $message = Message("", true);
-                AddLog(\app\index\model\Log::ACTION_MEMBER_ADD, json_encode($this->request->param())
-                    , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+                $result = SetResult(200, '操作成功');
             } catch (\Exception $e) {
-
-                $message = Message($e->getMessage(), false);
-                AddLog(\app\index\model\Log::ACTION_MEMBER_ADD, json_encode($this->request->param())
-                    , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+                $result = SetResult(500, $e->getMessage());
             }
 
-
-        } else {
-            $message = '';
-            $name = '';
+            return $result;
         }
 
-        return $this->fetch("add", [
-            'message' => $message,
-            'name' => $name,
-        ]);
+        return $this->fetch("add");
     }
 
     //密码修改
@@ -115,24 +104,18 @@ class Members extends BaseController
                     throw new \Exception("更新失败");
                 }
 
-                $message = Message('', true);
-                AddLog(\app\index\model\Log::ACTION_MEMBER_UPDATE_PWD, json_encode($this->request->param())
-                    , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+                $result = SetResult(200, '操作成功');
             } catch (\Exception $e) {
 
-                $message = Message($e->getMessage(), false);
-                AddLog(\app\index\model\Log::ACTION_MEMBER_UPDATE_PWD, json_encode($this->request->param())
-                    , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+                $result = SetResult(500, $e->getMessage());
             }
 
-        } else {
-            $message = '';
+            return $result;
         }
 
         $users = User::where("status", User::STATUS_ACTIVE)->select();
 
         return $this->fetch('update_pwd', [
-            'message' => $message,
             'users' => $users,
         ]);
     }
@@ -144,7 +127,7 @@ class Members extends BaseController
 
             $userId = $this->request->post('user_id',0);
 
-            $nodes = $this->request->post('nodes/a', []);
+            $nodes = $this->request->post('node_ids/a', []);
 
             Db::startTrans();
             try {
@@ -231,16 +214,13 @@ class Members extends BaseController
                 }
 
                 Db::commit();
-                $message = Message('', true);
-                AddLog(\app\index\model\Log::ACTION_MEMBER_UPDATE_ACCESS, json_encode($this->request->param())
-                    , \app\index\model\Log::RESPONSE_SUCCESS, Session::get('user_id'));
+                $result = SetResult(200, '操作成功');
             } catch (\Exception $e) {
                 Db::rollback();
-                $message = Message($e->getMessage(), false);
-                AddLog(\app\index\model\Log::ACTION_MEMBER_UPDATE_ACCESS, json_encode($this->request->param())
-                    , \app\index\model\Log::RESPONSE_FAIL, Session::get('user_id'));
+                $result = SetResult(500, $e->getMessage());
             }
 
+            return $result;
         } else {
             $message = '';
             $userId = '';

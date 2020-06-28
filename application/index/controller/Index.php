@@ -63,7 +63,10 @@ class Index extends BaseController
                 Session::set("user_id", $user->id);
                 Session::set("user_name", $user->username);
                 
-                return SetResult(200, 'success');
+                return SetResult(200, [
+                    'user_name' => $user->username,
+                    'user_id' => $user->id
+                ]);
             } catch (\Exception $e) {
                 return SetResult(500, $e->getMessage());
             }
@@ -114,5 +117,13 @@ class Index extends BaseController
             echo "数据sql " .$conn->error;
         }
         die;
+    }
+
+    public function errorTemp($message='')
+    {
+        
+        return $this->fetch('error', [
+            'message' => $message
+        ]);
     }
 }

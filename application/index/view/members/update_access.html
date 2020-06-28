@@ -1,62 +1,142 @@
-{$message}
-<div class="row">
-    <div class="span12">
-        <div class="">
-            <div class="page-header">
-                <h2>权限修改</h2>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card" style="height: 1100px;">
+                <div class="layui-card-header">筛选条件</div>
+                <form class="layui-form" method="get" id="form" data-action="{:url('/members/updateAccess')}">
+                    <div class="layui-card-body" style="height: 600px;">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">选择账号</label>
+                                <div class="layui-input-inline">
+                                    <select id="user_id" name="user_id" lay-filter="user_id"
+                                        lay-verify="required">
+                                        {foreach $users as $user}
+                                        <option value="{$user.id}" data-nodes="{$user.nodes | json_encode}" {$user_id==$user.id ? 'selected' : ''}>{$user.username}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+
+                            <div id="test12" class="demo-tree-more"></div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="L_repass" class="layui-form-label"></label>
+                            <button class="layui-btn layui-btn-lg" lay-filter="submit" type="submit"
+                                lay-submit>确定</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <form class="form-horizontal" method="post">
-                <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="user_id">选择账号{$user_id}</label>
-                        <div class="controls">
-                            <select id="user_id" class="input-xlarge" name="user_id">
-                                {foreach $users as $user}
-                                <option value="{$user.id}" data-nodes="{$user.nodes | json_encode}" {$user_id==$user.id ? 'selected' : ''}>{$user.username}</option>
-                                {/foreach}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="nodes">选择权限</label>
-                        <div class="controls">
-                            {foreach $nodes as $parent}
-                                <p style="margin-top: 6px">
-                                    <h5 style="font-weight: bold">{$parent.name}</h5>
-                                    {foreach $parent.children as $node}
-                                        <label style="display: initial;cursor: pointer"><input class="nodes" id="nodes_{$node.id}" type="checkbox" name="nodes[{$node.id}]" value="{$node.id}" />{$node.name}</label>
-                                    {/foreach}
-                                </p>
-                            {/foreach}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="submit"></label>
-                        <button class="btn btn-success" type="submit" id="submit">确定</button>
-                    </div>
-                </fieldset>
-            </form>
         </div>
     </div>
 </div>
-<script src="/static/js/jquery.min.js"></script>
+
+<div id="all_nodes_data" style="display: none;">{:json_encode($nodes)}</div>
 <script>
-    $(function(){
+    layui.use(['tree', 'form','util'], function () {
+        var tree = layui.tree
+        , form = layui.form
+        , layer = layui.layer
+        , util = layui.util
+        , all_nodes_data = []
 
-        function select_user_id() {
-            var nodes = $("#user_id option:selected").data("nodes");
-            $(".nodes").prop("checked",false)
-            $.each(nodes, function (k,v) {
+        var all_nodes_data_temp = layui.$.parseJSON( layui.$('#all_nodes_data').html() );
 
-                var name = 'nodes_' + v;
-                $("#"+name+"").prop("checked",true)
+        layui.$.each(all_nodes_data_temp, function(k, v) {
+            var temp = {
+                title: v.name,
+                id: k,
+                spread: true,
+                children: []
+            }
+
+            layui.$.each(v.children, function(kk, vv) {
+                var children_temp = {
+                    title: vv.name,
+                    id: vv.id,
+                    checked: false
+                }
+                temp.children.push(children_temp);
             })
-        }
+            all_nodes_data.push(temp);
+        });
+     
+        all_nodes_data_temp = select_user_id(all_nodes_data);
+    
+        //基本演示
+        tree.render({
+            elem: '#test12'
+            , data: all_nodes_data_temp
+            , showCheckbox: true  //是否显示复选框
+            , id: 'demoId1'
+            , isJump: false //是否允许点击节点时弹出新窗口跳转
+        });
 
-        select_user_id();
+        form.on('select(user_id)', function(){
+            all_nodes_data_temp = select_user_id(all_nodes_data);
+            tree.reload('demoId1', {
+                elem: '#test12'
+                , data: all_nodes_data_temp
+                , showCheckbox: true  //是否显示复选框
+                , id: 'demoId1'
+                , isJump: false //是否允许点击节点时弹出新窗口跳转
+            });
+        });
 
-        $("#user_id").change(function() {
-            select_user_id();
+        //监听提交
+        form.on('submit(submit)',
+            function (data) {
+                var url = layui.$("#form").data('action');
+                var checkedData = tree.getChecked('demoId1'); //获取选中节点的数据
+                var data = {
+                    user_id: layui.$("#user_id option:selected").val(),
+                    node_ids: []
+                }
+                layui.$.each(checkedData, function(k1, v1) {
+                    layui.$.each(v1.children, function(k2, v2) {
+                        data.node_ids.push(v2.id);
+                    })
+                })
+                layui.$.post(url, data, function (res) {
+                    if (res.code == 200) {
+                        layer.alert("保存成功", {
+                            icon: 6
+                        }, function () {
+                            //关闭当前frame
+                            window.layer.close();
+                            // 可以对父窗口进行刷新 
+                            window.location.reload();
+                        })
+                    } else {
+                        layer.alert(res.data, {
+                            icon: 5
+                        })
+                    }
+                });
+                return false;
+            }
+        );
+    });
+
+    function select_user_id(all_nodes_data) {
+ 
+        all_nodes_data_temp = JSON.parse(JSON.stringify(all_nodes_data));
+        nodes = layui.$("#user_id option:selected").data("nodes");
+
+        layui.$.each(nodes, function (a,b) {
+
+            layui.$.each(all_nodes_data_temp, function(aa, bb) {
+                layui.$.each(bb.children, function(aaa, bbb) {
+                    if (bbb.id == b) {
+                        bbb.checked = true;
+                    }
+                })
+            })
         })
-    })
+     
+        return all_nodes_data_temp;
+    }
 </script>

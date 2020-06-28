@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/item/return_income.html";i:1590216256;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/item/return_income.html";i:1593316441;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -56,7 +56,7 @@
 
             table.render({
                 elem: '#table-list'
-                ,url: '/index/item/returnIncomeList' //数据接口
+                ,url: '/item/returnIncomeList' //数据接口
                 ,parseData: function(res){ //res 即为原始返回的数据
                     return {
                     "code": 0, //解析接口状态
@@ -104,7 +104,7 @@
                         return d.order_no;
                     }}
                     ,{fixed: 'right', title: '操作', minWidth: 120, sort: true,templet: function(d){
-                        return '<a class="layui-btn layui-btn-sm" onclick="return_income(this,' + d.id + ')" data-value="1" data-href="/index/item/addReturnIncome?id=' + d.id + '">退货入库</a>';
+                        return '<a class="layui-btn layui-btn-sm" onclick="return_income(this,' + d.id + ')" data-value="1" data-href="/item/addReturnIncome?id=' + d.id + '">退货入库</a>';
                     }}
                 ]]
             });

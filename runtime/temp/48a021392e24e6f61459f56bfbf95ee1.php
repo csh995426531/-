@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1592732646;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/search.html";i:1593316449;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -30,7 +30,7 @@
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
           <div class="layui-form-item">
             <div class="layui-inline">
-                <select name="category_id" id='category_id' lay-filter="category_id" data-href="<?php echo url('/index/item/changeCategory'); ?>">
+                <select name="category_id" id='category_id' lay-filter="category_id" data-href="<?php echo url('/item/changeCategory'); ?>">
                     <option value=""> - 分类 - </option>
                     <?php foreach($categories as $category): ?>
                     <option value="<?php echo $category['data']; ?>" <?php echo \think\Request::instance()->get('category_id')==$category['data']?'selected' :''; ?>><?php echo $category['data']; ?></opion>
@@ -47,7 +47,7 @@
             </div>
             <span id="data-all" style="display:none"><?php echo json_encode($data); ?></span>
             <div class="layui-inline">
-                <select id="name_id" name="name_id" lay-filter="name_id" data-href="<?php echo url('/index/item/changeName'); ?>">
+                <select id="name_id" name="name_id" lay-filter="name_id" data-href="<?php echo url('/item/changeName'); ?>">
                     <option value=""> - 名称 - </option>
                     <?php foreach($names as $name): ?>
                     <option value="<?php echo $name['data']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['data']?'selected' :''; ?>><?php echo $name['data']; ?></option>
@@ -142,7 +142,7 @@
 
           table.render({
               elem: '#table-list'
-              ,url: '/index/item/searchList' //数据接口
+              ,url: '/item/searchList' //数据接口
               ,parseData: function(res){ //res 即为原始返回的数据
                   return {
                   "code": 0, //解析接口状态
@@ -192,7 +192,7 @@
                       return d.lastOutNo;
                   }}
                   ,{fixed: 'right', title: '状态[历史]', minWidth: 120, sort: true,templet: function(d){
-                    return '<a class="layui-btn layui-btn-normal layui-btn-sm" onclick="status_history(this,' + d.id + ')" data-href="/index/item/history?item_id=' + d.id + '">' + d.statusName + '</a>';
+                    return '<a class="layui-btn layui-btn-normal layui-btn-sm" onclick="status_history(this,' + d.id + ')" data-href="/item/history?item_id=' + d.id + '">' + d.statusName + '</a>';
                   }}
               ]]
           });

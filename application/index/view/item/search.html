@@ -4,7 +4,7 @@
         <div class="layui-form layui-card-header layuiadmin-card-header-auto">
           <div class="layui-form-item">
             <div class="layui-inline">
-                <select name="category_id" id='category_id' lay-filter="category_id" data-href="{:url('/index/item/changeCategory')}">
+                <select name="category_id" id='category_id' lay-filter="category_id" data-href="{:url('/item/changeCategory')}">
                     <option value=""> - 分类 - </option>
                     {foreach $categories as $category}
                     <option value="{$category.data}" {$Think.get.category_id==$category.data? 'selected' :''}>{$category.data}</opion>
@@ -21,7 +21,7 @@
             </div>
             <span id="data-all" style="display:none">{$data|json_encode}</span>
             <div class="layui-inline">
-                <select id="name_id" name="name_id" lay-filter="name_id" data-href="{:url('/index/item/changeName')}">
+                <select id="name_id" name="name_id" lay-filter="name_id" data-href="{:url('/item/changeName')}">
                     <option value=""> - 名称 - </option>
                     {foreach $names as $name}
                     <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
@@ -116,7 +116,7 @@
 
           table.render({
               elem: '#table-list'
-              ,url: '/index/item/searchList' //数据接口
+              ,url: '/item/searchList' //数据接口
               ,parseData: function(res){ //res 即为原始返回的数据
                   return {
                   "code": 0, //解析接口状态
@@ -166,7 +166,7 @@
                       return d.lastOutNo;
                   }}
                   ,{fixed: 'right', title: '状态[历史]', minWidth: 120, sort: true,templet: function(d){
-                    return '<a class="layui-btn layui-btn-normal layui-btn-sm" onclick="status_history(this,' + d.id + ')" data-href="/index/item/history?item_id=' + d.id + '">' + d.statusName + '</a>';
+                    return '<a class="layui-btn layui-btn-normal layui-btn-sm" onclick="status_history(this,' + d.id + ')" data-href="/item/history?item_id=' + d.id + '">' + d.statusName + '</a>';
                   }}
               ]]
           });

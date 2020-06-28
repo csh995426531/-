@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:68:"/data/www/y5g/public/../application/index/view/item/outgo_agree.html";i:1592471305;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:68:"/data/www/y5g/public/../application/index/view/item/outgo_agree.html";i:1593316402;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -87,7 +87,7 @@
 
             table.render({
                 elem: '#table-list'
-                ,url: '/index/item/outgoAgreeList' //数据接口
+                ,url: '/item/outgoAgreeList' //数据接口
                 ,title: '出库审核'
                 ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
                 ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
@@ -121,7 +121,7 @@
                         if(d.item.itemAppearance != null){return d.item.itemAppearance.data} else {return ''}
                     }}
                     ,{field: 'number', title: '序列号', minWidth: 170,templet: function(d){
-                        return '<a onclick="status_history(this,' + d.id + ')" data-href="/index/item/history?item_id=' + d.id + '"><span style="color:coral;cursor: pointer;">' + d.item.number + '</span></a>';
+                        return '<a onclick="status_history(this,' + d.id + ')" data-href="/item/history?item_id=' + d.id + '"><span style="color:coral;cursor: pointer;">' + d.item.number + '</span></a>';
                     }}
                     ,{field: 'itemEdition', title: '版本', minWidth: 100,templet: function(d){
                         if(d.item.itemEdition != null){return d.item.itemEdition.data} else {return ''}
@@ -148,8 +148,8 @@
                         return '<span title="买家昵称：'+ d.consignee_nickname +'" style="cursor: pointer;">' + d.order_no + '</span>';
                     }}
                     ,{fixed: 'right', title: '操作', minWidth: 140, sort: true,templet: function(d){
-                        var str = '<a class="layui-btn layui-btn-sm" onclick="allowAgree(this,' + d.id + ')" data-value="1" data-href="/index/item/allowOutgoAgree?id=' + d.id + '">通过</a>';
-                        return str + '<a class="layui-btn layui-btn-warm layui-btn-sm" onclick="rejectAgree(this,' + d.id + ')" data-value="0" data-href="/index/item/rejectOutgoAgree?id=' + d.id + '">拒绝</a>';
+                        var str = '<a class="layui-btn layui-btn-sm" onclick="allowAgree(this,' + d.id + ')" data-value="1" data-href="/item/allowOutgoAgree?id=' + d.id + '">通过</a>';
+                        return str + '<a class="layui-btn layui-btn-warm layui-btn-sm" onclick="rejectAgree(this,' + d.id + ')" data-value="0" data-href="/item/rejectOutgoAgree?id=' + d.id + '">拒绝</a>';
                       
                     }}
                 ]]
@@ -183,7 +183,7 @@
 
                 switch(obj.event){
                     case 'batchPass':
-                        var url = '/index/item/allowOutgoAgree';
+                        var url = '/item/allowOutgoAgree';
                         if (arr.length > 0) {
                             $.post(url, {id:arr}, function(res) {
                                 layer.msg(res.data, {
@@ -197,7 +197,7 @@
                         }
                     break;
                     case 'batchReject':
-                        var url = '/index/item/rejectOutgoAgree';
+                        var url = '/item/rejectOutgoAgree';
                         if (arr.length > 0) {
                             $.post(url, {id:arr}, function(res) {
                                 layer.msg(res.data, {

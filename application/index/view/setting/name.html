@@ -21,7 +21,7 @@
 
             table.render({
                 elem: '#table-list'
-                , url: '/index/setting/nameList' //数据接口
+                , url: '/setting/nameList' //数据接口
                 ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
                 , parseData: function (res) { //res 即为原始返回的数据
                     return {
@@ -43,11 +43,11 @@
                     , {
                         fixed: 'right', title: '操作', minWidth: 100, templet: function (d) {
                             if (d.status == 1) {
-                                var str = '<a class="layui-btn-sm layui-btn layui-btn-danger" onclick="stopItem(this,' + d.id + ')" data-href="/index/setting/delName?id=' + d.id + '" >停用</a>';
+                                var str = '<a class="layui-btn-sm layui-btn layui-btn-danger" onclick="stopItem(this,' + d.id + ')" data-href="/setting/delName?id=' + d.id + '" >停用</a>';
                             } else {
-                                var str = '<a class="layui-btn-sm layui-btn" onclick="openItem(this,' + d.id + ')" data-href="/index/setting/openName?id=' + d.id + '" >启用</a>';
+                                var str = '<a class="layui-btn-sm layui-btn" onclick="openItem(this,' + d.id + ')" data-href="/setting/openName?id=' + d.id + '" >启用</a>';
                             }
-                            return str += '<a class="layui-btn-sm layui-btn layui-btn-normal" onclick="edit(this,' + d.id + ')" data-href="/index/popup/name?id=' + d.id + '" >修改</a>';
+                            return str += '<a class="layui-btn-sm layui-btn layui-btn-normal" onclick="edit(this,' + d.id + ')" data-href="/popup/name?id=' + d.id + '" >修改</a>';
                         }
                     }
                 ]]
@@ -64,7 +64,7 @@
 
                 switch(obj.event){
                     case 'addItem':
-                        var url = '/index/popup/name';
+                        var url = '/popup/name';
                         layer.open({
                             type: 2
                             , title: '录入'

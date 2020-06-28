@@ -61,7 +61,7 @@ class Item
      */
     public function getList($params){
         $lists = \app\index\model\Item::where('id', '>', '0');
-        $limit = $params['limit'] ?? 10;
+        $limit = $params['limit'] ? $params['limit'] : 10;
         
         if (!empty($params['type_id'])) {
             $typeArr = ItemType::where("data", $params['type_id'])->column('id');

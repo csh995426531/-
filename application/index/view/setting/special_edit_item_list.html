@@ -8,7 +8,7 @@
                 </div>
                 <div class="layui-inline">
                     <select id="name_id" name="name_id" lay-filter="name_id"
-                        data-href="{:url('/index/item/changeName')}">
+                        data-href="{:url('/item/changeName')}">
                         <option value=""> - 名称 - </option>
                         {foreach $names as $name}
                         <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}
@@ -61,7 +61,7 @@
 
         table.render({
             elem: '#table-list'
-            , url: '/index/setting/specialEditItemLists' //数据接口
+            , url: '/setting/specialEditItemLists' //数据接口
             , parseData: function (res) { //res 即为原始返回的数据
                 return {
                     "code": 0, //解析接口状态
@@ -118,7 +118,7 @@
                 }
                 , {
                     fixed: 'right', title: '操作', minWidth: 120, sort: true, templet: function (d) {
-                        return '<a class="layui-btn-sm layui-btn layui-btn-normal" onclick="edit(this,' + d.id + ')" data-href="/index/item/addincome?is_special=1&id=' + d.id + '" >修改</a>';
+                        return '<a class="layui-btn-sm layui-btn layui-btn-normal" onclick="edit(this,' + d.id + ')" data-href="/item/addincome?is_special=1&id=' + d.id + '" >修改</a>';
                     }
                 }
             ]]

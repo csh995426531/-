@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:62:"/data/www/y5g/public/../application/index/view/item/outgo.html";i:1590916038;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:62:"/data/www/y5g/public/../application/index/view/item/outgo.html";i:1593316435;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -39,7 +39,7 @@
                 </div>
                 <span id="data-all" style="display:none"><?php echo json_encode($data); ?></span>
                 <div class="layui-inline">
-                    <select id="name_id" name="name_id" lay-filter="name_id" data-href="<?php echo url('/index/item/changeName'); ?>">
+                    <select id="name_id" name="name_id" lay-filter="name_id" data-href="<?php echo url('/item/changeName'); ?>">
                         <option value=""> - 名称 - </option>
                         <?php foreach($names as $name): ?>
                         <option value="<?php echo $name['data']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['data']?'selected' :''; ?>><?php echo $name['data']; ?></option>
@@ -103,7 +103,7 @@
 
             table.render({
                 elem: '#table-list'
-                ,url: '/index/item/outgoList' //数据接口
+                ,url: '/item/outgoList' //数据接口
                 ,parseData: function(res){ //res 即为原始返回的数据
                     return {
                     "code": 0, //解析接口状态
@@ -148,11 +148,11 @@
                         return d.memo;
                     }}
                     ,{field: 'history', title: '状态[全]', minWidth:120,templet: function(d){
-                        return '<a title="' + d.prepare + '" style="cursor: pointer" class="layui-btn layui-btn-normal layui-btn-sm" onclick="status_history(this,' + d.id + ')" data-href="/index/item/history?item_id=' + d.id + '">' + d.statusName + '</a>';
+                        return '<a title="' + d.prepare + '" style="cursor: pointer" class="layui-btn layui-btn-normal layui-btn-sm" onclick="status_history(this,' + d.id + ')" data-href="/item/history?item_id=' + d.id + '">' + d.statusName + '</a>';
                     }}
                     ,{fixed: 'right', title: '操作', minWidth: 120, sort: true,templet: function(d){
                       if (d.status == 2 || d.status == 8) {
-                        return '<a class="layui-btn layui-btn-sm" onclick="add_outgo(this,' + d.id + ')" data-value="1" data-href="/index/popup/outgoItem?id=' + d.id + '">出库</a>';
+                        return '<a class="layui-btn layui-btn-sm" onclick="add_outgo(this,' + d.id + ')" data-value="1" data-href="/popup/outgoItem?id=' + d.id + '">出库</a>';
                       } else {
                         return ''
                       }

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/item/special_outgo.html";i:1592142973;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:70:"/data/www/y5g/public/../application/index/view/item/special_outgo.html";i:1593316455;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -39,7 +39,7 @@
                 </div>
                 <span id="data-all" style="display:none"><?php echo json_encode($data); ?></span>
                 <div class="layui-inline">
-                    <select id="name_id" name="name_id" lay-filter="name_id" data-href="<?php echo url('/index/item/changeName'); ?>">
+                    <select id="name_id" name="name_id" lay-filter="name_id" data-href="<?php echo url('/item/changeName'); ?>">
                         <option value=""> - 名称 - </option>
                         <?php foreach($names as $name): ?>
                         <option value="<?php echo $name['data']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['data']?'selected' :''; ?>><?php echo $name['data']; ?></option>
@@ -110,7 +110,7 @@
 
             table.render({
                 elem: '#table-list'
-                ,url: '/index/item/specialoutgoList' //数据接口
+                ,url: '/item/specialoutgoList' //数据接口
                 ,title: '维修登记'
                 ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
                 ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
@@ -163,13 +163,13 @@
                         return d.memo;
                     }}
                     ,{field: 'history', title: '状态[全]', minWidth:120,templet: function(d){
-                        return '<a title="' + d.prepare + '" style="cursor: pointer" class="layui-btn layui-btn-normal layui-btn-sm" onclick="status_history(this,' + d.id + ')" data-href="/index/item/history?item_id=' + d.id + '">' + d.statusName + '</a>';
+                        return '<a title="' + d.prepare + '" style="cursor: pointer" class="layui-btn layui-btn-normal layui-btn-sm" onclick="status_history(this,' + d.id + ')" data-href="/item/history?item_id=' + d.id + '">' + d.statusName + '</a>';
                     }}
                     ,{fixed: 'right', title: '操作', minWidth: 120, sort: true,templet: function(d){
                       if (d.status == 2) {
-                        return '<a class="layui-btn layui-btn-sm" onclick="addSpecialOutgo(this,' + d.id + ')" data-value="1" data-type="4" data-href="/index/item/addSpecialOutgo?id=' + d.id + '">维修</a>';
+                        return '<a class="layui-btn layui-btn-sm" onclick="addSpecialOutgo(this,' + d.id + ')" data-value="1" data-type="4" data-href="/item/addSpecialOutgo?id=' + d.id + '">维修</a>';
                       } else {
-                        return '<a class="layui-btn layui-btn-warm layui-btn-sm" onclick="cancelSpecialOutgo(this,' + d.id + ')" data-value="1" data-type="4" data-href="/index/item/cancelSpecialOutgo?id=' + d.id + '">返库</a>';
+                        return '<a class="layui-btn layui-btn-warm layui-btn-sm" onclick="cancelSpecialOutgo(this,' + d.id + ')" data-value="1" data-type="4" data-href="/item/cancelSpecialOutgo?id=' + d.id + '">返库</a>';
                       }
                     }}
                 ]]
@@ -221,7 +221,7 @@
 
                 switch(obj.event){
                     case 'allAddSpecialOutgo':
-                        var url = '/index/item/addSpecialOutgo';
+                        var url = '/item/addSpecialOutgo';
                         var type = 4;
                         if (arr.length > 0) {
                             $.post(url, {id:arr,type:type}, function(res) {
@@ -236,7 +236,7 @@
                         }
                     break;
                     case 'allCancelSpecialOutgo':
-                        var url = '/index/item/cancelSpecialOutgo';
+                        var url = '/item/cancelSpecialOutgo';
                         var type = 4;
                         if (arr.length > 0) {
                             $.post(url, {id:arr,type:type}, function(res) {

@@ -45,8 +45,8 @@ class Log extends BaseController
         $date = $this->request->get("date");
         if (!empty($date)) {
             $date_arr = explode(' ~ ', $date);
-            $startDate = $date_arr[0] ?? '';
-            $endDate = $date_arr[1] ?? '';
+            $startDate = $date_arr[0] ? $date_arr[0] : '';
+            $endDate = $date_arr[1] ? $date_arr[1] : '';
         }
         $userId = $this->request->get('user_id');
         $action = $this->request->get("action");

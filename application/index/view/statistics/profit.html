@@ -28,7 +28,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">产品名称</label>
                         <div class="layui-input-inline">
-                            <select id="name_id" class="" name="name_id" lay-filter="outgo_channel_id">
+                            <select id="name_id" class="" name="name_id" lay-filter="name_id">
                                 <option value="0"> -  - </option>
                                 {foreach $names as $name}
                                 <option value="{$name.id}" {$Think.get.name_id==$name.id ? 'selected' :''}>{$name.data}</option>
@@ -41,7 +41,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">进货渠道</label>
                         <div class="layui-input-inline">
-                            <select id="income_channel_id" class="" name="income_channel_id" lay-filter="outgo_channel_id">
+                            <select id="income_channel_id" class="" name="income_channel_id" lay-filter="income_channel_id">
                                 <option value="0"> -  - </option>
                                 {foreach $income_channels as $channel}
                                 <option value="{$channel.id}" {$Think.get.income_channel_id==$channel.id ? 'selected' :''}>{$channel.data}</option>
@@ -54,7 +54,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">进货人</label>
                         <div class="layui-input-inline">
-                            <select id="create_user_id" class="" name="create_user_id" lay-filter="outgo_channel_id">
+                            <select id="create_user_id" class="" name="create_user_id" lay-filter="create_user_id">
                                 <option value="0"> -  - </option>
                                 {foreach $create_users as $createUser}
                                 <option value="{$createUser.id}" {$Think.get.create_user_id==$createUser.id ? 'selected' :''}>{$createUser.username}</option>

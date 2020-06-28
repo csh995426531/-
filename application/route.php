@@ -1,4 +1,5 @@
 <?php
+use \think\Route;
 // +----------------------------------------------------------------------
 // | ThinkPHP [ WE CAN DO IT JUST THINK ]
 // +----------------------------------------------------------------------
@@ -18,4 +19,12 @@ return [
         ':name' => ['index/hello', ['method' => 'post']],
     ],
     'login' => 'index/index/login',
+    '/' => 'index/index/index',
+    'home' => 'index/index/home',
+    'error' => 'index/index/errorTemp',
+    'index/index/logout' => 'index/index/logout',
+    'index/index/captcha_src' => 'index/index/captcha_src',
+    'index' => 'index/index/index',
+
+    ':controller/:action'=> 'index/:controller/:action'
 ];

@@ -1,40 +1,84 @@
-{$message}
-<div class="row">
-    <div class="span12">
-        <div class="">
-            <div class="page-header">
-                <h2>密码修改</h2>
-            </div>
-            <form class="form-horizontal" method="post">
-                <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="user_id">选择账号</label>
-                        <div class="controls">
-                            <select id="user_id" class="input-xlarge" name="user_id">
+
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">筛选条件</div>
+          <form class="layui-form" method="get" id="form" data-action="{:url('/members/updatePwd')}" >
+            <div class="layui-card-body" style="height: 600px;">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">选择账号</label>
+                        <div class="layui-input-inline">
+                            <select id="user_id" class="" name="user_id" lay-filter="user_id" lay-verify="required">
                                 {foreach $users as $user}
                                     <option value="{$user.id}">{$user.username}</option>
                                 {/foreach}
                             </select>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="pwd_1">新密码</label>
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="pwd_1" name="pwd_1" value="">
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">新密码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" id="pwd_1" name="pwd_1" lay-verify="required">
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="pwd_2">确认新密码</label>
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="pwd_2" name="pwd_2" value="">
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">确认新密码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input" id="pwd_2" name="pwd_2" lay-verify="required">
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="submit"></label>
-                        <button class="btn btn-success" type="submit" id="submit">确定</button>
-                    </div>
-                </fieldset>
-            </form>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_repass" class="layui-form-label"></label>
+                    <button class="layui-btn layui-btn-lg" lay-filter="submit" type="submit" lay-submit>确定</button>
+                </div>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-</div>
+  </div>
+
+
+<script>
+    layui.use(['form', 'layer'], function () {
+        $ = layui.jquery;
+        var form = layui.form,
+        layer = layui.layer;
+
+            //监听提交
+            form.on('submit(submit)',
+                function (data) {
+                    var url = $("#form").data('action');
+                    var data = $('#form').serialize();
+
+                    $.post(url, data, function (res) {
+                        if (res.code == 200) {
+                            layer.alert("保存成功", {
+                                icon: 6
+                            }, function () {
+                                //关闭当前frame
+                                window.layer.close();
+                                // 可以对父窗口进行刷新 
+                                window.location.reload();
+                            })
+                        } else {
+                            layer.alert(res.data, {
+                                icon: 5
+                            })
+                        }
+                    });
+                    return false;
+                }
+            );
+
+    })
+</script>
+
+

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/income.html";i:1590204189;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:63:"/data/www/y5g/public/../application/index/view/item/income.html";i:1593316359;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -88,7 +88,7 @@
             
             table.render({
                 elem: '#table-list'
-                ,url: '/index/item/incomeList' //数据接口
+                ,url: '/item/incomeList' //数据接口
                 ,parseData: function(res){ //res 即为原始返回的数据
                     return {
                     "code": 0, //解析接口状态
@@ -134,7 +134,7 @@
                     }}
                     ,{fixed: 'right', title: '操作', minWidth: 120, sort: true,templet: function(d){
                       if (d.create_user_id == s_user_id) {
-                        return '<a class="layui-btn layui-btn-sm" onclick="edit(this,' + d.id + ')" data-value="1" data-href="/index/item/addIncome?id=' + d.id + '">修改</a>';
+                        return '<a class="layui-btn layui-btn-sm" onclick="edit(this,' + d.id + ')" data-value="1" data-href="/item/addIncome?id=' + d.id + '">修改</a>';
                       } else {
                         return ''
                       }

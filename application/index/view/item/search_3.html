@@ -17,7 +17,7 @@
                         <div class="layui-card-body ">
                             <form class="layui-form layui-col-space5" method="get">
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <select name="category_id" id='category_id' lay-filter="category_id" data-href="{:url('/index/item/changeCategory')}">
+                                    <select name="category_id" id='category_id' lay-filter="category_id" data-href="{:url('/item/changeCategory')}">
                                         <option value=""> - 分类 - </option>
                                         {foreach $categories as $category}
                                         <option value="{$category.data}" {$Think.get.category_id==$category.data? 'selected' :''}>{$category.data}</opion>
@@ -34,7 +34,7 @@
                                 </div>
                                 <span id="data-all" style="display:none">{$data|json_encode}</span>
                                 <div class="layui-input-inline layui-show-xs-block">
-                                    <select id="name_id" name="name_id" lay-filter="name_id" data-href="{:url('/index/item/changeName')}">
+                                    <select id="name_id" name="name_id" lay-filter="name_id" data-href="{:url('/item/changeName')}">
                                         <option value=""> - 名称 - </option>
                                         {foreach $names as $name}
                                         <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
@@ -145,7 +145,7 @@
                                         <th><span>{$temp.price*1}</span></th>
                                         <th><span>{$temp.lastOutNo}</span></th>
                                         <td class="actions">
-                                            <a class="layui-btn layui-btn-normal layui-btn-sm" href="{:url('/index/item/history',['item_id'=>$temp.id])}">{$temp.statusName}</a>
+                                            <a class="layui-btn layui-btn-normal layui-btn-sm" href="{:url('/item/history',['item_id'=>$temp.id])}">{$temp.statusName}</a>
                                         </td>
                                         <!-- <td class="actions"> -->
                                              <!--<a class="btn btn-small btn-info" href="{:url('item/history',['item_id'=>$temp.id])}">历史</a>-->

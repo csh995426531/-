@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"/data/www/y5g/public/../application/index/view/item/inventory.html";i:1592293468;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:66:"/data/www/y5g/public/../application/index/view/item/inventory.html";i:1593316380;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -41,7 +41,7 @@
                     <span id="data-all" style="display:none"><?php echo json_encode($data); ?></span>
                     <div class="layui-inline">
                         <select id="name_id" name="name_id" lay-filter="name_id"
-                            data-href="<?php echo url('/index/item/changeName'); ?>">
+                            data-href="<?php echo url('/item/changeName'); ?>">
                             <option value=""> - 名称 - </option>
                             <?php foreach($names as $name): ?>
                             <option value="<?php echo $name['data']; ?>" <?php echo \think\Request::instance()->get('name_id')==$name['data']?'selected' :''; ?>><?php echo $name['data']; ?>
@@ -116,7 +116,7 @@
 
             table.render({
                 elem: '#table-list'
-                , url: '/index/item/inventoryList' //数据接口
+                , url: '/item/inventoryList' //数据接口
                 , parseData: function (res) { //res 即为原始返回的数据
                     return {
                         "code": 0, //解析接口状态
@@ -166,7 +166,7 @@
                     }
                     , {
                         field: 'number', title: '序列号', minWidth: 150, templet: function (d) {
-                            return '<a lay-text="综合查询" lay-href="/index/item/search?keyword=' + d.number + '"><span style="color:coral;cursor: pointer;">' + d.number + '</span></a>';
+                            return '<a lay-text="综合查询" lay-href="/item/search?keyword=' + d.number + '"><span style="color:coral;cursor: pointer;">' + d.number + '</span></a>';
                         }
                     }
                     , {
@@ -192,9 +192,9 @@
                     , {
                         fixed: 'right', title: '操作', minWidth: 100, templet: function (d) {
                             if (d.status == "<?php echo \app\index\model\Item::STATUS_NORMAL;?>") {
-                                return '<a class="layui-btn-sm layui-btn layui-btn-normal" onclick="member_prepare(this,' + d.id + ')" data-href="/index/popup/prepareItem?id=' + d.id + '" lay-text="预售出库">预售</a>';
+                                return '<a class="layui-btn-sm layui-btn layui-btn-normal" onclick="member_prepare(this,' + d.id + ')" data-href="/popup/prepareItem?id=' + d.id + '" lay-text="预售出库">预售</a>';
                             } else if (d.status == "<?php echo \app\index\model\Item::STATUS_PREPARE;?>") {
-                                return '<a class="layui-btn-sm layui-btn layui-btn-danger" onclick="member_del(this,' + d.id + ')" data-id="' + d.id + '" href="javascript:;" data-href="/index/item/cancelPrepare" >取消预售</a>';
+                                return '<a class="layui-btn-sm layui-btn layui-btn-danger" onclick="member_del(this,' + d.id + ')" data-id="' + d.id + '" href="javascript:;" data-href="/item/cancelPrepare" >取消预售</a>';
                             } else {
                                 return ''
                             }

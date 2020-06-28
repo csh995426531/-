@@ -13,7 +13,7 @@
                 </div>
                 <span id="data-all" style="display:none">{$data|json_encode}</span>
                 <div class="layui-inline">
-                    <select name="name_id" id='name_id' lay-filter="name_id" data-href="{:url('/index/item/changeName')}">
+                    <select name="name_id" id='name_id' lay-filter="name_id" data-href="{:url('/item/changeName')}">
                         <option value=""> - 名称 - </option>
                         {foreach $names as $name}
                         <option value="{$name.data}" {$Think.get.name_id==$name.data ? 'selected' :''}>{$name.data}</option>
@@ -91,7 +91,7 @@
 
             table.render({
                 elem: '#table-list'
-                ,url: '/index/item/specialOutgo2List' //数据接口
+                ,url: '/item/specialOutgo2List' //数据接口
                 ,title: '仓库盘点'
                 ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
                 ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
@@ -151,9 +151,9 @@
                     }}
                     ,{fixed: 'right', title: '操作', minWidth: 140, sort: true,templet: function(d){
                         if (d.status == 2) {
-                            return '<a class="layui-btn layui-btn-sm" onclick="addSpecialOutgo(this,' + d.id + ')" data-href="/index/item/addSpecialOutgo?id=' + d.id + '" data-type="5">盘出</a>';
+                            return '<a class="layui-btn layui-btn-sm" onclick="addSpecialOutgo(this,' + d.id + ')" data-href="/item/addSpecialOutgo?id=' + d.id + '" data-type="5">盘出</a>';
                         } else {
-                            return '<a class="layui-btn layui-btn-warm layui-btn-sm" onclick="cancelSpecialOutgo(this,' + d.id + ')" data-href="/index/item/cancelSpecialOutgo?id=' + d.id + '" data-type="5">返库</a>';
+                            return '<a class="layui-btn layui-btn-warm layui-btn-sm" onclick="cancelSpecialOutgo(this,' + d.id + ')" data-href="/item/cancelSpecialOutgo?id=' + d.id + '" data-type="5">返库</a>';
                         } 
                     }}
                 ]]
@@ -206,7 +206,7 @@
 
                 switch(obj.event){
                     case 'batchAddSpecialOutgo':
-                        var url = '/index/item/addSpecialOutgo';
+                        var url = '/item/addSpecialOutgo';
                         var type = '5';
                         if (arr.length > 0) {
                             $.post(url, {id:arr, type:type}, function(res) {
@@ -221,7 +221,7 @@
                         }
                     break;
                     case 'batchCancelSpecialOutgo':
-                        var url = '/index/item/cancelSpecialOutgo';
+                        var url = '/item/cancelSpecialOutgo';
                         var type = '5';
                         if (arr.length > 0) {
                             $.post(url, {id:arr, type:type}, function(res) {

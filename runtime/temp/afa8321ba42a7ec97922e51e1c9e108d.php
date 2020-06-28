@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"/data/www/y5g/public/../application/index/view/setting/type.html";i:1592990596;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:64:"/data/www/y5g/public/../application/index/view/setting/type.html";i:1593316534;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -47,7 +47,7 @@
 
             table.render({
                 elem: '#table-list'
-                , url: '/index/setting/typeList' //数据接口
+                , url: '/setting/typeList' //数据接口
                 ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
                 , parseData: function (res) { //res 即为原始返回的数据
                     return {
@@ -77,11 +77,11 @@
                     , {
                         fixed: 'right', title: '操作', minWidth: 100, templet: function (d) {
                             if (d.status == 1) {
-                                var str = '<a class="layui-btn-sm layui-btn layui-btn-danger" onclick="stopItem(this,' + d.id + ')" data-href="/index/setting/delType?id=' + d.id + '" >停用</a>';
+                                var str = '<a class="layui-btn-sm layui-btn layui-btn-danger" onclick="stopItem(this,' + d.id + ')" data-href="/setting/delType?id=' + d.id + '" >停用</a>';
                             } else {
-                                var str = '<a class="layui-btn-sm layui-btn" onclick="openItem(this,' + d.id + ')" data-href="/index/setting/openType?id=' + d.id + '" >启用</a>';
+                                var str = '<a class="layui-btn-sm layui-btn" onclick="openItem(this,' + d.id + ')" data-href="/setting/openType?id=' + d.id + '" >启用</a>';
                             }
-                            return str += '<a class="layui-btn-sm layui-btn layui-btn-normal" onclick="edit(this,' + d.id + ')" data-href="/index/popup/type?id=' + d.id + '" >修改</a>';
+                            return str += '<a class="layui-btn-sm layui-btn layui-btn-normal" onclick="edit(this,' + d.id + ')" data-href="/popup/type?id=' + d.id + '" >修改</a>';
                         }
                     }
                 ]]
@@ -98,7 +98,7 @@
 
                 switch(obj.event){
                     case 'addItem':
-                        var url = '/index/popup/type';
+                        var url = '/popup/type';
                         layer.open({
                             type: 2
                             , title: '录入'
