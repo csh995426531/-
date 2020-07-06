@@ -49,7 +49,7 @@
             var temp = {
                 title: v.name,
                 id: k,
-                spread: true,
+                spread: false,
                 children: []
             }
 
@@ -132,6 +132,7 @@
                 layui.$.each(bb.children, function(aaa, bbb) {
                     if (bbb.id == b) {
                         bbb.checked = true;
+                        bb.spread = true;
                     }
                 })
             })

@@ -53,7 +53,7 @@ class BaseController extends Controller
 
         $nodes = ['index/index/index', 'index/index/home', "index/index/executsql"
             , 'index/statistics/index', 'index/item/changename', 'index/item/changecategory'
-            , "index/index/errortemp"];
+            , "index/index/errortemp", 'index/item/historylist'];
         if (!empty($userNodes)) {
             $userNodesTemp = collection($userNodes)->toArray();
 

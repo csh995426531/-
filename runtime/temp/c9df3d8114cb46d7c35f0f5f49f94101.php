@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:73:"/data/www/y5g/public/../application/index/view/members/update_access.html";i:1593346851;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:73:"/data/www/y5g/public/../application/index/view/members/update_access.html";i:1593399268;s:48:"/data/www/y5g/application/index/view/layout.html";i:1592482662;}*/ ?>
 <!DOCTYPE html>
 <html>
 
@@ -75,7 +75,7 @@
             var temp = {
                 title: v.name,
                 id: k,
-                spread: true,
+                spread: false,
                 children: []
             }
 
@@ -158,6 +158,7 @@
                 layui.$.each(bb.children, function(aaa, bbb) {
                     if (bbb.id == b) {
                         bbb.checked = true;
+                        bb.spread = true;
                     }
                 })
             })
